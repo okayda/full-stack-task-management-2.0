@@ -1,11 +1,9 @@
-import { Button } from "@/components/ui/button";
+import SignInCard from "@/features/auth/components/sign-in-card";
 
 export default function Home() {
   return (
-    <div>
-      <h1>Hello World</h1>
-
-      <Button>Click me</Button>
+    <div className="mx-auto max-w-[1400px] py-32 pb-16">
+      <SignInCard />
     </div>
   );
 }
