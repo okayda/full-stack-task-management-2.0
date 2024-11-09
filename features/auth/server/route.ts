@@ -11,7 +11,7 @@ import { AUTH_COOKIE } from "../constants";
 const app = new Hono().post(
   "/create",
   zValidator("json", createUserSchema),
-  async (c) => {
+  async function (c) {
     const { username, email, password } = c.req.valid("json");
 
     // Your information here is handled by Appwrite I don't handle it, especially your PASSWORD.

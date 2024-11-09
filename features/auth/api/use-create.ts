@@ -11,12 +11,12 @@ import { toast } from "sonner";
 type ResponseType = InferResponseType<(typeof client.api.auth.create)["$post"]>;
 type RequestType = InferRequestType<(typeof client.api.auth.create)["$post"]>;
 
-export const useCreate = () => {
+export const useCreate = function () {
   const router = useRouter();
   const queryClient = useQueryClient();
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
-    mutationFn: async ({ json }) => {
+    mutationFn: async function ({ json }) {
       const response = await client.api.auth.create["$post"]({ json });
 
       if (!response.ok) throw new Error("Failed to create account");
@@ -24,13 +24,13 @@ export const useCreate = () => {
       return await response.json();
     },
 
-    onSuccess: () => {
+    onSuccess: function () {
       toast.success("Account created successfully");
       router.refresh();
       queryClient.invalidateQueries({ queryKey: ["current-user"] });
     },
 
-    onError: () => {
+    onError: function () {
       toast.error("Failed to create account");
     },
   });

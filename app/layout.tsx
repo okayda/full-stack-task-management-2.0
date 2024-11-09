@@ -30,9 +30,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen antialiased`}
       >
-        <main className="container mx-auto px-3 md:px-8">
-          <QueryProvider>{children}</QueryProvider>
-        </main>
+        <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
   );
