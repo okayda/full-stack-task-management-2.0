@@ -9,7 +9,7 @@ import Link from "next/link";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { loginSchema } from "@/features/auth/schemas";
+import { createSchema } from "@/features/auth/schemas";
 
 import { AuroraBackground } from "@/components/ui/aurora-background";
 
@@ -35,25 +35,26 @@ import { Input } from "@/components/ui/input";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import { BadgeCheckIcon } from "lucide-react";
 
-export default function SignInCard() {
+export default function SignUpCard() {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-  const form = useForm<z.infer<typeof loginSchema>>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<z.infer<typeof createSchema>>({
+    resolver: zodResolver(createSchema),
     defaultValues: {
+      username: "",
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = async function (data: z.infer<typeof loginSchema>) {
+  const onSubmit = async function (data: z.infer<typeof createSchema>) {
     setIsSubmitting(true);
     try {
       // Replace this with your actual login
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      console.log("Login successful:", data);
+      console.log("Registered successful:", data);
     } catch (e) {
-      console.error("Login error:", e);
+      console.error("Register error:", e);
     } finally {
       setIsSubmitting(false);
     }
@@ -68,11 +69,11 @@ export default function SignInCard() {
         <Card className="mx-auto max-w-[400px] rounded-none border-none shadow-none lg-l:mx-0 lg-l:flex lg-l:w-full lg-l:max-w-none lg-l:gap-x-4 lg-l:bg-transparent">
           <div className="lg-l:w-full lg-l:max-w-[410px] lg-l:rounded-lg lg-l:border lg-l:bg-background lg-l:shadow-sm">
             <CardHeader className="pt-9">
-              <CardTitle className="mb-1 text-3xl">Get started</CardTitle>
+              <CardTitle className="mb-1 text-3xl">Create account</CardTitle>
 
               <CardDescription className="text-base">
-                Log in to stay organized and keep your tasks on track.
-                Let&apos;s get things done together.
+                Join us and start organizing your tasks effortlessly. Together,
+                we&apos;ll keep you on track and moving forward.
               </CardDescription>
             </CardHeader>
 
@@ -117,6 +118,29 @@ export default function SignInCard() {
                   onSubmit={form.handleSubmit(onSubmit)}
                   className="space-y-4 pt-2"
                 >
+                  <FormField
+                    name="username"
+                    control={form.control}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-semibold tracking-wide text-foreground">
+                          Username
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            autoComplete="off"
+                            type="username"
+                            placeholder="linus_torvalds"
+                            {...field}
+                            className="!mt-1 h-[40px] border-neutral-400/60"
+                          />
+                        </FormControl>
+
+                        <FormMessage className="!mt-1" />
+                      </FormItem>
+                    )}
+                  />
+
                   <FormField
                     name="email"
                     control={form.control}
@@ -167,17 +191,17 @@ export default function SignInCard() {
                     size="lg"
                     className="w-full font-semibold tracking-wide"
                   >
-                    {isSubmitting ? "Loading..." : "Login"}
+                    {isSubmitting ? "Loading..." : "Create"}
                   </Button>
                 </form>
               </Form>
             </CardContent>
 
-            <CardFooter className="my-5 flex items-center justify-center py-4 lg-l:bg-secondary">
+            <CardFooter className="flex items-center justify-center p-7">
               <p>
                 Don&apos;t have an account?
                 <Link href="/sign-up">
-                  <span className="text-sky-600"> Sign Up</span>
+                  <span className="text-blue-700"> Sign Up</span>
                 </Link>
               </p>
             </CardFooter>
