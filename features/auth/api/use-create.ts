@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { InferRequestType, InferResponseType } from "hono";
 
 import { client } from "@/lib/rpc";
+import { currentDate } from "@/lib/utils";
 
 import { toast } from "sonner";
 
@@ -25,7 +26,9 @@ export const useCreate = function () {
     },
 
     onSuccess: function () {
-      toast.success("Account created successfully");
+      toast.success("Account created successfully", {
+        description: currentDate(),
+      });
       router.refresh();
       queryClient.invalidateQueries({ queryKey: ["current-user"] });
     },
