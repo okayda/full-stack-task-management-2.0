@@ -9,7 +9,7 @@ import Link from "next/link";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { createSchema } from "@/features/auth/schemas";
+import { createUserSchema } from "@/features/auth/schemas";
 
 import { AuroraBackground } from "@/components/ui/aurora-background";
 
@@ -38,8 +38,8 @@ import { BadgeCheckIcon } from "lucide-react";
 export default function SignUpCard() {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-  const form = useForm<z.infer<typeof createSchema>>({
-    resolver: zodResolver(createSchema),
+  const form = useForm<z.infer<typeof createUserSchema>>({
+    resolver: zodResolver(createUserSchema),
     defaultValues: {
       username: "",
       email: "",
@@ -47,7 +47,7 @@ export default function SignUpCard() {
     },
   });
 
-  const onSubmit = async function (data: z.infer<typeof createSchema>) {
+  const onSubmit = async function (data: z.infer<typeof createUserSchema>) {
     setIsSubmitting(true);
     try {
       // Replace this with your actual login
