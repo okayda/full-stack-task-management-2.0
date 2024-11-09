@@ -16,7 +16,7 @@ export async function createSessionClient() {
   const session = cookies().get(AUTH_COOKIE);
 
   if (!session || !session.value) {
-    throw new Error("No session available");
+    throw new Error("No cookie session available");
   }
 
   client.setSession(session.value);
