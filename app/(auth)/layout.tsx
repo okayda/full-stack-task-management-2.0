@@ -2,10 +2,17 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 
-import { AuroraBackground } from "@/components/ui/aurora-background";
 import { Button } from "@/components/ui/button";
+
+const AuroraBackground = dynamic(
+  () => import("@/components/ui/aurora-background"),
+  {
+    ssr: false,
+  },
+);
 
 interface AuthLayoutProps {
   children: React.ReactNode;

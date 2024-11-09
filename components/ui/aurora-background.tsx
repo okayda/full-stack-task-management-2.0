@@ -7,10 +7,10 @@ interface AuroraBackgroundProps extends React.HTMLProps<HTMLDivElement> {
   showRadialGradient?: boolean;
 }
 
-export const AuroraBackground = ({
+export default function AuroraBackground({
   showRadialGradient = true,
   ...props
-}: AuroraBackgroundProps) => {
+}: AuroraBackgroundProps) {
   return (
     <div
       className="transition-bg absolute left-0 top-0 -z-10 hidden h-screen w-screen bg-zinc-50 dark:bg-zinc-900 lg-l:block"
@@ -30,4 +30,4 @@ export const AuroraBackground = ({
       </div>
     </div>
   );
-};
+}
