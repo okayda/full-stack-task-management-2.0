@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { useForm } from "react-hook-form";
 
 import Image from "next/image";
@@ -9,6 +8,7 @@ import Link from "next/link";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { useLogin } from "../api/use-login";
 import { loginUserSchema } from "@/features/auth/schemas";
 
 import {
@@ -34,7 +34,7 @@ import { FaGithub, FaGoogle } from "react-icons/fa";
 import { BadgeCheckIcon } from "lucide-react";
 
 export default function SignInCard() {
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const { mutate: verifyAccount, isPending: isVerifyingAccount } = useLogin();
 
   const form = useForm<z.infer<typeof loginUserSchema>>({
     resolver: zodResolver(loginUserSchema),
@@ -44,17 +44,8 @@ export default function SignInCard() {
     },
   });
 
-  const onSubmit = async function (data: z.infer<typeof loginUserSchema>) {
-    setIsSubmitting(true);
-    try {
-      // Replace this with your actual login
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      console.log("Login successful:", data);
-    } catch (e) {
-      console.error("Login error:", e);
-    } finally {
-      setIsSubmitting(false);
-    }
+  const onSubmit = function (values: z.infer<typeof loginUserSchema>) {
+    verifyAccount({ json: values });
   };
 
   return (
@@ -73,7 +64,7 @@ export default function SignInCard() {
           <CardContent className="justify-cente flex gap-x-4 px-0 pb-6 sm:px-6">
             <Button
               onClick={() => {}}
-              disabled={isSubmitting}
+              disabled={isVerifyingAccount}
               variant="outline"
               className="h-[43px] w-full border-neutral-700/20 p-3"
               size="lg"
@@ -84,7 +75,7 @@ export default function SignInCard() {
 
             <Button
               onClick={() => {}}
-              disabled={isSubmitting}
+              disabled={isVerifyingAccount}
               variant="outline"
               className="h-[43px] w-full border-neutral-700/20 p-3"
               size="lg"
@@ -145,7 +136,7 @@ export default function SignInCard() {
                       <FormControl>
                         <Input
                           type="password"
-                          placeholder="Password (at least 8 characters)"
+                          placeholder="Enter your password"
                           {...field}
                           className="!mt-1 h-[45px] border-neutral-400/60 text-[15px]"
                         />
@@ -157,11 +148,11 @@ export default function SignInCard() {
                 />
 
                 <Button
-                  disabled={isSubmitting}
+                  disabled={isVerifyingAccount}
                   size="lg"
                   className="h-[42px] w-full font-semibold tracking-wide"
                 >
-                  {isSubmitting ? "Loading..." : "Login"}
+                  {isVerifyingAccount ? "Loading..." : "Login"}
                 </Button>
               </form>
             </Form>
