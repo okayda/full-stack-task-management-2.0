@@ -20,7 +20,7 @@ export const useCreate = function () {
     mutationFn: async function ({ json }) {
       const response = await client.api.auth.create["$post"]({ json });
 
-      if (!response.ok) throw new Error("Failed to create account");
+      if (!response.ok) throw new Error("Failed mutation to create account");
 
       return await response.json();
     },
