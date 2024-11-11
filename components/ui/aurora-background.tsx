@@ -13,7 +13,7 @@ export default function AuroraBackground({
 }: AuroraBackgroundProps) {
   return (
     <div
-      className="transition-bg absolute left-0 top-0 -z-10 hidden h-screen w-screen bg-zinc-50 dark:bg-zinc-900 lg-l:block"
+      className="transition-bg fixed left-0 top-0 -z-10 hidden h-screen w-screen bg-background dark:bg-zinc-900 lg-l:block"
       {...props}
     >
       <div className="absolute inset-0 overflow-hidden">

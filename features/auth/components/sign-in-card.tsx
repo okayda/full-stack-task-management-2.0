@@ -120,7 +120,7 @@ export default function SignInCard() {
                         />
                       </FormControl>
 
-                      <FormMessage className="!mt-1" />
+                      <FormMessage className="!mt-[5.5px]" />
                     </FormItem>
                   )}
                 />
@@ -142,7 +142,7 @@ export default function SignInCard() {
                         />
                       </FormControl>
 
-                      <FormMessage className="!mt-1" />
+                      <FormMessage className="!mt-[5.5px]" />
                     </FormItem>
                   )}
                 />
@@ -187,7 +187,7 @@ export default function SignInCard() {
           <div className="absolute inset-0 px-10 pt-9">
             <div className="text-left text-white">
               <h2
-                className="mb-6 text-4xl font-bold tracking-wide"
+                className="mb-6 text-[32px] font-semibold tracking-wide"
                 style={{ textShadow: "1px 1px 3px rgba(0, 0, 0, 0.75)" }}
               >
                 Disclaimer

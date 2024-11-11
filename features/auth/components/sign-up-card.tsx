@@ -46,7 +46,17 @@ export default function SignUpCard() {
   });
 
   const onSubmit = function (values: z.infer<typeof createUserSchema>) {
-    createAccount({ json: values });
+    createAccount(
+      { json: values },
+      {
+        onError: function (error) {
+          form.setError("root.serverError", {
+            type: "server",
+            message: error.message,
+          });
+        },
+      },
+    );
   };
 
   return (
@@ -121,7 +131,7 @@ export default function SignUpCard() {
                         />
                       </FormControl>
 
-                      <FormMessage className="!mt-1" />
+                      <FormMessage className="!mt-[5.5px]" />
                     </FormItem>
                   )}
                 />
@@ -144,10 +154,16 @@ export default function SignUpCard() {
                         />
                       </FormControl>
 
-                      <FormMessage className="!mt-1" />
+                      <FormMessage className="!mt-[5.5px]" />
                     </FormItem>
                   )}
                 />
+
+                {form.formState.errors.root?.serverError && (
+                  <p className="!mt-[5.5px] text-[12.8px] text-rose-500">
+                    {form.formState.errors.root.serverError.message}
+                  </p>
+                )}
 
                 <FormField
                   name="password"
@@ -166,7 +182,7 @@ export default function SignUpCard() {
                         />
                       </FormControl>
 
-                      <FormMessage className="!mt-1" />
+                      <FormMessage className="!mt-[5.5px]" />
                     </FormItem>
                   )}
                 />
@@ -211,7 +227,7 @@ export default function SignUpCard() {
           <div className="absolute inset-0 px-10 pt-9">
             <div className="text-left text-white">
               <h2
-                className="mb-6 text-4xl font-bold tracking-wide"
+                className="mb-6 text-[32px] font-semibold tracking-wide"
                 style={{ textShadow: "1px 1px 3px rgba(0, 0, 0, 0.75)" }}
               >
                 Disclaimer

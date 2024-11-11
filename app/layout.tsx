@@ -32,7 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen antialiased`}
       >
         <QueryProvider>
-          <Toaster />
+          <Toaster richColors />
 
           {children}
         </QueryProvider>

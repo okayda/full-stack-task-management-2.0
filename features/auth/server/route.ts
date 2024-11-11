@@ -36,10 +36,13 @@ const app = new Hono()
         return c.json({ success: true });
       } catch (error) {
         console.error("Server auth account creation error:", error);
-        return c.json({
-          success: false,
-          message: "Server auth failed to create account",
-        });
+        return c.json(
+          {
+            success: false,
+            message: "Email already in use. Please use a different email.",
+          },
+          409,
+        );
       }
     },
   )
@@ -67,10 +70,13 @@ const app = new Hono()
         return c.json({ success: true });
       } catch (error) {
         console.error("Server auth account login error:", error);
-        return c.json({
-          success: false,
-          message: "Server auth failed to login account",
-        });
+        return c.json(
+          {
+            success: false,
+            message: "Failed to verify account",
+          },
+          401,
+        );
       }
     },
   );

@@ -19,21 +19,29 @@ export const useLogin = () => {
     mutationFn: async ({ json }) => {
       const response = await client.api.auth.login["$post"]({ json });
 
-      if (!response.ok) throw new Error("Failed mutation to verify account");
+      if (!response.ok) {
+        const errorData = (await response.json()) as {
+          message?: string;
+        };
+
+        throw new Error(errorData.message);
+      }
 
       return await response.json();
     },
 
     onSuccess: () => {
-      toast.success("Account verified successfully", {
+      toast.success("Account verified successfully.", {
         description: currentDate(),
       });
       router.refresh();
-      queryClient.invalidateQueries({ queryKey: ["current"] });
+      queryClient.invalidateQueries({ queryKey: ["user-existent"] });
     },
 
-    onError: () => {
-      toast.error("Failed to verify account");
+    onError: (error) => {
+      toast.warning(error.message, {
+        description: currentDate(),
+      });
     },
   });
 

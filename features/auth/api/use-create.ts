@@ -20,21 +20,29 @@ export const useCreate = function () {
     mutationFn: async function ({ json }) {
       const response = await client.api.auth.create["$post"]({ json });
 
-      if (!response.ok) throw new Error("Failed mutation to create account");
+      if (!response.ok) {
+        const errorData = (await response.json()) as {
+          message?: string;
+        };
+
+        throw new Error(errorData.message);
+      }
 
       return await response.json();
     },
 
     onSuccess: function () {
-      toast.success("Account created successfully", {
+      toast.success("Account created successfully.", {
         description: currentDate(),
       });
       router.refresh();
-      queryClient.invalidateQueries({ queryKey: ["current-user"] });
+      queryClient.invalidateQueries({ queryKey: ["user-existent"] });
     },
 
     onError: function () {
-      toast.error("Failed to create account");
+      toast.warning("Failed to create account", {
+        description: currentDate(),
+      });
     },
   });
 
