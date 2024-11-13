@@ -26,7 +26,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
     <main>
       <AuroraBackground />
 
-      <div className="border-b bg-background p-4 md:px-8">
+      <div className="border-b bg-background p-4 md-l:px-8">
         <nav className="mx-auto flex max-w-[900px] items-center justify-between lg-l:max-w-[1200px]">
           <Image src="/logo.svg" alt="Logo" width={116} height={56} />
 
@@ -38,7 +38,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
         </nav>
       </div>
 
-      <div className="px-4 pt-7 sm:pt-16 md:px-8 md:pt-20 lg-l:pb-10">
+      <div className="px-4 pt-7 sm:pt-16 md:py-12 md-l:px-8 lg-l:pb-10 lg-l:pt-20">
         <div className="mx-auto max-w-[1200px]">{children}</div>
       </div>
     </main>

@@ -15,6 +15,7 @@ const config: Config = {
     extend: {
       screens: {
         "lg-l": "1200px",
+        "md-l": "900px",
       },
       animation: {
         aurora: "aurora 60s linear infinite",
