@@ -123,7 +123,7 @@ export default function SignUpCard() {
                     control={form.control}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-semibold tracking-wide text-foreground">
+                        <FormLabel className="tracking-wide text-foreground">
                           Username
                         </FormLabel>
                         <FormControl>
@@ -146,7 +146,7 @@ export default function SignUpCard() {
                     control={form.control}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-semibold tracking-wide text-foreground">
+                        <FormLabel className="tracking-wide text-foreground">
                           Email
                         </FormLabel>
                         <FormControl>
@@ -175,7 +175,7 @@ export default function SignUpCard() {
                     control={form.control}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-semibold tracking-wide text-foreground">
+                        <FormLabel className="tracking-wide text-foreground">
                           Password
                         </FormLabel>
                         <FormControl>
@@ -195,7 +195,7 @@ export default function SignUpCard() {
                   <Button
                     disabled={isCreatingAccount}
                     size="lg"
-                    className="h-[42px] w-full font-semibold tracking-wide"
+                    className="h-[42px] w-full tracking-wide"
                   >
                     {isCreatingAccount ? "Loading..." : "Create"}
                   </Button>
@@ -204,7 +204,7 @@ export default function SignUpCard() {
             </CardContent>
 
             <CardFooter className="my-3 flex items-center justify-center py-4 sm:my-5 sm:bg-secondary">
-              <p className="text-sm font-semibold">
+              <p className="text-sm font-medium">
                 Already have an account?
                 <Link href="/sign-in">
                   <span className="text-sky-600"> Sign In</span>
@@ -232,15 +232,15 @@ export default function SignUpCard() {
             <div className="absolute inset-0 px-10 pt-9">
               <div className="text-left text-white">
                 <h2
-                  className="mb-6 text-[32px] font-semibold tracking-wide"
-                  style={{ textShadow: "1px 1px 3px rgba(0, 0, 0, 0.75)" }}
+                  className="mb-3 text-[32px] font-semibold tracking-wide"
+                  style={{ textShadow: "1px 1px 3px rgba(0, 0, 0, 0.45)" }}
                 >
                   Disclaimer
                 </h2>
 
                 <p
                   className="mb-5"
-                  style={{ textShadow: "1px 1px 3px rgba(0, 0, 0, 0.75)" }}
+                  style={{ textShadow: "1px 1px 3px rgba(0, 0, 0, 0.45)" }}
                 >
                   For the sake of transparency, I want to clarify that I
                   don&apos;t collect or misuse any personal information. You can
@@ -258,7 +258,7 @@ export default function SignUpCard() {
 
                 <p
                   className="mb-5"
-                  style={{ textShadow: "1px 1px 3px rgba(0, 0, 0, 0.75)" }}
+                  style={{ textShadow: "1px 1px 3px rgba(0, 0, 0, 0.45)" }}
                 >
                   Any design similarities between this project and your project
                   are{" "}
@@ -280,7 +280,7 @@ export default function SignUpCard() {
       <Separator className="mt-6 hidden py-2 sm:block md:hidden" />
 
       <div className="sm:relative">
-        <div className="relative mx-auto max-w-[400px] py-11 sm:static sm:max-w-[410px] md:mx-0 md:max-w-none md:flex-grow lg-l:hidden">
+        <div className="relative mx-auto max-w-[400px] py-6 sm:static sm:max-w-[410px] md:mx-0 md:max-w-none md:flex-grow md:py-11 lg-l:hidden">
           <GridPattern
             squares={[
               [7, 1],
@@ -301,7 +301,9 @@ export default function SignUpCard() {
               "inset-x-0 skew-y-0",
             )}
           />
-          <h4 className="mb-3 text-[26px] font-semibold">Disclaimer</h4>
+          <h4 className="mb-3 text-[26px] font-semibold md:text-[32px]">
+            Disclaimer
+          </h4>
 
           <p className="mb-4">
             For the sake of transparency, I want to clarify that I don&apos;t

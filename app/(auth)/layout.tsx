@@ -30,7 +30,10 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
         <nav className="mx-auto flex max-w-[900px] items-center justify-between lg-l:max-w-[1200px]">
           <Image src="/logo.svg" alt="Logo" width={116} height={56} />
 
-          <Button asChild className="rounded-full px-6 tracking-wide">
+          <Button
+            asChild
+            className="rounded-full px-6 font-normal tracking-wide"
+          >
             <Link href={isSignIn ? "/sign-up" : "sign-in"}>
               {isSignIn ? "Create account" : "Get started"}
             </Link>

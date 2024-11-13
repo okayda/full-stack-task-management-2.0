@@ -13,6 +13,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        rubik: ["var(--font-rubik)"],
+      },
+
       screens: {
         "lg-l": "1200px",
         "md-l": "900px",
