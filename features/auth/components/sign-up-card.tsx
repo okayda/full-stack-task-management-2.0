@@ -104,10 +104,10 @@ export default function SignUpCard() {
             <CardContent className="grid gap-y-4 px-0 pb-0 sm:px-6">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t border-muted-foreground" />
+                  <span className="w-full border-t border-muted-foreground/30" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground">
+                  <span className="bg-background px-2 text-muted-foreground/70">
                     or
                   </span>
                 </div>
