@@ -1,7 +1,13 @@
 import Navbar from "@/components/navbar";
 import Sidebar from "@/components/sidebar";
+import { getCurrentUser } from "@/features/auth/queries";
+import { redirect } from "next/navigation";
 
-export default function Home() {
+export default async function Home() {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) redirect("/sign-in");
+
   return (
     <main>
       <div className="flex h-full w-full">
