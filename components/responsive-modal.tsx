@@ -1,7 +1,5 @@
 import { useMedia } from "react-use";
-
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
 
 interface ResponsiveModalProps {
@@ -10,17 +8,17 @@ interface ResponsiveModalProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export const ResponsiveModal = ({
+export const ResponsiveModal = function ({
   children,
   open,
   onOpenChange,
-}: ResponsiveModalProps) => {
-  const isDesktop = useMedia("(min-width: 1024px)", true);
+}: ResponsiveModalProps) {
+  const isDesktop = useMedia("(min-width: 640px)", true);
 
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="hide-scrollbar max-h-[85vh] w-full overflow-y-auto border-none p-0 sm:max-w-lg">
+        <DialogContent className="hide-scrollbar max-h-[85vh] w-full overflow-y-auto border-none p-0 sm:max-w-md">
           {children}
         </DialogContent>
       </Dialog>

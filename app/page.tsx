@@ -1,6 +1,7 @@
 import Navbar from "@/components/navbar";
 import Sidebar from "@/components/sidebar";
 import { getCurrentUser } from "@/features/auth/queries";
+import { CreateBoardModal } from "@/features/board/components/create-board-modal";
 import { redirect } from "next/navigation";
 
 export default async function Home() {
@@ -10,6 +11,8 @@ export default async function Home() {
 
   return (
     <main>
+      <CreateBoardModal />
+
       <div className="flex h-full w-full">
         <div className="fixed left-0 top-0 hidden h-full overflow-y-auto lg:block lg:w-[280px]">
           <Sidebar />

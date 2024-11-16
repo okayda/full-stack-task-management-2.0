@@ -8,8 +8,11 @@ import { Button } from "./ui/button";
 
 import { LogOut } from "lucide-react";
 import { MdOutlineDashboard } from "react-icons/md";
+import { useCreateBoardModal } from "@/features/board/hooks/use-create-board-modal";
 
 export default function Sidebar() {
+  const { open } = useCreateBoardModal();
+
   return (
     <aside className="h-full w-full bg-neutral-100 p-4">
       <div className="flex h-full flex-col justify-between">
@@ -32,7 +35,10 @@ export default function Sidebar() {
             </li>
 
             <li className="mt-5 border-t-2 border-dashed border-neutral-400/50 pt-4">
-              <Button className="flex h-[42px] w-full items-center gap-x-2 lg:h-auto">
+              <Button
+                className="flex h-[42px] w-full items-center gap-x-2 lg:h-auto"
+                onClick={open}
+              >
                 Create Board
               </Button>
             </li>

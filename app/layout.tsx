@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { QueryProvider } from "@/components/query-provider";
+
 import { Toaster } from "@/components/ui/sonner";
 
 const rubik = localFont({
@@ -23,11 +25,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${rubik.variable} font-rubik min-h-screen antialiased`}>
+      <body className={`${rubik.variable} min-h-screen font-rubik antialiased`}>
         <QueryProvider>
           <Toaster richColors />
-
-          {children}
+          <NuqsAdapter>{children}</NuqsAdapter>
         </QueryProvider>
       </body>
     </html>

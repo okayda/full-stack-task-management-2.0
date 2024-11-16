@@ -112,9 +112,7 @@ export default function SignInCard() {
                     control={form.control}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="tracking-wide text-foreground">
-                          Email
-                        </FormLabel>
+                        <FormLabel className="tracking-wide">Email</FormLabel>
                         <FormControl>
                           <Input
                             autoComplete="off"
@@ -135,7 +133,7 @@ export default function SignInCard() {
                     control={form.control}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="tracking-wide text-foreground">
+                        <FormLabel className="tracking-wide">
                           Password
                         </FormLabel>
                         <FormControl>
