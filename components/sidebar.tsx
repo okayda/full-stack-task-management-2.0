@@ -14,7 +14,7 @@ export default function Sidebar() {
   const { open } = useCreateBoardModal();
 
   return (
-    <aside className="h-full w-full bg-neutral-100 p-4">
+    <aside className="h-full w-full bg-neutral-50 p-4">
       <div className="flex h-full flex-col justify-between">
         <div>
           <Link href="/">
@@ -45,6 +45,17 @@ export default function Sidebar() {
           </ul>
 
           <Separator className="my-4 bg-neutral-400/50" />
+
+          <div className="text-[13px] font-semibold text-neutral-600">
+            <p>
+              <span className="text-emerald-600">Developed: </span>
+              Jhon Que&ntilde;ano
+            </p>
+            <p>
+              <span className="text-emerald-600">Design: </span>
+              Min-seo
+            </p>
+          </div>
         </div>
 
         <Button

@@ -25,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${rubik.variable} min-h-screen font-rubik antialiased`}>
+      <body className={`${rubik.variable} font-rubik antialiased`}>
         <QueryProvider>
           <Toaster richColors />
           <NuqsAdapter>{children}</NuqsAdapter>

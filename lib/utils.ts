@@ -18,3 +18,7 @@ export function currentDate() {
     hour12: true,
   }).format(now);
 }
+
+export function customizeUpperCase(str: string): string {
+  return str.replace(/_/g, " ").toLocaleUpperCase();
+}
