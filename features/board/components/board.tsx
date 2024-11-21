@@ -142,7 +142,7 @@ export default function Board({ data }: DataBoardProps) {
       return newTasks;
     });
 
-    //   onChange(updatesPayload);
+    // onChange(updatesPayload);
   }, []);
 
   return (

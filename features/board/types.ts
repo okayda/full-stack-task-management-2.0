@@ -1,3 +1,5 @@
+import { Models } from "node-appwrite";
+
 export enum TaskStatus {
   TODO = "TODO",
   IN_PROGRESS = "IN_PROGRESS",
@@ -5,8 +7,7 @@ export enum TaskStatus {
   DONE = "DONE",
 }
 
-export type Task = {
-  $id: string | undefined;
+export type Task = Models.Document & {
   name: string;
   status: TaskStatus;
   position: number;
