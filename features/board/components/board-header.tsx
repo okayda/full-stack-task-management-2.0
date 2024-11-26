@@ -11,10 +11,10 @@ interface BoardHeaderProps {
 
 export default function BoardHeader({ board, taskCount }: BoardHeaderProps) {
   return (
-    <div className="mb-6 flex cursor-auto items-center justify-between rounded-md border-b border-neutral-300 px-2 pb-3">
+    <div className="mb-6 flex cursor-auto items-center justify-between rounded-md border-b border-neutral-300 px-2 pb-3 2xl:mr-[10px]">
       <div className="flex items-center gap-x-2">
         <div>
-          <h2 className="align-center inline-block text-sm font-medium">
+          <h2 className="inline-block text-sm font-medium">
             {customizeUpperCase(board)}
           </h2>
         </div>

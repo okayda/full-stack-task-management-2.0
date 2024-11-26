@@ -13,9 +13,9 @@ export const ResponsiveModal = function ({
   open,
   onOpenChange,
 }: ResponsiveModalProps) {
-  const isDesktop = useMedia("(min-width: 640px)", true);
+  const largeScreen = useMedia("(min-width: 640px)", true);
 
-  if (isDesktop) {
+  if (largeScreen) {
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="hide-scrollbar max-h-[85vh] w-full overflow-y-auto border-none p-0 sm:max-w-md">

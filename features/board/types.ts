@@ -9,6 +9,7 @@ export enum TaskStatus {
 
 export type Task = Models.Document & {
   name: string;
+  priority: string;
   status: TaskStatus;
   position: number;
 };
