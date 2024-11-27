@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Sidebar from "@/components/sidebar";
 import Navbar from "@/components/navbar";
@@ -12,12 +12,21 @@ interface SidebarLayoutProps {
   isDesktop: boolean;
 }
 
+const VIEWPORT_WIDTH = 1680;
+
 export default function DashBoardLayout({
   children,
   isDesktop,
 }: SidebarLayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(isDesktop);
-  const [viewportWidth, setViewportWidth] = useState(1680);
+  const [viewportWidth, setViewportWidth] = useState(VIEWPORT_WIDTH);
+
+  useEffect(() => {
+    const savedViewportWidth = localStorage.getItem("viewportWidth");
+    if (savedViewportWidth) {
+      setViewportWidth(parseInt(savedViewportWidth, 10));
+    }
+  }, []);
 
   return (
     <div className="relative">

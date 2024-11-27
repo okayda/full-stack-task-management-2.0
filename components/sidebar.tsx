@@ -1,5 +1,7 @@
 "use client";
 
+import { useState, useEffect } from "react";
+
 import Link from "next/link";
 import Image from "next/image";
 
@@ -13,7 +15,12 @@ import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 
 import { MdOutlineDashboard } from "react-icons/md";
-import { LogOut, PanelLeftCloseIcon, PanelRightOpenIcon } from "lucide-react";
+import {
+  LogOut,
+  PanelLeftCloseIcon,
+  PanelRightOpenIcon,
+  LoaderIcon,
+} from "lucide-react";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -22,6 +29,15 @@ interface SidebarProps {
   setViewportWidth: (width: number) => void;
 }
 
+const VIEW_PORT_STEPS = [1080, 1280, 1580, 1680];
+const VIEW_PORT_LABELS = ["Small", "Medium", "Large", "X-Large"];
+
+const getTargetIndex = function (width: number) {
+  // Return index of the first occurrence or -1 if not present so the last step will be used which X-Large
+  const idx = VIEW_PORT_STEPS.indexOf(width);
+  return idx >= 0 ? idx : VIEW_PORT_STEPS.length - 1;
+};
+
 export default function Sidebar({
   isOpen,
   toggle,
@@ -29,6 +45,29 @@ export default function Sidebar({
   setViewportWidth,
 }: SidebarProps) {
   const { open } = useCreateBoardModal();
+
+  const [index, setIndex] = useState(getTargetIndex(viewportWidth));
+  const [label, setLabel] = useState(VIEW_PORT_LABELS[index]);
+  const [showSlider, setShowSlider] = useState(false);
+
+  useEffect(() => {
+    const getViewportWidth = localStorage.getItem("viewportWidth");
+    const getLabel = localStorage.getItem("viewportLabel");
+
+    if (getViewportWidth && getLabel) {
+      const width = parseInt(getViewportWidth, 10);
+      setViewportWidth(width);
+      setIndex(getTargetIndex(width));
+
+      setLabel(getLabel);
+    }
+
+    const timer = setTimeout(() => {
+      setShowSlider(true);
+    }, 2000); // 2 second
+
+    return () => clearTimeout(timer); // Cleanup timer
+  }, []);
 
   return (
     <div
@@ -84,15 +123,26 @@ export default function Sidebar({
               Viewport adjustment
             </span>
 
-            <CustomSlider
-              defaultValue={viewportWidth}
-              steps={[1080, 1280, 1580, 1680]}
-              onValueChange={(value) => setViewportWidth(value)}
-            />
+            {showSlider ? (
+              <div>
+                <CustomSlider
+                  value={index}
+                  viewPortSteps={VIEW_PORT_STEPS}
+                  viewPortLabels={VIEW_PORT_LABELS}
+                  onValueChange={(newIndex, newValue, newLabel) => {
+                    setIndex(newIndex);
+                    setViewportWidth(newValue);
+                    setLabel(newLabel);
+                  }}
+                />
 
-            <span className="flex h-[36px] items-center justify-center rounded-full border border-[#0F0F0F] px-3 py-1 text-center text-[15px] font-medium tracking-wide text-neutral-900">
-              {viewportWidth}px
-            </span>
+                <span className="flex h-[36px] items-center justify-center rounded-full border border-[#0F0F0F] px-3 py-1 text-center text-[15px] font-medium tracking-wide text-neutral-900">
+                  {label}
+                </span>
+              </div>
+            ) : (
+              <LoaderIcon className="mx-auto mt-4 animate-spin" />
+            )}
 
             <Separator className="my-4 bg-neutral-400/50" />
           </div>
@@ -109,14 +159,24 @@ export default function Sidebar({
           </div>
         </div>
 
-        <Button
-          variant="outline"
-          className="flex h-[42px] items-center gap-x-3 lg:h-auto"
-          onClick={() => {}}
-        >
-          Log out
-          <LogOut className="size-5" />
-        </Button>
+        <div>
+          <Image
+            src="/hatsune.webp"
+            width={150}
+            height={150}
+            alt="meme picture"
+            className="mx-auto"
+          />
+
+          <Button
+            variant="outline"
+            className="flex h-[42px] w-full items-center gap-x-3 lg:h-auto"
+            onClick={() => {}}
+          >
+            Log out
+            <LogOut className="size-5" />
+          </Button>
+        </div>
       </div>
     </div>
   );

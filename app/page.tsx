@@ -2,50 +2,50 @@ import { redirect } from "next/navigation";
 
 import { getCurrentUser } from "@/features/auth/queries";
 import { CreateBoardModal } from "@/features/board/components/create-board-modal";
-import { Task, TaskStatus } from "@/features/board/types";
-import Board from "@/features/board/components/board";
+// import { Task, TaskStatus } from "@/features/board/types";
+// import Board from "@/features/board/components/board";
 
 import GridPattern from "@/components/ui/grid-pattern";
 import DashBoardLayout from "@/components/dash-board-layout";
 
-const dataExample: Task[] = [
-  // Your data here
-  {
-    $id: "1",
-    priority: "Lowest",
-    name: "Setup project",
-    status: TaskStatus.TODO,
-    position: 1,
-  },
-  {
-    $id: "2",
-    priority: "Low",
-    name: "Implement authentication",
-    status: TaskStatus.IN_PROGRESS,
-    position: 2,
-  },
-  {
-    $id: "3",
-    priority: "Highest",
-    name: "Code review",
-    status: TaskStatus.IN_REVIEW,
-    position: 3,
-  },
-  {
-    $id: "4",
-    priority: "Medium",
-    name: "Bug fix: Login issue",
-    status: TaskStatus.IN_PROGRESS,
-    position: 4,
-  },
-  {
-    $id: "5",
-    priority: "High",
-    name: "Deploy application",
-    status: TaskStatus.DONE,
-    position: 5,
-  },
-];
+// const dataExample: Task[] = [
+//   // Your data here
+//   {
+//     $id: "1",
+//     priority: "Lowest",
+//     name: "Setup project",
+//     status: TaskStatus.TODO,
+//     position: 1,
+//   },
+//   {
+//     $id: "2",
+//     priority: "Low",
+//     name: "Implement authentication",
+//     status: TaskStatus.IN_PROGRESS,
+//     position: 2,
+//   },
+//   {
+//     $id: "3",
+//     priority: "Highest",
+//     name: "Code review",
+//     status: TaskStatus.IN_REVIEW,
+//     position: 3,
+//   },
+//   {
+//     $id: "4",
+//     priority: "Medium",
+//     name: "Bug fix: Login issue",
+//     status: TaskStatus.IN_PROGRESS,
+//     position: 4,
+//   },
+//   {
+//     $id: "5",
+//     priority: "High",
+//     name: "Deploy application",
+//     status: TaskStatus.DONE,
+//     position: 5,
+//   },
+// ];
 
 export default async function Home() {
   const currentUser = await getCurrentUser();
