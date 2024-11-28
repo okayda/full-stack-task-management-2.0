@@ -44,7 +44,7 @@ export default function Sidebar({
   viewportWidth,
   setViewportWidth,
 }: SidebarProps) {
-  const { open } = useCreateBoardModal();
+  const { open: openBoardFormModal } = useCreateBoardModal();
 
   const [index, setIndex] = useState(getTargetIndex(viewportWidth));
   const [label, setLabel] = useState(VIEW_PORT_LABELS[index]);
@@ -109,7 +109,7 @@ export default function Sidebar({
             <li className="mt-5 border-t-2 border-dashed border-neutral-400/50 pt-4">
               <Button
                 className="flex h-[42px] w-full items-center gap-x-2 lg:h-auto"
-                onClick={open}
+                onClick={openBoardFormModal}
               >
                 Create Board
               </Button>

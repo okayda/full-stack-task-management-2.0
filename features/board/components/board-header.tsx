@@ -1,8 +1,11 @@
+"use client";
+
 import { customizeUpperCase } from "@/lib/utils";
 
 import { TaskStatus } from "../types";
 
 import { CirclePlusIcon } from "lucide-react";
+import { useCreateTaskModal } from "../hooks/use-create-task-modal";
 
 interface BoardHeaderProps {
   board: TaskStatus;
@@ -10,6 +13,8 @@ interface BoardHeaderProps {
 }
 
 export default function BoardHeader({ board, taskCount }: BoardHeaderProps) {
+  const { open: openTaskFormModal } = useCreateTaskModal();
+
   return (
     <div className="mb-6 flex cursor-auto items-center justify-between rounded-md border-b border-neutral-300 px-2 pb-3 2xl:mr-[10px]">
       <div className="flex items-center gap-x-2">
@@ -25,7 +30,7 @@ export default function BoardHeader({ board, taskCount }: BoardHeaderProps) {
       </div>
 
       <div className="size-[18px] cursor-pointer">
-        <CirclePlusIcon className="size-full" />
+        <CirclePlusIcon className="size-full" onClick={openTaskFormModal} />
       </div>
     </div>
   );

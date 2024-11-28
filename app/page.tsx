@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 
 import { getCurrentUser } from "@/features/auth/queries";
 import { CreateBoardModal } from "@/features/board/components/create-board-modal";
+import { CreateTaskModal } from "@/features/board/components/create-task-modal";
 // import { Task, TaskStatus } from "@/features/board/types";
 // import Board from "@/features/board/components/board";
 
@@ -9,7 +10,6 @@ import GridPattern from "@/components/ui/grid-pattern";
 import DashBoardLayout from "@/components/dash-board-layout";
 
 // const dataExample: Task[] = [
-//   // Your data here
 //   {
 //     $id: "1",
 //     priority: "Lowest",
@@ -60,6 +60,8 @@ export default async function Home() {
       />
 
       <CreateBoardModal />
+
+      <CreateTaskModal />
 
       {/* Different layout different functionalities */}
 
