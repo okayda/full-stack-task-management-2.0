@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/features/auth/queries";
 import { CreateBoardModal } from "@/features/board/components/create-board-modal";
 import { SettingColumnModal } from "@/features/board/components/setting-column-modal";
+import { CreateColumnModal } from "@/features/board/components/create-column-modal";
 import { CreateTaskModal } from "@/features/board/components/create-task-modal";
 // import { Task, TaskStatus } from "@/features/board/types";
 // import Board from "@/features/board/components/board";
@@ -63,6 +64,8 @@ export default async function Home() {
       <CreateBoardModal />
 
       <SettingColumnModal />
+
+      <CreateColumnModal />
 
       <CreateTaskModal />
 

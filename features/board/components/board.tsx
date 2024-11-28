@@ -4,6 +4,8 @@ import React, { useState, useEffect, useCallback } from "react";
 
 import ScrollContainer from "react-indiana-drag-scroll";
 
+import { useCreateColumnModal } from "../hooks/use-create-column-modal";
+
 import BoardHeader from "./board-header";
 import BoardTaskCard from "./board-task-card";
 
@@ -60,6 +62,7 @@ const buildTasksState = function (data: Task[]): TasksState {
 };
 
 export default function Board({ data, isDesktop }: DataBoardProps) {
+  const { open: openColumnFormModal } = useCreateColumnModal();
   const [tasks, setTasks] = useState<TasksState>(() => buildTasksState(data));
 
   useEffect(() => setTasks(buildTasksState(data)), [data]);
@@ -239,8 +242,11 @@ export default function Board({ data, isDesktop }: DataBoardProps) {
             })}
 
             {boards.length !== MAX_COLUMNS && (
-              <div className="cursor-move rounded-md pb-1.5 pr-2 2xl:pr-0">
-                <div className="flex h-full w-[300px] cursor-pointer flex-col justify-center rounded-lg border border-dashed border-neutral-300 bg-neutral-100 text-muted-foreground transition hover:border-[#0F0F0F] hover:text-[#0F0F0F] 2xl:w-[310px]">
+              <div className="on cursor-move rounded-md pb-1.5 pr-2 2xl:pr-0">
+                <div
+                  onClick={openColumnFormModal}
+                  className="flex h-full w-[300px] cursor-pointer flex-col justify-center rounded-lg border border-dashed border-neutral-300 bg-neutral-100 text-muted-foreground transition 2xl:w-[310px]"
+                >
                   <h3 className="text-center text-2xl font-medium">
                     New Column
                   </h3>
