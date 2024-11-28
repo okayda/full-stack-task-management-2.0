@@ -19,7 +19,7 @@ export default function CustomSlider({
   className,
   onValueChange,
 }: CustomSliderProps) {
-  const handleValueChange = (valueArray: number[]) => {
+  const handleValueChange = function (valueArray: number[]) {
     const newIndex = valueArray[0];
     const newValue = viewPortSteps[newIndex];
     const newLabel = viewPortLabels[newIndex];

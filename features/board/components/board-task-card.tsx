@@ -8,7 +8,7 @@ import {
 
 import { Task } from "../types";
 
-interface BoardTaskProps {
+interface BoardTaskCardProps {
   task: Task;
 }
 
@@ -60,7 +60,7 @@ const priorityIcons: Record<string, { icon: JSX.Element; tooltip: string }> = {
   },
 };
 
-const getPriorityType = (priorityStr: string): JSX.Element | null => {
+const getPriorityType = function (priorityStr: string): JSX.Element | null {
   const priority = priorityIcons[priorityStr];
   if (!priority) return null;
 
@@ -82,7 +82,7 @@ const priorityBorderColors: Record<string, string> = {
   Highest: "border-l-rose-500",
 };
 
-export default function BoardTaskCard({ task }: BoardTaskProps) {
+export default function BoardTaskCard({ task }: BoardTaskCardProps) {
   const defaultClass =
     "relative cursor-pointer rounded-lg border border-l-4 border-y-transparent border-r-transparent bg-white px-4 py-6 shadow-task transition";
 

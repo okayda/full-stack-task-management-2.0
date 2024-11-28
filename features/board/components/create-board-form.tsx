@@ -44,7 +44,7 @@ export const CreateBoardForm = function ({ onCancel }: CreateBoardFormProps) {
                       <Input
                         {...field}
                         autoComplete="off"
-                        placeholder="Your board name"
+                        placeholder="Your board name?"
                         className="!mt-1 h-[45px] border-neutral-400/60 text-[15px] md:h-[42px]"
                       />
                     </FormControl>

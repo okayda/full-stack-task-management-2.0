@@ -29,8 +29,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-import { BadgeXIcon } from "lucide-react";
 import { TaskStatus, TaskPriority } from "../types";
+
+import { BadgeXIcon } from "lucide-react";
 
 interface CreateTaskFormProps {
   onCancel?: () => void;
@@ -40,18 +41,18 @@ export const CreateTaskForm = function ({ onCancel }: CreateTaskFormProps) {
   const form = useForm({});
   const [subtasks, setSubtasks] = useState<string[]>([""]);
 
-  const addSubtask = () => {
+  const addSubtask = function () {
     if (subtasks.length < 5) {
       setSubtasks([...subtasks, ""]);
     }
   };
 
-  const removeSubtask = (index: number) => {
+  const removeSubtask = function (index: number) {
     const updatedSubtasks = subtasks.filter((_, i) => i !== index);
     setSubtasks(updatedSubtasks);
   };
 
-  const updateSubtask = (index: number, value: string) => {
+  const updateSubtask = function (index: number, value: string) {
     const updatedSubtasks = subtasks.map((subtask, i) =>
       i === index ? value : subtask,
     );
@@ -76,6 +77,7 @@ export const CreateTaskForm = function ({ onCancel }: CreateTaskFormProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="tracking-wide">Task Name</FormLabel>
+
                     <FormControl>
                       <Input
                         {...field}
@@ -84,6 +86,7 @@ export const CreateTaskForm = function ({ onCancel }: CreateTaskFormProps) {
                         className="!mt-1 h-[45px] border-neutral-400/60 text-[15px] md:h-[42px]"
                       />
                     </FormControl>
+
                     <FormMessage />
                   </FormItem>
                 )}
@@ -95,6 +98,7 @@ export const CreateTaskForm = function ({ onCancel }: CreateTaskFormProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="tracking-wide">Status</FormLabel>
+
                     <Select
                       defaultValue={field.value}
                       onValueChange={field.onChange}
@@ -104,18 +108,24 @@ export const CreateTaskForm = function ({ onCancel }: CreateTaskFormProps) {
                           <SelectValue placeholder="Select status" />
                         </SelectTrigger>
                       </FormControl>
+
                       <FormMessage />
+
                       <SelectContent>
                         <SelectItem value={TaskStatus.IN_PROGRESS}>
                           In Progress
                         </SelectItem>
+
                         <SelectItem value={TaskStatus.IN_REVIEW}>
                           In Review
                         </SelectItem>
+
                         <SelectItem value={TaskStatus.TODO}>Todo</SelectItem>
+
                         <SelectItem value={TaskStatus.DONE}>Done</SelectItem>
                       </SelectContent>
                     </Select>
+
                     <FormMessage />
                   </FormItem>
                 )}
@@ -127,6 +137,7 @@ export const CreateTaskForm = function ({ onCancel }: CreateTaskFormProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="tracking-wide">Description</FormLabel>
+
                     <FormControl>
                       <Textarea
                         {...field}
@@ -134,6 +145,7 @@ export const CreateTaskForm = function ({ onCancel }: CreateTaskFormProps) {
                         className="!mt-1 h-[80px] border-neutral-400/60 text-[15px] md:h-[80px]"
                       />
                     </FormControl>
+
                     <FormMessage />
                   </FormItem>
                 )}
@@ -154,21 +166,26 @@ export const CreateTaskForm = function ({ onCancel }: CreateTaskFormProps) {
                           <SelectValue placeholder="Select priority" />
                         </SelectTrigger>
                       </FormControl>
+
                       <FormMessage />
                       <SelectContent>
                         <SelectItem value={TaskPriority.HIGHEST}>
                           Highest
                         </SelectItem>
                         <SelectItem value={TaskPriority.HIGH}>High</SelectItem>
+
                         <SelectItem value={TaskPriority.MEDIUM}>
                           Medium
                         </SelectItem>
+
                         <SelectItem value={TaskPriority.LOW}>Low</SelectItem>
+
                         <SelectItem value={TaskPriority.LOWEST}>
                           Lowest
                         </SelectItem>
                       </SelectContent>
                     </Select>
+
                     <FormMessage />
                   </FormItem>
                 )}
@@ -210,10 +227,12 @@ export const CreateTaskForm = function ({ onCancel }: CreateTaskFormProps) {
                   {subtasks.length < 5 && (
                     <Button
                       type="button"
-                      className="mt-2 h-[40px] w-full"
+                      variant="outline"
+                      className="mt-2 h-[40px] w-full border-neutral-400/60"
+                      disabled={false}
                       onClick={addSubtask}
                     >
-                      Increase
+                      New Subtask
                     </Button>
                   )}
                 </AccordionContent>
@@ -228,6 +247,7 @@ export const CreateTaskForm = function ({ onCancel }: CreateTaskFormProps) {
               >
                 Create
               </Button>
+
               <Button
                 type="button"
                 variant="secondary"
