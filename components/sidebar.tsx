@@ -102,7 +102,7 @@ export default function Sidebar({
                 className="flex items-center gap-x-2 text-lg font-medium"
               >
                 <MdOutlineDashboard className="h-6 w-6" />
-                First Board
+                Example Board
               </Link>
             </li>
 

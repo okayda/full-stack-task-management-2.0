@@ -19,7 +19,7 @@ export default function TechStack() {
           href={tech.link}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-between rounded-lg border bg-background/40 p-4 text-center text-base backdrop-blur-md transition-colors duration-300 hover:border-neutral-300 hover:bg-neutral-50"
+          className="flex items-center justify-between rounded-lg border bg-background/60 p-4 text-center text-base backdrop-blur transition-colors duration-300 hover:border-neutral-400"
         >
           {tech.name}
 

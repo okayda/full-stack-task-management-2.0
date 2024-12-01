@@ -2,17 +2,18 @@
 
 import { customizeUpperCase } from "@/lib/utils";
 
-import { TaskStatus } from "../types";
-
 import { CirclePlusIcon } from "lucide-react";
 import { useCreateTaskModal } from "../hooks/use-create-task-modal";
 
 interface BoardHeaderProps {
-  board: TaskStatus;
+  statusName: string;
   taskCount: number;
 }
 
-export default function BoardHeader({ board, taskCount }: BoardHeaderProps) {
+export default function BoardHeader({
+  statusName,
+  taskCount,
+}: BoardHeaderProps) {
   const { open: openTaskFormModal } = useCreateTaskModal();
 
   return (
@@ -20,7 +21,7 @@ export default function BoardHeader({ board, taskCount }: BoardHeaderProps) {
       <div className="flex items-center gap-x-2">
         <div>
           <h2 className="inline-block text-sm font-medium">
-            {customizeUpperCase(board)}
+            {customizeUpperCase(statusName)}
           </h2>
         </div>
 

@@ -32,14 +32,13 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
         strokeDasharray="4 2"
       />
 
-      <div className="border-b bg-background p-4 md-l:px-8">
+      <div className="border-b bg-background/60 p-4 backdrop-blur md-l:px-8">
         <nav className="mx-auto flex max-w-[900px] items-center justify-between lg-l:max-w-[1200px]">
           <Image src="/logo.svg" alt="Logo" width={116} height={56} />
 
           <Button
             asChild
-            variant="secondary"
-            className="rounded-full border border-neutral-300 px-6 font-medium tracking-wide"
+            className="rounded-full border px-6 font-medium tracking-wide"
           >
             <Link href={isSignIn ? "/sign-up" : "sign-in"}>
               {isSignIn ? "Create account" : "Get started"}

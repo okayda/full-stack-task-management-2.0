@@ -13,7 +13,7 @@ interface BoardTaskCardProps {
 }
 
 const priorityIcons: Record<string, { icon: JSX.Element; tooltip: string }> = {
-  Lowest: {
+  LOWEST: {
     icon: (
       <MdOutlineKeyboardDoubleArrowDown
         className="size-6 text-blue-500"
@@ -22,7 +22,7 @@ const priorityIcons: Record<string, { icon: JSX.Element; tooltip: string }> = {
     ),
     tooltip: "Lowest Priority",
   },
-  Low: {
+  LOW: {
     icon: (
       <MdOutlineKeyboardArrowDown
         className="size-6 text-blue-500"
@@ -31,7 +31,7 @@ const priorityIcons: Record<string, { icon: JSX.Element; tooltip: string }> = {
     ),
     tooltip: "Low Priority",
   },
-  Medium: {
+  MEDIUM: {
     icon: (
       <FaGripLines
         className="size-[18px] text-amber-400"
@@ -40,7 +40,7 @@ const priorityIcons: Record<string, { icon: JSX.Element; tooltip: string }> = {
     ),
     tooltip: "Medium Priority",
   },
-  High: {
+  HIGH: {
     icon: (
       <MdOutlineKeyboardArrowUp
         className="size-6 text-rose-500"
@@ -49,7 +49,7 @@ const priorityIcons: Record<string, { icon: JSX.Element; tooltip: string }> = {
     ),
     tooltip: "High Priority",
   },
-  Highest: {
+  HIGHEST: {
     icon: (
       <MdOutlineKeyboardDoubleArrowUp
         className="size-6 text-rose-500"
@@ -75,11 +75,11 @@ const getPriorityType = function (priorityStr: string): JSX.Element | null {
 };
 
 const priorityBorderColors: Record<string, string> = {
-  Lowest: "border-l-blue-500",
-  Low: "border-l-blue-500",
-  Medium: "border-l-amber-400",
-  High: "border-l-rose-500",
-  Highest: "border-l-rose-500",
+  LOWEST: "border-l-blue-500",
+  LOW: "border-l-blue-500",
+  MEDIUM: "border-l-amber-400",
+  HIGH: "border-l-rose-500",
+  HIGHEST: "border-l-rose-500",
 };
 
 export default function BoardTaskCard({ task }: BoardTaskCardProps) {
@@ -93,7 +93,9 @@ export default function BoardTaskCard({ task }: BoardTaskCardProps) {
       <div className="absolute right-2 top-2">
         {getPriorityType(task.priority)}
       </div>
-      <h3 className="mb-2 pb-2.5 text-[14px] font-medium">{task.name}</h3>
+      <h3 className="mb-2 pb-2.5 font-sans text-[15px] font-medium">
+        {task.taskName}
+      </h3>
       <p className="text-xs font-medium text-muted-foreground">
         0 of 5 subtasks
       </p>

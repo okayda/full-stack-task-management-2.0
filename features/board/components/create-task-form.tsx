@@ -1,7 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+import { useCreateTask } from "../api/use-create-task";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -29,37 +33,65 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-import { TaskStatus, TaskPriority } from "../types";
+import { customizeUpperCase } from "@/lib/utils";
+
+import { TaskPriority, StatusColumn } from "../types";
+import { createTaskSchema } from "../schemas";
+
+import { MAX_SUB_TASKS } from "../constants";
 
 import { BadgeXIcon } from "lucide-react";
 
 interface CreateTaskFormProps {
   onCancel?: () => void;
+  statusColumn: StatusColumn[];
 }
 
-export const CreateTaskForm = function ({ onCancel }: CreateTaskFormProps) {
-  const form = useForm({});
-  const [subtasks, setSubtasks] = useState<string[]>([""]);
+type CreateTaskFormValues = z.infer<typeof createTaskSchema>;
+
+export const CreateTaskForm = function ({
+  onCancel,
+  statusColumn,
+}: CreateTaskFormProps) {
+  const { mutate: createTask, isPending: isCreating } = useCreateTask();
+
+  const form = useForm<CreateTaskFormValues>({
+    resolver: zodResolver(createTaskSchema),
+    defaultValues: {
+      boardId: "bsa100",
+      taskName: "",
+      subtasks: [{ value: "" }],
+    },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "subtasks",
+  });
 
   const addSubtask = function () {
-    if (subtasks.length < 5) {
-      setSubtasks([...subtasks, ""]);
+    if (fields.length < MAX_SUB_TASKS) {
+      append({ value: "" });
     }
   };
 
   const removeSubtask = function (index: number) {
-    const updatedSubtasks = subtasks.filter((_, i) => i !== index);
-    setSubtasks(updatedSubtasks);
+    remove(index);
   };
 
-  const updateSubtask = function (index: number, value: string) {
-    const updatedSubtasks = subtasks.map((subtask, i) =>
-      i === index ? value : subtask,
+  const onSubmit: SubmitHandler<CreateTaskFormValues> = function (data) {
+    createTask(
+      { json: { ...data, boardId: "test100Id" } },
+      {
+        onSuccess: function () {
+          form.reset({
+            subtasks: [{ value: "" }],
+          });
+          onCancel?.();
+        },
+      },
     );
-    setSubtasks(updatedSubtasks);
   };
-
-  const onSubmit = function () {};
 
   return (
     <Card className="h-full w-full border-none shadow-none">
@@ -73,122 +105,131 @@ export const CreateTaskForm = function ({ onCancel }: CreateTaskFormProps) {
             <div className="space-y-3">
               <FormField
                 control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="tracking-wide">Task Name</FormLabel>
+                name="taskName"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormLabel className="tracking-wide">Task Name</FormLabel>
 
-                    <FormControl>
-                      <Input
-                        {...field}
-                        autoComplete="off"
-                        placeholder="Your task name?"
-                        className="!mt-1 h-[45px] border-neutral-400/60 text-[15px] md:h-[42px]"
-                      />
-                    </FormControl>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="status"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="tracking-wide">Status</FormLabel>
-
-                    <Select
-                      defaultValue={field.value}
-                      onValueChange={field.onChange}
-                    >
                       <FormControl>
-                        <SelectTrigger className="!mt-1 h-[45px] border-neutral-400/60 text-[15px] md:h-[42px]">
-                          <SelectValue placeholder="Select status" />
-                        </SelectTrigger>
+                        <Input
+                          {...field}
+                          autoComplete="off"
+                          placeholder="Your task name?"
+                          className="!mt-1 h-[45px] border-neutral-400/60 text-[15px] md:h-[42px]"
+                        />
                       </FormControl>
-
-                      <FormMessage />
-
-                      <SelectContent>
-                        <SelectItem value={TaskStatus.IN_PROGRESS}>
-                          In Progress
-                        </SelectItem>
-
-                        <SelectItem value={TaskStatus.IN_REVIEW}>
-                          In Review
-                        </SelectItem>
-
-                        <SelectItem value={TaskStatus.TODO}>Todo</SelectItem>
-
-                        <SelectItem value={TaskStatus.DONE}>Done</SelectItem>
-                      </SelectContent>
-                    </Select>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
+                    </FormItem>
+                  );
+                }}
               />
 
               <FormField
                 control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="tracking-wide">Description</FormLabel>
+                name="statusId"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormLabel className="tracking-wide">Status</FormLabel>
 
-                    <FormControl>
-                      <Textarea
-                        {...field}
-                        placeholder="Do you have any description?"
-                        className="!mt-1 h-[80px] border-neutral-400/60 text-[15px] md:h-[80px]"
-                      />
-                    </FormControl>
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="!mt-1 h-[45px] border-neutral-400/60 text-[15px] md:h-[42px]">
+                            <SelectValue placeholder="Select status" />
+                          </SelectTrigger>
+                        </FormControl>
 
-                    <FormMessage />
-                  </FormItem>
-                )}
+                        <SelectContent>
+                          {statusColumn.map((statusColumn) => {
+                            const columnName = customizeUpperCase(
+                              statusColumn.statusName,
+                            );
+
+                            return (
+                              <SelectItem
+                                key={statusColumn.statusId}
+                                value={statusColumn.statusId}
+                              >
+                                {columnName}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  );
+                }}
               />
 
               <FormField
                 control={form.control}
                 name="priority"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="tracking-wide">Priority</FormLabel>
-                    <Select
-                      defaultValue={field.value}
-                      onValueChange={field.onChange}
-                    >
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormLabel className="tracking-wide">Priority</FormLabel>
+
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="!mt-1 h-[45px] border-neutral-400/60 text-[15px] md:h-[42px]">
+                            <SelectValue placeholder="Select priority" />
+                          </SelectTrigger>
+                        </FormControl>
+
+                        <SelectContent>
+                          <SelectItem value={TaskPriority.HIGHEST}>
+                            Highest
+                          </SelectItem>
+
+                          <SelectItem value={TaskPriority.HIGH}>
+                            High
+                          </SelectItem>
+
+                          <SelectItem value={TaskPriority.MEDIUM}>
+                            Medium
+                          </SelectItem>
+
+                          <SelectItem value={TaskPriority.LOW}>Low</SelectItem>
+
+                          <SelectItem value={TaskPriority.LOWEST}>
+                            Lowest
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  );
+                }}
+              />
+
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormLabel className="tracking-wide">
+                        Description
+                      </FormLabel>
+
                       <FormControl>
-                        <SelectTrigger className="!mt-1 h-[45px] border-neutral-400/60 text-[15px] md:h-[42px]">
-                          <SelectValue placeholder="Select priority" />
-                        </SelectTrigger>
+                        <Textarea
+                          {...field}
+                          autoComplete="off"
+                          placeholder="Do you have any description?"
+                          className="!mt-1 h-[80px] border-neutral-400/60 text-[15px] md:h-[80px]"
+                        />
                       </FormControl>
 
                       <FormMessage />
-                      <SelectContent>
-                        <SelectItem value={TaskPriority.HIGHEST}>
-                          Highest
-                        </SelectItem>
-                        <SelectItem value={TaskPriority.HIGH}>High</SelectItem>
-
-                        <SelectItem value={TaskPriority.MEDIUM}>
-                          Medium
-                        </SelectItem>
-
-                        <SelectItem value={TaskPriority.LOW}>Low</SelectItem>
-
-                        <SelectItem value={TaskPriority.LOWEST}>
-                          Lowest
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
+                    </FormItem>
+                  );
+                }}
               />
             </div>
 
@@ -203,33 +244,35 @@ export const CreateTaskForm = function ({ onCancel }: CreateTaskFormProps) {
 
                 <AccordionContent>
                   <div className="space-y-2 py-1">
-                    {subtasks.map((subtask, index) => (
-                      <div key={index} className="flex items-center gap-2">
-                        <Input
-                          value={subtask}
-                          onChange={(e) => updateSubtask(index, e.target.value)}
-                          placeholder="Your minor task?"
-                          className="h-[40px] border-neutral-400/60"
-                        />
+                    {fields.map((field, index) => {
+                      return (
+                        <div key={field.id} className="flex items-center gap-2">
+                          <Input
+                            {...form.register(`subtasks.${index}.value`)}
+                            autoComplete="off"
+                            placeholder="Your minor task?"
+                            className="h-[40px] border-neutral-400/60"
+                          />
 
-                        <Button
-                          type="button"
-                          className="h-[40px] px-3"
-                          onClick={() => removeSubtask(index)}
-                          disabled={subtasks.length === 1}
-                        >
-                          <BadgeXIcon className="!size-5" />
-                        </Button>
-                      </div>
-                    ))}
+                          <Button
+                            type="button"
+                            disabled={fields.length === 1 || isCreating}
+                            className="h-[40px] px-3"
+                            onClick={() => removeSubtask(index)}
+                          >
+                            <BadgeXIcon className="!size-5" />
+                          </Button>
+                        </div>
+                      );
+                    })}
                   </div>
 
-                  {subtasks.length < 5 && (
+                  {fields.length < MAX_SUB_TASKS && (
                     <Button
                       type="button"
+                      disabled={isCreating}
                       variant="outline"
                       className="mt-2 h-[40px] w-full border-neutral-400/60"
-                      disabled={false}
                       onClick={addSubtask}
                     >
                       New Subtask
@@ -242,16 +285,16 @@ export const CreateTaskForm = function ({ onCancel }: CreateTaskFormProps) {
             <div className="mt-6 flex gap-x-2">
               <Button
                 type="submit"
-                disabled={false}
+                disabled={isCreating}
                 className="h-[42px] w-full tracking-wide"
               >
-                Create
+                {isCreating ? "Loading..." : "Create"}
               </Button>
 
               <Button
                 type="button"
+                disabled={isCreating}
                 variant="secondary"
-                disabled={false}
                 onClick={onCancel}
                 className="h-[42px] w-full border tracking-wide"
               >

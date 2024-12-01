@@ -5,49 +5,12 @@ import { CreateBoardModal } from "@/features/board/components/create-board-modal
 import { SettingColumnModal } from "@/features/board/components/setting-column-modal";
 import { CreateColumnModal } from "@/features/board/components/create-column-modal";
 import { CreateTaskModal } from "@/features/board/components/create-task-modal";
-// import { Task, TaskStatus } from "@/features/board/types";
-// import Board from "@/features/board/components/board";
+import Board from "@/features/board/components/board";
 
 import GridPattern from "@/components/ui/grid-pattern";
 import DashBoardLayout from "@/components/dash-board-layout";
 
-// const dataExample: Task[] = [
-//   {
-//     $id: "1",
-//     priority: "Lowest",
-//     name: "Setup project",
-//     status: TaskStatus.TODO,
-//     position: 1,
-//   },
-//   {
-//     $id: "2",
-//     priority: "Low",
-//     name: "Implement authentication",
-//     status: TaskStatus.IN_PROGRESS,
-//     position: 2,
-//   },
-//   {
-//     $id: "3",
-//     priority: "Highest",
-//     name: "Code review",
-//     status: TaskStatus.IN_REVIEW,
-//     position: 3,
-//   },
-//   {
-//     $id: "4",
-//     priority: "Medium",
-//     name: "Bug fix: Login issue",
-//     status: TaskStatus.IN_PROGRESS,
-//     position: 4,
-//   },
-//   {
-//     $id: "5",
-//     priority: "High",
-//     name: "Deploy application",
-//     status: TaskStatus.DONE,
-//     position: 5,
-//   },
-// ];
+import { dataExample, statusColumnExample } from "@/lib/exampleData";
 
 export default async function Home() {
   const currentUser = await getCurrentUser();
@@ -67,7 +30,7 @@ export default async function Home() {
 
       <CreateColumnModal />
 
-      <CreateTaskModal />
+      <CreateTaskModal statusColumn={statusColumnExample} />
 
       {/* Different layout different functionalities */}
 
@@ -75,7 +38,11 @@ export default async function Home() {
       <div className="lg:hidden">
         <DashBoardLayout isDesktop={false}>
           <div className="flex flex-col pb-0 pl-2 pt-8 lg:px-6 lg:pt-10">
-            {/* <Board data={dataExample} isDesktop={false} /> */}
+            {/* <Board
+              data={dataExample}
+              statusColumn={statusColumnExample}
+              isDesktop={false}
+            /> */}
           </div>
         </DashBoardLayout>
       </div>
@@ -84,7 +51,11 @@ export default async function Home() {
       <div className="hidden lg:block">
         <DashBoardLayout isDesktop={true}>
           <div className="flex flex-col pb-0 pl-2 pt-8 lg:px-6 lg:pt-10">
-            {/* <Board data={dataExample} isDesktop={true} /> */}
+            {/* <Board
+              data={dataExample}
+              statusColumn={statusColumnExample}
+              isDesktop={true}
+            /> */}
           </div>
         </DashBoardLayout>
       </div>

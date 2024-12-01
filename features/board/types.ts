@@ -1,12 +1,5 @@
 import { Models } from "node-appwrite";
 
-export enum TaskStatus {
-  TODO = "TODO",
-  IN_PROGRESS = "IN_PROGRESS",
-  IN_REVIEW = "IN_REVIEW",
-  DONE = "DONE",
-}
-
 export enum TaskPriority {
   HIGHEST = "HIGHEST",
   HIGH = "HIGH",
@@ -15,9 +8,18 @@ export enum TaskPriority {
   LOWEST = "LOWEST",
 }
 
+export type StatusColumn = {
+  statusId: string;
+  statusName: string;
+};
+
 export type Task = Models.Document & {
-  name: string;
-  priority: string;
-  status: TaskStatus;
+  boardId: string; // appwrite referential id
+  statusId: string;
+  statusName: string;
   position: number;
+  taskName: string;
+  description?: string;
+  priority: TaskPriority;
+  subtasksId: string; // appwrite referential id
 };

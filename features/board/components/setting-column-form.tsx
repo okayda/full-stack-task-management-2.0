@@ -15,6 +15,8 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 
+import { MAX_COLUMNS } from "../constants";
+
 import { BadgeXIcon } from "lucide-react";
 
 interface SettingColumnFormProps {
@@ -28,7 +30,7 @@ export const SettingColumnForm = function ({
   const [columns, setColumns] = useState<string[]>(["", ""]);
 
   const addColumn = function () {
-    if (columns.length < 5) {
+    if (columns.length < MAX_COLUMNS) {
       setColumns([...columns, ""]);
     }
   };
@@ -105,7 +107,7 @@ export const SettingColumnForm = function ({
                 ))}
               </div>
 
-              {columns.length < 5 && (
+              {columns.length < MAX_COLUMNS && (
                 <div className="flex justify-center">
                   <Button
                     type="button"

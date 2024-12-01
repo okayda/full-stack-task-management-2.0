@@ -1,14 +1,19 @@
 import { CreateTaskForm } from "./create-task-form";
+
+import { StatusColumn } from "../types";
+
 // import { Card, CardContent } from "@/components/ui/card";
 
 // import { Loader } from "lucide-react";
 
 interface CreateTaskFormWrapperProps {
   onCancel: () => void;
+  statusColumn: StatusColumn[];
 }
 
 export const CreateTaskFormWrapper = ({
   onCancel,
+  statusColumn,
 }: CreateTaskFormWrapperProps) => {
   //   if (false) {
   //     return (
@@ -20,5 +25,5 @@ export const CreateTaskFormWrapper = ({
   //     );
   //   }
 
-  return <CreateTaskForm onCancel={onCancel} />;
+  return <CreateTaskForm statusColumn={statusColumn} onCancel={onCancel} />;
 };
