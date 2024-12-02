@@ -5,12 +5,11 @@ import { CreateBoardModal } from "@/features/board/components/create-board-modal
 import { SettingColumnModal } from "@/features/board/components/setting-column-modal";
 import { CreateColumnModal } from "@/features/board/components/create-column-modal";
 import { CreateTaskModal } from "@/features/board/components/create-task-modal";
-import Board from "@/features/board/components/board";
 
 import GridPattern from "@/components/ui/grid-pattern";
 import DashBoardLayout from "@/components/dash-board-layout";
 
-import { dataExample, statusColumnExample } from "@/lib/exampleData";
+import { statusColumnExample } from "@/lib/exampleData";
 
 export default async function Home() {
   const currentUser = await getCurrentUser();

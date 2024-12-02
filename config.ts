@@ -1,5 +1,7 @@
 export const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
 
+export const BOARDS_ID = process.env.NEXT_PUBLIC_APPWRITE_BOARDS_ID!;
+
 export const STATUS_COLUMN_ID =
   process.env.NEXT_PUBLIC_APPWRITE_STATUS_COLUMN_ID!;
 

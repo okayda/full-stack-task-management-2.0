@@ -1,101 +1,87 @@
 import { TaskPriority } from "@/features/board/types";
 
-export const dataExample = [
-  // taskName: string; ✅
-  // description?: string;
-  // position: number; ✅
-  // boardId: string;
-  // subtasksId: string;
-  // statusName: string; ✅
-  // statusId: string; ✅
-  // priority: TaskPriority; ✅
+export const tasksExample = [
   {
-    $id: "1",
-    priority: TaskPriority.HIGH,
     taskName: "Design homepage layout",
+    description: "Create wireframes and design mockups for the homepage.",
+    priority: TaskPriority.HIGH,
     statusId: "status100",
-    statusName: "Todo",
-    position: 1,
+    position: 1000,
+    subtasks: [
+      { title: "Create wireframe", isCompleted: false },
+      { title: "Design mockup", isCompleted: false },
+    ],
   },
   {
-    $id: "2",
-    priority: TaskPriority.MEDIUM,
     taskName: "Implement user authentication",
+    description: "Set up authentication flow using Appwrite.",
+    priority: TaskPriority.MEDIUM,
     statusId: "status200",
-    statusName: "In Progress",
-    position: 1,
+    position: 1000,
+    subtasks: [
+      { title: "Set up backend auth", isCompleted: false },
+      { title: "Create login page", isCompleted: false },
+      { title: "Create signup page", isCompleted: false },
+    ],
   },
   {
-    $id: "3",
-    priority: TaskPriority.LOW,
     taskName: "Set up database schema",
-    statusId: "status100",
-    statusName: "Todo",
-    position: 2,
-  },
-  {
-    $id: "4",
+    description: "Design and implement the database schema using PostgreSQL.",
     priority: TaskPriority.HIGH,
-    taskName: "Integrate third-party API",
-    statusId: "status200",
-    statusName: "In Progress",
-    position: 2,
-  },
-  {
-    $id: "5",
-    priority: TaskPriority.MEDIUM,
-    taskName: "Fix responsive layout issues",
-    statusId: "status300",
-    statusName: "In Review",
-    position: 1,
-  },
-  {
-    $id: "6",
-    priority: TaskPriority.LOWEST,
-    taskName: "Optimize images for performance",
     statusId: "status100",
-    statusName: "Todo",
-    position: 3,
+    position: 2000,
+    subtasks: [
+      { title: "Define tables and relationships", isCompleted: false },
+      { title: "Implement migrations", isCompleted: false },
+    ],
   },
   {
-    $id: "7",
-    priority: TaskPriority.HIGHEST,
-    taskName: "Write unit tests for components",
+    taskName: "Develop RESTful API endpoints",
+    description: "Create API endpoints for user and product management.",
+    priority: TaskPriority.MEDIUM,
     statusId: "status200",
-    statusName: "In Progress",
-    position: 3,
+    position: 2000,
+    subtasks: [
+      { title: "Create user endpoints", isCompleted: false },
+      { title: "Create product endpoints", isCompleted: false },
+      { title: "Implement authentication middleware", isCompleted: false },
+    ],
   },
   {
-    $id: "8",
+    taskName: "Integrate third-party payment gateway",
+    description: "Add payment processing using Stripe.",
+    priority: TaskPriority.HIGH,
+    statusId: "status100",
+    position: 3000,
+    subtasks: [
+      { title: "Set up Stripe account", isCompleted: false },
+      { title: "Implement payment API", isCompleted: false },
+      { title: "Handle webhooks", isCompleted: false },
+    ],
+  },
+  {
+    taskName: "Optimize application performance",
+    description: "Improve load times and optimize database queries.",
     priority: TaskPriority.LOW,
-    taskName: "Implement password reset functionality",
     statusId: "status300",
-    statusName: "In Review",
-    position: 2,
+    position: 1000,
+    subtasks: [
+      { title: "Analyze slow queries", isCompleted: false },
+      { title: "Implement caching", isCompleted: false },
+      { title: "Optimize frontend assets", isCompleted: false },
+    ],
   },
   {
-    $id: "9",
-    priority: TaskPriority.HIGH,
-    taskName: "Deploy application to production server",
-    statusId: "status400",
-    statusName: "Done",
-    position: 1,
-  },
-  {
-    $id: "10",
+    taskName: "Implement unit and integration tests",
+    description: "Ensure code quality with automated testing.",
     priority: TaskPriority.MEDIUM,
-    taskName: "Update documentation",
     statusId: "status400",
-    statusName: "Done",
-    position: 2,
-  },
-  {
-    $id: "11",
-    priority: TaskPriority.HIGHEST,
-    taskName: "Refactor codebase for better maintainability",
-    statusId: "status300",
-    statusName: "In Review",
-    position: 3,
+    position: 1000,
+    subtasks: [
+      { title: "Write unit tests", isCompleted: false },
+      { title: "Write integration tests", isCompleted: false },
+      { title: "Set up CI pipeline", isCompleted: false },
+    ],
   },
 ];
 

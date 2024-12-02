@@ -3,6 +3,7 @@ import { setCookie } from "hono/cookie";
 import { zValidator } from "@hono/zod-validator";
 
 import { ID } from "node-appwrite";
+
 import { createAdminClient } from "@/lib/appwrite";
 
 import { createUserSchema, loginUserSchema } from "../schemas";
@@ -18,6 +19,7 @@ const app = new Hono()
         const { username, email, password } = c.req.valid("json");
 
         const { account } = await createAdminClient();
+
         await account.create(ID.unique(), email, password, username);
 
         const session = await account.createEmailPasswordSession(
