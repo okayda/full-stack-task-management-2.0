@@ -11,7 +11,7 @@ import { toast } from "sonner";
 type ResponseType = InferResponseType<(typeof client.api.auth.login)["$post"]>;
 type RequestType = InferRequestType<(typeof client.api.auth.login)["$post"]>;
 
-export const useLogin = () => {
+export const useLogin = function () {
   const queryClient = useQueryClient();
   const router = useRouter();
 

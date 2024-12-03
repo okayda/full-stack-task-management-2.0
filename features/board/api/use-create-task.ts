@@ -9,7 +9,7 @@ import { toast } from "sonner";
 type ResponseType = InferResponseType<(typeof client.api.board)["$post"], 200>;
 type RequestType = InferRequestType<(typeof client.api.board)["$post"]>;
 
-export const useCreateTask = () => {
+export const useCreateTask = function () {
   const queryClient = useQueryClient();
 
   const mutation = useMutation<ResponseType, Error, RequestType>({

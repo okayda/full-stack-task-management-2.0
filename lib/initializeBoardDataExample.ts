@@ -11,7 +11,9 @@ import {
   SUB_TASKS_ID,
 } from "@/config";
 
-export async function initializeBoardData(
+import { MAX_SUB_TASKS } from "@/features/board/constants";
+
+export async function initializeBoardDataExample(
   databases: Databases,
   userId: string,
 ) {
@@ -19,10 +21,15 @@ export async function initializeBoardData(
     const boardId = ID.unique();
     const boardName = "Example Board";
 
-    await databases.createDocument(DATABASE_ID, BOARDS_ID, boardId, {
-      boardName,
-      userId,
-    });
+    const boardPromise = await databases.createDocument(
+      DATABASE_ID,
+      BOARDS_ID,
+      boardId,
+      {
+        boardName,
+        userId,
+      },
+    );
 
     const statusColumnsData: Record<string, unknown> = {
       boardId,
@@ -32,12 +39,14 @@ export async function initializeBoardData(
       statusColumnsData[`column_${index}`] = status.statusName;
     });
 
-    await databases.createDocument(
+    const columnsPromise = await databases.createDocument(
       DATABASE_ID,
       STATUS_COLUMN_ID,
       ID.unique(),
       statusColumnsData,
     );
+
+    await Promise.all([boardPromise, columnsPromise]);
 
     for (const task of tasksExample) {
       const { taskName, description, position, priority, statusId, subtasks } =
@@ -51,7 +60,6 @@ export async function initializeBoardData(
         subtaskData[`subtask_check_${index}`] = subtask.isCompleted || false;
       });
 
-      const MAX_SUB_TASKS = 5;
       for (let i = subtasksArray.length; i < MAX_SUB_TASKS; i++) {
         subtaskData[`subtask_${i}`] = "";
         subtaskData[`subtask_check_${i}`] = null;
@@ -84,7 +92,7 @@ export async function initializeBoardData(
       await Promise.all([subtasksPromise, taskPromise]);
     }
   } catch (error) {
-    console.error("Error initializing Example board data:", error);
+    console.error("Error initializing board data example:", error);
     throw error;
   }
 }

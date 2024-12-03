@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { useCreateBoardModal } from "@/features/board/hooks/use-create-board-modal";
+import { useCreateBoardDataExample } from "@/features/board/api/use-create-board-data-example";
 
 import CustomSlider from "@/components/custom-slider";
 
@@ -45,6 +46,9 @@ export default function Sidebar({
   setViewportWidth,
 }: SidebarProps) {
   const { open: openBoardFormModal } = useCreateBoardModal();
+
+  const { mutate: createBoardExample, isPending: isCreatingBoardExample } =
+    useCreateBoardDataExample();
 
   const [index, setIndex] = useState(getTargetIndex(viewportWidth));
   const [label, setLabel] = useState(VIEW_PORT_LABELS[index]);
@@ -96,19 +100,30 @@ export default function Sidebar({
           <Separator className="mb-5 mt-4 bg-neutral-400/50" />
 
           <ul>
-            <li>
+            {/* <li>
               <Link
                 href="#"
                 className="flex items-center gap-x-2 text-lg font-medium"
               >
-                <MdOutlineDashboard className="h-6 w-6" />
+                <MdOutlineDashboard className="size-6" />
                 Example Board
               </Link>
+            </li> */}
+
+            <li>
+              <Button
+                className="mx-auto flex h-[42px] items-center gap-x-2 rounded-full lg:h-auto"
+                onClick={createBoardExample}
+                disabled={isCreatingBoardExample}
+              >
+                {isCreatingBoardExample ? "Generating..." : "Generate Example"}
+                <MdOutlineDashboard />
+              </Button>
             </li>
 
             <li className="mt-5 border-t-2 border-dashed border-neutral-400/60 pt-4">
               <Button
-                className="flex h-[42px] w-full items-center gap-x-2 lg:h-auto"
+                className="h-[42px] w-full lg:h-auto"
                 onClick={openBoardFormModal}
               >
                 Create Board
