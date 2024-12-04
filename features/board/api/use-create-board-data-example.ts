@@ -24,13 +24,13 @@ export const useCreateBoardDataExample = function () {
         await client.api.board["create-board-data-example"]["$post"]();
 
       if (!response.ok)
-        throw new Error("Failed to initialize board data example");
+        throw new Error("Failed to initialize board data example.");
 
       return await response.json();
     },
 
     onSuccess: () => {
-      toast.success("Successfully initialized board data example", {
+      toast.success("Successfully initialized board data example.", {
         description: currentDate(),
       });
 
@@ -38,7 +38,7 @@ export const useCreateBoardDataExample = function () {
     },
 
     onError: () => {
-      toast.error("Failed to initialize board data example", {
+      toast.error("Failed to initialize board data example.", {
         description: currentDate(),
       });
     },

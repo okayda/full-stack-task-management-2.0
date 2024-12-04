@@ -2,6 +2,11 @@
 
 import { useForm } from "react-hook-form";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+import { useCreateBoard } from "../api/use-create-board";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,18 +15,40 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
+
+import { createBoardSchema } from "../schemas";
 
 interface CreateBoardFormProps {
   onCancel?: () => void;
 }
 
-export const CreateBoardForm = function ({ onCancel }: CreateBoardFormProps) {
-  const form = useForm({});
+type CreateBoardFormValues = z.infer<typeof createBoardSchema>;
 
-  const onSubmit = function () {};
+export const CreateBoardForm = function ({ onCancel }: CreateBoardFormProps) {
+  const { mutate: createBoard, isPending: isCreatingBoard } = useCreateBoard();
+
+  const form = useForm({
+    resolver: zodResolver(createBoardSchema),
+    defaultValues: {
+      boardName: "",
+    },
+  });
+
+  const onSubmit = function (data: CreateBoardFormValues) {
+    createBoard(
+      { json: data },
+      {
+        onSuccess: function () {
+          form.reset({
+            boardName: "",
+          });
+          onCancel?.();
+        },
+      },
+    );
+  };
 
   return (
     <Card className="h-full w-full border-none shadow-none">
@@ -35,7 +62,7 @@ export const CreateBoardForm = function ({ onCancel }: CreateBoardFormProps) {
             <div>
               <FormField
                 control={form.control}
-                name="name"
+                name="boardName"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="tracking-wide">Board Name</FormLabel>
@@ -48,8 +75,6 @@ export const CreateBoardForm = function ({ onCancel }: CreateBoardFormProps) {
                         className="!mt-1 h-[45px] border-neutral-400/60 text-[15px] md:h-[42px]"
                       />
                     </FormControl>
-
-                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -58,17 +83,16 @@ export const CreateBoardForm = function ({ onCancel }: CreateBoardFormProps) {
             <div className="flex gap-x-2">
               <Button
                 type="submit"
-                disabled={false}
-                onClick={() => {}}
+                disabled={isCreatingBoard}
                 className="h-[42px] w-full tracking-wide"
               >
-                Create
+                {isCreatingBoard ? "Creating..." : "Create"}
               </Button>
 
               <Button
                 type="button"
                 variant="secondary"
-                disabled={false}
+                disabled={isCreatingBoard}
                 onClick={onCancel}
                 className="h-[42px] w-full border tracking-wide"
               >

@@ -8,34 +8,37 @@ import { currentDate } from "@/lib/utils";
 import { toast } from "sonner";
 
 type ResponseType = InferResponseType<
-  (typeof client.api.board)["create-task"]["$post"],
+  (typeof client.api.board)["create-board"]["$post"],
   200
 >;
 type RequestType = InferRequestType<
-  (typeof client.api.board)["create-task"]["$post"]
+  (typeof client.api.board)["create-board"]["$post"]
 >;
 
-export const useCreateTask = function () {
+export const useCreateBoard = function () {
   const queryClient = useQueryClient();
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
     mutationFn: async ({ json }) => {
-      const response = await client.api.board["create-task"]["$post"]({ json });
+      const response = await client.api.board["create-board"]["$post"]({
+        json,
+      });
 
-      if (!response.ok) throw new Error("Failed to create task.");
+      if (!response.ok) throw new Error("Failed to create board.");
 
       return await response.json();
     },
 
     onSuccess: () => {
-      toast.success("Successfully created your task.", {
+      toast.success("Successfully created your board.", {
         description: currentDate(),
       });
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+
+      queryClient.invalidateQueries({ queryKey: ["boards"] });
     },
 
     onError: () => {
-      toast.error("Failed to create your task.", {
+      toast.error("Failed to create your board.", {
         description: currentDate(),
       });
     },

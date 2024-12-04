@@ -1,6 +1,10 @@
 import { z } from "zod";
 import { TaskPriority } from "./types";
 
+export const createBoardSchema = z.object({
+  boardName: z.string().trim().min(1, "Required"),
+});
+
 export const createTaskSchema = z.object({
   boardId: z.string().trim().min(1, "Required"),
   taskName: z.string().trim().min(1, "Required"),

@@ -114,6 +114,7 @@ export default function SignInCard() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="tracking-wide">Email</FormLabel>
+
                         <FormControl>
                           <Input
                             autoComplete="off"
@@ -245,7 +246,7 @@ export default function SignInCard() {
                 target="_blank"
                 rel="noopener noreferrer"
                 href="https://github.com/okayda/full-stack-task-management-2.0"
-                className="mt-6 flex items-center justify-between rounded-lg border bg-background/40 p-4 backdrop-blur-md transition-colors hover:border-neutral-300 hover:bg-neutral-50"
+                className="mt-6 flex items-center justify-between rounded-lg border bg-background/40 p-4 backdrop-blur-md transition-colors hover:border-neutral-400"
               >
                 <h4 className="text-xl font-medium">Task Management v2.0</h4>
 

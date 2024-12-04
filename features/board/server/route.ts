@@ -3,19 +3,44 @@ import { zValidator } from "@hono/zod-validator";
 
 import { ID, Query } from "node-appwrite";
 
-import { DATABASE_ID, SUB_TASKS_ID, TASKS_ID } from "@/config";
+import { BOARDS_ID, DATABASE_ID, SUB_TASKS_ID, TASKS_ID } from "@/config";
 
 import { sessionMiddleware } from "@/lib/session-middleware";
 
 import { initializeBoardDataExample } from "@/lib/initializeBoardDataExample";
 
-import { createTaskSchema } from "../schemas";
+import { createBoardSchema, createTaskSchema } from "../schemas";
 
 import { MAX_SUB_TASKS } from "../constants";
 
 const app = new Hono()
   .post(
-    "/",
+    "/create-board",
+    sessionMiddleware,
+    zValidator("json", createBoardSchema),
+    async (c) => {
+      const databases = c.get("databases");
+      const user = c.get("user");
+
+      const { boardName } = c.req.valid("json");
+
+      const boardId = ID.unique();
+
+      const board = await databases.createDocument(
+        DATABASE_ID,
+        BOARDS_ID,
+        boardId,
+        {
+          boardName,
+          userId: user.$id,
+        },
+      );
+
+      return c.json({ board });
+    },
+  )
+  .post(
+    "/create-task",
     sessionMiddleware,
     zValidator("json", createTaskSchema),
     async (c) => {

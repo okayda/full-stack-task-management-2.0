@@ -147,14 +147,20 @@ export default function SignUpCard() {
                     control={form.control}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="tracking-wide">Email</FormLabel>
+                        <FormLabel className="flex items-center justify-between tracking-wide">
+                          Email
+                          <span className="text-xs text-muted-foreground/70">
+                            (Don&apos;t use your real email)
+                          </span>
+                        </FormLabel>
+
                         <FormControl>
                           <Input
                             autoComplete="off"
                             type="email"
                             placeholder="hello_world@navercorp.com"
                             {...field}
-                            className="!mt-1 h-[45px] border-neutral-400/60 text-[15px]"
+                            className="h-[45px] border-neutral-400/60 text-[15px]"
                           />
                         </FormControl>
 
@@ -285,7 +291,7 @@ export default function SignUpCard() {
                 target="_blank"
                 rel="noopener noreferrer"
                 href="https://github.com/okayda/full-stack-task-management-2.0"
-                className="mt-6 flex items-center justify-between rounded-lg border bg-background/40 p-4 backdrop-blur-md transition-colors hover:border-neutral-300 hover:bg-neutral-50"
+                className="mt-6 flex items-center justify-between rounded-lg border bg-background/40 p-4 backdrop-blur-md transition-colors hover:border-neutral-400"
               >
                 <h4 className="text-xl font-medium">Task Management v2.0</h4>
 
