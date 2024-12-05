@@ -1,9 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
+
+import { Models } from "node-appwrite";
 
 import { useCreateBoardModal } from "@/features/board/hooks/use-create-board-modal";
 import { useCreateBoardDataExample } from "@/features/board/api/use-create-board-data-example";
@@ -15,7 +18,7 @@ import { Button } from "./ui/button";
 
 import { cn } from "@/lib/utils";
 
-// import { MdOutlineDashboard } from "react-icons/md";
+import { MdOutlineDashboard } from "react-icons/md";
 import {
   LogOut,
   PanelLeftCloseIcon,
@@ -28,6 +31,8 @@ interface SidebarProps {
   toggle: () => void;
   viewportWidth: number;
   setViewportWidth: (width: number) => void;
+  isHomePage?: boolean;
+  userBoardsData?: Models.DocumentList<Models.Document>;
 }
 
 const VIEW_PORT_STEPS = [1080, 1280, 1580, 1680];
@@ -44,7 +49,11 @@ export default function Sidebar({
   toggle,
   viewportWidth,
   setViewportWidth,
+  isHomePage,
+  userBoardsData,
 }: SidebarProps) {
+  const pathname = usePathname();
+
   const { open: openBoardFormModal } = useCreateBoardModal();
 
   useCreateBoardDataExample();
@@ -99,19 +108,30 @@ export default function Sidebar({
           <Separator className="mb-5 mt-4 bg-neutral-400/50" />
 
           <ul>
-            {/* <li>
-              <Link
-                href="#"
-                className="flex items-center gap-x-2 text-lg font-medium"
-              >
-                <MdOutlineDashboard className="size-6" />
-                Example Board
-              </Link>
-            </li> */}
+            {userBoardsData && userBoardsData.total > 0 ? (
+              userBoardsData.documents.map((board) => {
+                const isActive = pathname === `/boards/${board.$id}`;
 
-            <li>
-              <h3 className="text-lg font-medium">No available boards</h3>
-            </li>
+                return (
+                  <li key={board.$id} className="mb-3">
+                    <Link
+                      href={`/boards/${board.$id}`}
+                      className={cn(
+                        "flex items-center gap-x-2 text-base font-medium transition-colors",
+                        isActive ? "text-[#0A0A0A]" : "text-neutral-400",
+                      )}
+                    >
+                      <MdOutlineDashboard className="size-6" />
+                      {board.boardName}
+                    </Link>
+                  </li>
+                );
+              })
+            ) : (
+              <li>
+                <h3 className="text-base font-medium">No available boards</h3>
+              </li>
+            )}
 
             <li className="mt-5 border-t-2 border-dashed border-neutral-400/60 pt-4">
               <Button
@@ -125,34 +145,36 @@ export default function Sidebar({
 
           <Separator className="my-4 bg-neutral-400/50" />
 
-          <div className="hidden lg:block">
-            <span className="block text-sm font-medium">
-              Viewport adjustment
-            </span>
+          {!isHomePage && (
+            <div className="hidden lg:block">
+              <span className="block text-sm font-medium">
+                Viewport adjustment
+              </span>
 
-            {showSlider ? (
-              <div>
-                <CustomSlider
-                  value={index}
-                  viewPortSteps={VIEW_PORT_STEPS}
-                  viewPortLabels={VIEW_PORT_LABELS}
-                  onValueChange={(newIndex, newValue, newLabel) => {
-                    setIndex(newIndex);
-                    setViewportWidth(newValue);
-                    setLabel(newLabel);
-                  }}
-                />
+              {showSlider ? (
+                <div>
+                  <CustomSlider
+                    value={index}
+                    viewPortSteps={VIEW_PORT_STEPS}
+                    viewPortLabels={VIEW_PORT_LABELS}
+                    onValueChange={(newIndex, newValue, newLabel) => {
+                      setIndex(newIndex);
+                      setViewportWidth(newValue);
+                      setLabel(newLabel);
+                    }}
+                  />
 
-                <span className="flex h-[36px] items-center justify-center rounded-full border border-[#0F0F0F] px-3 py-1 text-center text-[15px] font-medium tracking-wide text-neutral-900">
-                  {label}
-                </span>
-              </div>
-            ) : (
-              <LoaderIcon className="mx-auto mt-4 animate-spin" />
-            )}
+                  <span className="flex h-[36px] items-center justify-center rounded-full border border-[#0F0F0F] px-3 py-1 text-center text-[15px] font-medium tracking-wide text-neutral-900">
+                    {label}
+                  </span>
+                </div>
+              ) : (
+                <LoaderIcon className="mx-auto mt-4 animate-spin" />
+              )}
 
-            <Separator className="my-4 bg-neutral-400/50" />
-          </div>
+              <Separator className="my-4 bg-neutral-400/50" />
+            </div>
+          )}
 
           <div className="text-[13px] font-semibold text-neutral-600">
             <p>

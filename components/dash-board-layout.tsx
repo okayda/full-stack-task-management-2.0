@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 
+import { Models } from "node-appwrite";
+
 import Sidebar from "@/components/sidebar";
 import Navbar from "@/components/navbar";
 
@@ -10,7 +12,9 @@ import { cn } from "@/lib/utils";
 interface SidebarLayoutProps {
   children: React.ReactNode;
   isDesktop: boolean;
-  hasBoardData: boolean;
+  isHomePage?: boolean;
+  hasBoardsData: boolean;
+  userBoardsData?: Models.DocumentList<Models.Document>;
 }
 
 const VIEWPORT_WIDTH = 1680;
@@ -18,10 +22,14 @@ const VIEWPORT_WIDTH = 1680;
 export default function DashBoardLayout({
   children,
   isDesktop,
-  hasBoardData,
+  isHomePage,
+  hasBoardsData,
+  userBoardsData,
 }: SidebarLayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(isDesktop);
   const [viewportWidth, setViewportWidth] = useState(VIEWPORT_WIDTH);
+
+  const showNavbar = hasBoardsData && !isHomePage;
 
   useEffect(() => {
     const savedViewportWidth = localStorage.getItem("viewportWidth");
@@ -43,6 +51,8 @@ export default function DashBoardLayout({
           toggle={() => setIsSidebarOpen(!isSidebarOpen)}
           viewportWidth={viewportWidth}
           setViewportWidth={setViewportWidth}
+          isHomePage={isHomePage}
+          userBoardsData={userBoardsData}
         />
       </div>
 
@@ -53,7 +63,7 @@ export default function DashBoardLayout({
         )}
       >
         <div className="mx-auto" style={{ maxWidth: `${viewportWidth}px` }}>
-          {hasBoardData && <Navbar />}
+          {showNavbar && <Navbar userBoardsData={userBoardsData} />}
 
           {children}
         </div>

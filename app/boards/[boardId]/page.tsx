@@ -3,11 +3,15 @@ import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/features/auth/queries";
 import { getCurrentUserBoards } from "@/features/board/queries";
 import { CreateBoardModal } from "@/features/board/components/create-board-modal";
-import GenerateExampleBox from "@/features/board/components/generate-example-box";
+import { SettingColumnModal } from "@/features/board/components/setting-column-modal";
+import { CreateColumnModal } from "@/features/board/components/create-column-modal";
+import { CreateTaskModal } from "@/features/board/components/create-task-modal";
 
 import DashBoardLayout from "@/components/dash-board-layout";
 
-export default async function Home() {
+import { statusColumnExample } from "@/lib/exampleData";
+
+export default async function BoardIdPage() {
   const currentUser = await getCurrentUser();
   if (!currentUser) {
     redirect("/sign-in");
@@ -17,8 +21,8 @@ export default async function Home() {
   const userBoardsData = await getCurrentUserBoards();
   const hasBoardsData = userBoardsData.total > 0;
 
-  if (hasBoardsData) {
-    redirect(`/boards/${userBoardsData.documents[0].$id}`);
+  if (!hasBoardsData) {
+    redirect("/");
     return null;
   }
 
@@ -26,17 +30,28 @@ export default async function Home() {
     <div>
       <CreateBoardModal />
 
+      <SettingColumnModal />
+
+      <CreateColumnModal />
+
+      <CreateTaskModal statusColumn={statusColumnExample} />
+
+      {/* Different layout different functionalities */}
+
       {/* For tablet */}
       <div className="lg:hidden">
         <DashBoardLayout
           isDesktop={false}
-          isHomePage={true}
+          isHomePage={false}
           hasBoardsData={hasBoardsData}
+          userBoardsData={userBoardsData}
         >
           <div className="flex flex-col px-2 pb-0 pt-8 lg:px-6 lg:pt-10">
-            <div className="flex h-[60vh] flex-col justify-center">
-              <GenerateExampleBox />
-            </div>
+            {/* <Board
+              data={dataExample}
+              statusColumn={statusColumnExample}
+              isDesktop={false}
+            /> */}
           </div>
         </DashBoardLayout>
       </div>
@@ -45,13 +60,16 @@ export default async function Home() {
       <div className="hidden lg:block">
         <DashBoardLayout
           isDesktop={true}
-          isHomePage={true}
+          isHomePage={false}
           hasBoardsData={hasBoardsData}
+          userBoardsData={userBoardsData}
         >
           <div className="flex flex-col px-2 pb-0 pt-8 lg:px-6 lg:pt-10">
-            <div className="flex h-[60vh] flex-col justify-center">
-              <GenerateExampleBox />
-            </div>
+            {/* <Board
+              data={dataExample}
+              statusColumn={statusColumnExample}
+              isDesktop={true}
+            /> */}
           </div>
         </DashBoardLayout>
       </div>
