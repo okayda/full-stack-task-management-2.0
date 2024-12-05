@@ -31,6 +31,7 @@ export const useCreateTask = function () {
       toast.success("Successfully created your task.", {
         description: currentDate(),
       });
+
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
 

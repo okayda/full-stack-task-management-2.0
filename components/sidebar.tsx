@@ -15,7 +15,7 @@ import { Button } from "./ui/button";
 
 import { cn } from "@/lib/utils";
 
-import { MdOutlineDashboard } from "react-icons/md";
+// import { MdOutlineDashboard } from "react-icons/md";
 import {
   LogOut,
   PanelLeftCloseIcon,
@@ -47,8 +47,7 @@ export default function Sidebar({
 }: SidebarProps) {
   const { open: openBoardFormModal } = useCreateBoardModal();
 
-  const { mutate: createBoardExample, isPending: isCreatingBoardExample } =
-    useCreateBoardDataExample();
+  useCreateBoardDataExample();
 
   const [index, setIndex] = useState(getTargetIndex(viewportWidth));
   const [label, setLabel] = useState(VIEW_PORT_LABELS[index]);
@@ -111,14 +110,7 @@ export default function Sidebar({
             </li> */}
 
             <li>
-              <Button
-                className="mx-auto flex h-[42px] items-center gap-x-2 rounded-full lg:h-auto"
-                onClick={createBoardExample}
-                disabled={isCreatingBoardExample}
-              >
-                {isCreatingBoardExample ? "Generating..." : "Generate Example"}
-                <MdOutlineDashboard />
-              </Button>
+              <h3 className="text-lg font-medium">No available boards</h3>
             </li>
 
             <li className="mt-5 border-t-2 border-dashed border-neutral-400/60 pt-4">

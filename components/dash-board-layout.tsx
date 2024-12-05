@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 interface SidebarLayoutProps {
   children: React.ReactNode;
   isDesktop: boolean;
+  hasBoardData: boolean;
 }
 
 const VIEWPORT_WIDTH = 1680;
@@ -17,6 +18,7 @@ const VIEWPORT_WIDTH = 1680;
 export default function DashBoardLayout({
   children,
   isDesktop,
+  hasBoardData,
 }: SidebarLayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(isDesktop);
   const [viewportWidth, setViewportWidth] = useState(VIEWPORT_WIDTH);
@@ -51,7 +53,7 @@ export default function DashBoardLayout({
         )}
       >
         <div className="mx-auto" style={{ maxWidth: `${viewportWidth}px` }}>
-          <Navbar />
+          {hasBoardData && <Navbar />}
 
           {children}
         </div>
