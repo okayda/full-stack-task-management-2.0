@@ -21,7 +21,7 @@ export async function initializeBoardDataExample(
     const boardId = ID.unique();
     const boardName = "Example Board";
 
-    const boardPromise = await databases.createDocument(
+    const boardPromise = databases.createDocument(
       DATABASE_ID,
       BOARDS_ID,
       boardId,
@@ -35,11 +35,19 @@ export async function initializeBoardDataExample(
       boardId,
     };
 
+    // Iterate through `statusColumnExample` and assign values or `null` for missing values
     statusColumnExample.forEach((status, index) => {
-      statusColumnsData[`column_${index}`] = status.statusName;
+      statusColumnsData[`column_${index}`] = status.statusName || null;
+      statusColumnsData[`column_${index}_id`] = status.statusId || null;
     });
 
-    const columnsPromise = await databases.createDocument(
+    // Ensure attributes for all columns exist, even if not provided in `statusColumnExample`
+    for (let i = statusColumnExample.length; i < 5; i++) {
+      statusColumnsData[`column_${i}`] = null;
+      statusColumnsData[`column_${i}_id`] = null;
+    }
+
+    const columnsPromise = databases.createDocument(
       DATABASE_ID,
       STATUS_COLUMN_ID,
       ID.unique(),
@@ -48,6 +56,7 @@ export async function initializeBoardDataExample(
 
     await Promise.all([boardPromise, columnsPromise]);
 
+    // Loop through tasksExample to create tasks and subtasks
     for (const task of tasksExample) {
       const { taskName, description, position, priority, statusId, subtasks } =
         task;
@@ -55,11 +64,13 @@ export async function initializeBoardDataExample(
       const subtaskData: Record<string, unknown> = { boardId };
       const subtasksArray = subtasks || [];
 
+      // Populate subtasks or set to empty strings/null if missing
       subtasksArray.forEach((subtask, index) => {
         subtaskData[`subtask_${index}`] = subtask.title || "";
         subtaskData[`subtask_check_${index}`] = subtask.isCompleted || false;
       });
 
+      // Fill in remaining subtasks as null/empty
       for (let i = subtasksArray.length; i < MAX_SUB_TASKS; i++) {
         subtaskData[`subtask_${i}`] = "";
         subtaskData[`subtask_check_${i}`] = null;

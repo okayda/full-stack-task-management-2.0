@@ -1,14 +1,12 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
-
 import ScrollContainer from "react-indiana-drag-scroll";
 
 import { useCreateColumnModal } from "../hooks/use-create-column-modal";
-
 import BoardHeader from "./board-header";
-import BoardTaskCard from "./board-task-card";
 
+import BoardTaskCard from "./board-task-card";
 import {
   DragDropContext,
   Droppable,
@@ -17,12 +15,21 @@ import {
 } from "@hello-pangea/dnd";
 
 import { MAX_COLUMNS } from "../constants";
+import { Task } from "../types";
 
-import { Task, StatusColumn } from "../types";
+interface StatusColumnItem {
+  statusName: string;
+  statusId: string;
+}
+
+interface StatusColumnData {
+  columns: StatusColumnItem[];
+  boardId: string;
+}
 
 interface DataBoardProps {
-  data: Task[];
-  statusColumn: StatusColumn[];
+  dataTasks: Task[];
+  statusColumn: StatusColumnData;
   isDesktop: boolean;
 }
 
@@ -41,10 +48,9 @@ const buildTasksState = function (data: Task[]): TasksState {
   const tasksState: TasksState = {};
 
   data.forEach((task) => {
-    const statusId = task.statusId;
+    const statusId = task.columnId;
 
     if (!tasksState[statusId]) tasksState[statusId] = [];
-
     tasksState[statusId].push(task);
   });
 
@@ -56,14 +62,18 @@ const buildTasksState = function (data: Task[]): TasksState {
 };
 
 export default function Board({
-  data,
+  dataTasks,
   statusColumn,
   isDesktop,
 }: DataBoardProps) {
   const { open: openColumnFormModal } = useCreateColumnModal();
-  const [tasks, setTasks] = useState<TasksState>(() => buildTasksState(data));
+  const [tasks, setTasks] = useState<TasksState>(() =>
+    buildTasksState(dataTasks),
+  );
 
-  useEffect(() => setTasks(buildTasksState(data)), [data]);
+  useEffect(() => {
+    setTasks(buildTasksState(dataTasks));
+  }, [dataTasks]);
 
   const onDragEnd = useCallback(
     (result: DropResult) => {
@@ -76,7 +86,7 @@ export default function Board({
       const sameStatus = sourceStatusId === destStatusId;
       const sameIndexPosition = source.index === destination.index;
 
-      // If the task dropped in the same column & same order position do nothing
+      // If the task is dropped in the same column & same order, do nothing
       if (sameStatus && sameIndexPosition) return;
 
       let updatesPayload: Payloads[] = [];
@@ -92,7 +102,7 @@ export default function Board({
           return prevTasks;
         }
 
-        const destStatus = statusColumn.find(
+        const destStatus = statusColumn.columns.find(
           (column) => column.statusId === destStatusId,
         );
 
@@ -105,7 +115,7 @@ export default function Board({
           sourceStatusId !== destStatusId
             ? {
                 ...movedTask,
-                statusId: destStatusId,
+                columnId: destStatusId,
                 statusName: destStatus.statusName,
               }
             : movedTask;
@@ -118,6 +128,7 @@ export default function Board({
 
         updatesPayload = [];
 
+        // Update the moved task
         updatesPayload.push({
           $id: updatedMovedTask.$id,
           statusId: destStatusId,
@@ -125,6 +136,7 @@ export default function Board({
           position: Math.min((destination.index + 1) * 1000, 100_000),
         });
 
+        // Update positions for tasks in the destination column
         newTasks[destStatusId].forEach((task, index) => {
           if (task && task.$id !== updatedMovedTask.$id) {
             const newPosition = Math.min((index + 1) * 1000, 100_000);
@@ -139,6 +151,7 @@ export default function Board({
           }
         });
 
+        // Update positions for tasks in the source column if column changed
         if (sourceStatusId !== destStatusId) {
           newTasks[sourceStatusId].forEach((task, index) => {
             if (task) {
@@ -172,7 +185,7 @@ export default function Board({
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="h-[calc(100vh-127px)] lg:h-[calc(100vh-138px)]">
           <div className="flex h-full cursor-ew-resize gap-x-6 pb-2 2xl:gap-x-2">
-            {statusColumn.map(({ statusId, statusName }) => {
+            {statusColumn.columns.map(({ statusId, statusName }) => {
               return (
                 <div
                   key={statusId}
@@ -200,7 +213,7 @@ export default function Board({
                                 style={provided.draggableProps.style}
                                 className="board-task"
                               >
-                                <BoardTaskCard task={task} />
+                                {task && <BoardTaskCard task={task} />}
                               </div>
                             );
                           }
@@ -221,7 +234,7 @@ export default function Board({
                             <React.Fragment key={task.$id}>
                               {shouldRenderClone && isDesktop ? (
                                 <div className="relative">
-                                  <div className="board-task absolute left-0 top-0 -z-[5] mb-6 w-full opacity-40">
+                                  <div className="board-task absolute left-0 top-0 -z-[5] mb-6 w-full opacity-0">
                                     <BoardTaskCard task={task} />
                                   </div>
                                 </div>
@@ -251,7 +264,7 @@ export default function Board({
               );
             })}
 
-            {statusColumn.length !== MAX_COLUMNS && (
+            {statusColumn.columns.length !== MAX_COLUMNS && (
               <div className="on cursor-move rounded-md pb-1.5 pr-2 2xl:pr-0">
                 <div
                   onClick={openColumnFormModal}

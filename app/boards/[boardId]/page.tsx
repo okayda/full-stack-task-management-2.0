@@ -10,6 +10,7 @@ import { CreateTaskModal } from "@/features/board/components/create-task-modal";
 import DashBoardLayout from "@/components/dash-board-layout";
 
 import { statusColumnExample } from "@/lib/exampleData";
+import BoardClientPage from "./client-page";
 
 export default async function BoardIdPage() {
   const currentUser = await getCurrentUser();
@@ -47,11 +48,7 @@ export default async function BoardIdPage() {
           userBoardsData={userBoardsData}
         >
           <div className="flex flex-col px-2 pb-0 pt-8 lg:px-6 lg:pt-10">
-            {/* <Board
-              data={dataExample}
-              statusColumn={statusColumnExample}
-              isDesktop={false}
-            /> */}
+            <BoardClientPage isDesktop={false} />
           </div>
         </DashBoardLayout>
       </div>
@@ -65,11 +62,7 @@ export default async function BoardIdPage() {
           userBoardsData={userBoardsData}
         >
           <div className="flex flex-col px-2 pb-0 pt-8 lg:px-6 lg:pt-10">
-            {/* <Board
-              data={dataExample}
-              statusColumn={statusColumnExample}
-              isDesktop={true}
-            /> */}
+            <BoardClientPage isDesktop={true} />
           </div>
         </DashBoardLayout>
       </div>
