@@ -6,6 +6,8 @@ import { CreateBoardModal } from "@/features/board/components/create-board-modal
 import { SettingColumnModal } from "@/features/board/components/setting-column-modal";
 import { CreateColumnModal } from "@/features/board/components/create-column-modal";
 import { CreateTaskModal } from "@/features/board/components/create-task-modal";
+import { EditTaskModal } from "@/features/board/components/edit-task-modal";
+import { TaskContentModal } from "@/features/board/components/task-content-modal";
 
 import DashBoardLayout from "@/components/dash-board-layout";
 
@@ -36,6 +38,10 @@ export default async function BoardIdPage() {
       <CreateColumnModal />
 
       <CreateTaskModal statusColumn={statusColumnExample} />
+
+      <EditTaskModal statusColumn={statusColumnExample} />
+
+      <TaskContentModal statusColumn={statusColumnExample} />
 
       {/* Different layout different functionalities */}
 

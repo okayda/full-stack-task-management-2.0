@@ -21,3 +21,14 @@ export const createTaskSchema = z.object({
     )
     .max(5, "Only 5 subtasks allowed"),
 });
+
+export const editTaskSchema = createTaskSchema.extend({
+  subtasks: z
+    .array(
+      z.object({
+        value: z.string().trim().optional(),
+        isCompleted: z.boolean().optional(), // New boolean field for checkbox
+      }),
+    )
+    .max(5, "Only 5 subtasks allowed"),
+});
