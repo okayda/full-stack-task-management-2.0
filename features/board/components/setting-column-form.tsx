@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
+import { SettingColumnActions } from "./setting-column-actions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
@@ -17,7 +18,7 @@ import { Button } from "@/components/ui/button";
 
 import { MAX_COLUMNS } from "../constants";
 
-import { BadgeXIcon } from "lucide-react";
+import { BadgeXIcon, MoreVertical } from "lucide-react";
 
 interface SettingColumnFormProps {
   onCancel?: () => void;
@@ -51,8 +52,12 @@ export const SettingColumnForm = function ({
 
   return (
     <Card className="h-full w-full border-none shadow-none">
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between gap-x-3 space-y-0 pb-5 sm:pt-10">
         <CardTitle className="text-2xl font-medium">Setting Board</CardTitle>
+
+        <SettingColumnActions>
+          <MoreVertical className="!size-5" />
+        </SettingColumnActions>
       </CardHeader>
 
       <CardContent>
@@ -129,16 +134,7 @@ export const SettingColumnForm = function ({
             </div>
 
             <div className="mt-0 space-y-3 pt-1">
-              <Button
-                type="button"
-                variant="destructive"
-                disabled={false}
-                className="h-[42px] w-full border-rose-900"
-              >
-                Delete Board
-              </Button>
-
-              <div className="flex gap-x-3">
+              <div className="flex gap-x-2">
                 <Button
                   type="submit"
                   className="h-[42px] w-full tracking-wide"
