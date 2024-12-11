@@ -15,42 +15,49 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { StatusColumn } from "../types";
+import { Task, StatusColumnItem } from "../types";
 
 import { MoreVertical } from "lucide-react";
 
-const exampleSubtasks = [
-  { id: "internal", title: "Internal testing", isComplete: false },
-  { id: "external", title: "External testing", isComplete: false },
-];
-
 interface TaskContentProps {
   onCancel?: () => void;
-  statusColumn: StatusColumn[];
+  task: Task;
+  statusColumn: {
+    columns: StatusColumnItem[];
+    boardId: string;
+  };
 }
 
 export default function TaskContent({
   onCancel,
+  task,
   statusColumn,
 }: TaskContentProps) {
-  const [status, setStatus] = useState("TODO");
-  const [subTasks, setSubTasks] = useState(exampleSubtasks);
+  const [subTasks, setSubTasks] = useState(task.subtasks);
+
+  const currentStatus = statusColumn.columns.find(
+    (status) => status.statusId === task.columnId,
+  );
+
+  const [status, setStatus] = useState(
+    customizeUpperCase(currentStatus?.statusName || "TODO"),
+  );
 
   const checkboxHandler = function (i: number) {
-    const copySubTasks = [...subTasks];
-    copySubTasks[i] = { ...copySubTasks[i] };
-    copySubTasks[i].isComplete = !copySubTasks[i].isComplete;
-    setSubTasks(copySubTasks);
-  };
+    const updatedSubTasks = [...subTasks];
 
-  console.log(subTasks);
+    updatedSubTasks[i] = {
+      ...updatedSubTasks[i],
+      isCompleted: !updatedSubTasks[i].isCompleted,
+    };
+
+    setSubTasks(updatedSubTasks);
+  };
 
   return (
     <Card className="border-none shadow-none">
       <CardHeader className="flex flex-row items-center justify-between gap-x-3 space-y-0 pb-5 sm:pt-10">
-        <CardTitle className="text-lg font-semibold">
-          QA and test all major user Journeys.
-        </CardTitle>
+        <CardTitle className="text-lg font-semibold">{task.taskName}</CardTitle>
 
         <TaskContentActions>
           <MoreVertical className="!size-5" />
@@ -58,32 +65,35 @@ export default function TaskContent({
       </CardHeader>
 
       <CardContent>
-        <p className="mb-5 text-sm text-muted-foreground">
-          Once we feel version one is ready, we need to rigorously test it both
-          internally and externally to identify any major gaps.
-        </p>
+        <p className="mb-5 text-sm text-muted-foreground">{task.description}</p>
 
         <div className="mb-4">
           <h4 className="mb-2 text-sm font-medium text-foreground">Subtasks</h4>
 
           <ul className="flex flex-col gap-y-1.5">
-            {subTasks.map((task, index) => (
-              <li key={task.id} className="text-[13px]">
-                <label
-                  htmlFor={`task-${task.id}`}
-                  className="flex items-center gap-x-3 rounded-md bg-muted p-3"
-                >
-                  <input
-                    id={`task-${task.id}`}
-                    type="checkbox"
-                    checked={task.isComplete}
-                    onChange={() => checkboxHandler(index)}
-                    className="h-[14.5px] w-[14.5px] accent-[#0F0F0F]"
-                  />
-                  {task.title}
-                </label>
+            {subTasks.length > 0 ? (
+              subTasks.map((task: Task, index: number) => (
+                <li key={task.id} className="text-[13px]">
+                  <label
+                    htmlFor={`task-${index}`}
+                    className="flex cursor-pointer items-center gap-x-3 rounded-md bg-neutral-100 p-3 transition-colors hover:bg-neutral-200/70"
+                  >
+                    <input
+                      id={`task-${index}`}
+                      type="checkbox"
+                      checked={task.isComplete}
+                      onChange={() => checkboxHandler(index)}
+                      className="h-[14.5px] w-[14.5px] accent-[#0F0F0F] focus:outline-none focus:ring-0"
+                    />
+                    {task.title}
+                  </label>
+                </li>
+              ))
+            ) : (
+              <li className="rounded-md bg-neutral-100 p-3 text-center text-[13px]">
+                Empty
               </li>
-            ))}
+            )}
           </ul>
         </div>
 
@@ -92,20 +102,17 @@ export default function TaskContent({
             Current status
           </h4>
 
-          <Select value={status} onValueChange={setStatus}>
+          <Select onValueChange={setStatus}>
             <SelectTrigger className="h-[45px] border-neutral-400/60 text-[15px] md:h-[42px]">
-              <SelectValue placeholder="Select status" />
+              <SelectValue placeholder={status} />
             </SelectTrigger>
 
             <SelectContent>
-              {statusColumn.map((statusColumn) => {
-                const columnName = customizeUpperCase(statusColumn.statusName);
+              {statusColumn.columns.map((column) => {
+                const columnName = customizeUpperCase(column.statusName);
 
                 return (
-                  <SelectItem
-                    key={statusColumn.statusId}
-                    value={statusColumn.statusId}
-                  >
+                  <SelectItem key={column.statusId} value={column.statusId}>
                     {columnName}
                   </SelectItem>
                 );

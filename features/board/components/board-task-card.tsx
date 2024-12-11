@@ -1,4 +1,7 @@
-import { FaGripLines } from "react-icons/fa6";
+import React, { useState } from "react";
+
+import { TaskContentModal } from "./task-content-modal";
+
 import {
   MdOutlineKeyboardDoubleArrowUp,
   MdOutlineKeyboardArrowUp,
@@ -6,10 +9,16 @@ import {
   MdOutlineKeyboardArrowDown,
 } from "react-icons/md";
 
-import { Task } from "../types";
+import { Task, StatusColumnItem } from "../types";
+
+import { FaGripLines } from "react-icons/fa6";
 
 interface BoardTaskCardProps {
   task: Task;
+  statusColumn: {
+    columns: StatusColumnItem[];
+    boardId: string;
+  };
 }
 
 const priorityIcons: Record<string, { icon: JSX.Element; tooltip: string }> = {
@@ -82,23 +91,43 @@ const priorityBorderColors: Record<string, string> = {
   HIGHEST: "border-l-rose-500",
 };
 
-export default function BoardTaskCard({ task }: BoardTaskCardProps) {
+export default function BoardTaskCard({
+  task,
+  statusColumn,
+}: BoardTaskCardProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const defaultClass =
     "relative cursor-pointer rounded-lg border border-l-4 border-y-transparent border-r-transparent bg-white px-4 py-6 shadow-task transition";
 
   const borderColor = priorityBorderColors[task.priority];
 
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
+
   return (
-    <div className={`${defaultClass} ${borderColor}`}>
-      <div className="absolute right-2 top-2">
-        {getPriorityType(task.priority)}
+    <React.Fragment>
+      <TaskContentModal
+        task={task}
+        statusColumn={statusColumn}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
+
+      <div
+        className={`${defaultClass} ${borderColor}`}
+        onClick={handleOpenModal}
+      >
+        <div className="absolute right-2 top-2">
+          {getPriorityType(task.priority)}
+        </div>
+        <h3 className="mb-2 pb-2.5 font-sans text-[15px] font-medium">
+          {task.taskName}
+        </h3>
+        <p className="text-xs font-medium text-muted-foreground">
+          0 of 5 subtasks
+        </p>
       </div>
-      <h3 className="mb-2 pb-2.5 font-sans text-[15px] font-medium">
-        {task.taskName}
-      </h3>
-      <p className="text-xs font-medium text-muted-foreground">
-        0 of 5 subtasks
-      </p>
-    </div>
+    </React.Fragment>
   );
 }

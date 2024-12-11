@@ -4,8 +4,8 @@ import React, { useState, useEffect, useCallback } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";
 
 import { useCreateColumnModal } from "../hooks/use-create-column-modal";
-import BoardHeader from "./board-header";
 
+import BoardHeader from "./board-header";
 import BoardTaskCard from "./board-task-card";
 import {
   DragDropContext,
@@ -15,12 +15,8 @@ import {
 } from "@hello-pangea/dnd";
 
 import { MAX_COLUMNS } from "../constants";
-import { Task } from "../types";
 
-interface StatusColumnItem {
-  statusName: string;
-  statusId: string;
-}
+import { Task, StatusColumnItem } from "../types";
 
 interface StatusColumnData {
   columns: StatusColumnItem[];
@@ -213,7 +209,12 @@ export default function Board({
                                 style={provided.draggableProps.style}
                                 className="board-task"
                               >
-                                {task && <BoardTaskCard task={task} />}
+                                {task && (
+                                  <BoardTaskCard
+                                    task={task}
+                                    statusColumn={statusColumn}
+                                  />
+                                )}
                               </div>
                             );
                           }
@@ -235,7 +236,10 @@ export default function Board({
                               {shouldRenderClone && isDesktop ? (
                                 <div className="relative">
                                   <div className="board-task absolute left-0 top-0 -z-[5] mb-6 w-full opacity-0">
-                                    <BoardTaskCard task={task} />
+                                    <BoardTaskCard
+                                      task={task}
+                                      statusColumn={statusColumn}
+                                    />
                                   </div>
                                 </div>
                               ) : (
@@ -248,7 +252,10 @@ export default function Board({
                                       style={provided.draggableProps.style}
                                       className="board-task mb-6"
                                     >
-                                      <BoardTaskCard task={task} />
+                                      <BoardTaskCard
+                                        task={task}
+                                        statusColumn={statusColumn}
+                                      />
                                     </div>
                                   )}
                                 </Draggable>

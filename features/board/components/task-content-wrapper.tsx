@@ -1,6 +1,6 @@
 import TaskContent from "./task-content";
 
-import { StatusColumn } from "../types";
+import { Task, StatusColumnItem } from "../types";
 
 // import { Card, CardContent } from "@/components/ui/card";
 
@@ -8,11 +8,16 @@ import { StatusColumn } from "../types";
 
 interface TaskContentWrapperProps {
   onCancel: () => void;
-  statusColumn: StatusColumn[];
+  task: Task;
+  statusColumn: {
+    columns: StatusColumnItem[];
+    boardId: string;
+  };
 }
 
 export const TaskContentWrapper = function ({
   onCancel,
+  task,
   statusColumn,
 }: TaskContentWrapperProps) {
   //   if (false) {
@@ -25,5 +30,7 @@ export const TaskContentWrapper = function ({
   //     );
   //   }
 
-  return <TaskContent statusColumn={statusColumn} onCancel={onCancel} />;
+  return (
+    <TaskContent task={task} statusColumn={statusColumn} onCancel={onCancel} />
+  );
 };

@@ -8,9 +8,9 @@ export enum TaskPriority {
   LOWEST = "LOWEST",
 }
 
-export type StatusColumn = {
-  statusId: string;
+export type StatusColumnItem = {
   statusName: string;
+  statusId: string;
 };
 
 export type Task = Models.Document & {
