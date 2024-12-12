@@ -1,22 +1,34 @@
 "use client";
 
-import { useEditTaskModal } from "../hooks/use-edit-task-modal";
-
 import { ResponsiveModal } from "@/components/responsive-modal";
 import { EditTaskFormWrapper } from "./edit-task-form-wrapper";
 
-import { StatusColumn } from "../types";
+import { Task, StatusColumnItem } from "../types";
+
+interface EditTaskModalProps {
+  task: Task;
+  statusColumn: {
+    columns: StatusColumnItem[];
+    boardId: string;
+  };
+
+  isEditModalOpen: boolean;
+  closeEditModal: () => void;
+}
 
 export function EditTaskModal({
+  task,
   statusColumn,
-}: {
-  statusColumn: StatusColumn[];
-}) {
-  const { isOpen, setIsOpen, close } = useEditTaskModal();
-
+  isEditModalOpen,
+  closeEditModal,
+}: EditTaskModalProps) {
   return (
-    <ResponsiveModal open={isOpen} onOpenChange={setIsOpen}>
-      <EditTaskFormWrapper statusColumn={statusColumn} onCancel={close} />
+    <ResponsiveModal open={isEditModalOpen} onOpenChange={closeEditModal}>
+      <EditTaskFormWrapper
+        task={task}
+        statusColumn={statusColumn}
+        closeEditModal={closeEditModal}
+      />
     </ResponsiveModal>
   );
 }

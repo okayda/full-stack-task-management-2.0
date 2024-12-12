@@ -20,7 +20,7 @@ import { createBoardSchema, createTaskSchema } from "../schemas";
 import { MAX_COLUMNS, MAX_SUB_TASKS } from "../constants";
 
 import {
-  StatusColumn,
+  StatusColumnItem,
   Task,
   UpdatedTask,
   StatusColumnDoc,
@@ -106,7 +106,7 @@ const app = new Hono()
         {
           boardId,
           taskName,
-          columnId: statusId,
+          statusId,
           priority,
           description: description || "",
           subtasksId,
@@ -183,7 +183,7 @@ const app = new Hono()
       subtasksMap.set(doc.$id, doc);
     }
 
-    const columns: StatusColumn[] = [];
+    const columns: StatusColumnItem[] = [];
     let finalBoardId = boardId;
 
     if (statusColumnDoc) {
@@ -192,14 +192,14 @@ const app = new Hono()
         const columnName =
           statusColumnDoc[`column_${i}` as keyof StatusColumnDoc];
 
-        const columnId = statusColumnDoc[
+        const statusId = statusColumnDoc[
           `column_${i}_id` as keyof StatusColumnDoc
         ] as string | undefined;
 
         if (typeof columnName === "string" && columnName.trim() !== "") {
           columns.push({
             statusName: columnName,
-            statusId: columnId || "",
+            statusId: statusId || "",
           });
         }
       }

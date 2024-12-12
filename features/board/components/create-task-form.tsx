@@ -35,7 +35,7 @@ import {
 
 import { customizeUpperCase } from "@/lib/utils";
 
-import { TaskPriority, StatusColumn } from "../types";
+import { TaskPriority, StatusColumnItem } from "../types";
 import { createTaskSchema } from "../schemas";
 
 import { MAX_SUB_TASKS } from "../constants";
@@ -44,7 +44,7 @@ import { BadgeXIcon } from "lucide-react";
 
 interface CreateTaskFormProps {
   onCancel?: () => void;
-  statusColumn: StatusColumn[];
+  statusColumn: StatusColumnItem[];
 }
 
 type CreateTaskFormValues = z.infer<typeof createTaskSchema>;

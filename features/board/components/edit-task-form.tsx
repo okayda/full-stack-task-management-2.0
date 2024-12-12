@@ -31,32 +31,53 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-import { customizeUpperCase } from "@/lib/utils";
+import { useGetBoardId } from "../hooks/use-board-id";
 
-import { TaskPriority, StatusColumn } from "../types";
-import { editTaskSchema } from "../schemas";
+import { customizeUpperCase } from "@/lib/utils";
 
 import { MAX_SUB_TASKS } from "../constants";
 
+import { editTaskSchema } from "../schemas";
+
+import { Task, StatusColumnItem, TaskPriority } from "../types";
+
 import { BadgeXIcon } from "lucide-react";
 
+type SubTask = {
+  title: string;
+  isCompleted: boolean;
+};
+
 interface EditTaskFormProps {
-  onCancel?: () => void;
-  statusColumn: StatusColumn[];
+  task: Task;
+  statusColumn: {
+    columns: StatusColumnItem[];
+    boardId: string;
+  };
+  closeEditModal: () => void;
 }
 
 type EditTaskFormValues = z.infer<typeof editTaskSchema>;
 
 export const EditTaskForm = function ({
-  onCancel,
+  task,
   statusColumn,
+  closeEditModal,
 }: EditTaskFormProps) {
+  const boardId = useGetBoardId();
+
   const form = useForm<EditTaskFormValues>({
     resolver: zodResolver(editTaskSchema),
     defaultValues: {
-      boardId: "bsa100",
-      taskName: "",
-      subtasks: [{ value: "" }],
+      boardId: boardId,
+      taskName: task.taskName,
+      statusId: task.statusId,
+      description: task.description,
+      priority: task.priority,
+      subtasks: task.subtasks.map((subtask: SubTask) => ({
+        value: subtask.title,
+        isCompleted: subtask.isCompleted,
+      })),
     },
   });
 
@@ -73,9 +94,34 @@ export const EditTaskForm = function ({
 
   const removeSubtask = function (index: number) {
     remove(index);
+
+    if (fields.length - 1 === 0) {
+      append({ value: "" });
+    }
   };
 
-  const onSubmit: SubmitHandler<EditTaskFormValues> = function () {};
+  const onSubmit: SubmitHandler<EditTaskFormValues> = function (values) {
+    const taskId = task.$id;
+    const subtasksId = task.subtasksId;
+
+    const validSubtasks = values.subtasks
+      .filter(({ value }) => {
+        if (value?.trim()) return value;
+      })
+      .map((subtask) => ({
+        title: subtask.value,
+        isCompleted: subtask.isCompleted,
+      }));
+
+    const editedTask = {
+      ...values,
+      taskId,
+      subtasksId,
+      subtasks: validSubtasks,
+    };
+
+    console.log(editedTask);
+  };
 
   return (
     <Card className="h-full w-full border-none shadow-none">
@@ -94,7 +140,6 @@ export const EditTaskForm = function ({
                   return (
                     <FormItem>
                       <FormLabel className="tracking-wide">Task Name</FormLabel>
-
                       <FormControl>
                         <Input
                           {...field}
@@ -114,24 +159,23 @@ export const EditTaskForm = function ({
                 render={({ field }) => {
                   return (
                     <FormItem>
-                      <FormLabel className="tracking-wide">Status</FormLabel>
-
+                      <FormLabel className="tracking-wide">
+                        Current status
+                      </FormLabel>
                       <Select
                         value={field.value}
                         onValueChange={field.onChange}
                       >
                         <FormControl>
                           <SelectTrigger className="!mt-1 h-[45px] border-neutral-400/60 text-[15px] md:h-[42px]">
-                            <SelectValue placeholder="Select status" />
+                            <SelectValue placeholder={task.statusId} />
                           </SelectTrigger>
                         </FormControl>
-
                         <SelectContent>
-                          {statusColumn.map((statusColumn) => {
+                          {statusColumn.columns.map((statusColumn) => {
                             const columnName = customizeUpperCase(
                               statusColumn.statusName,
                             );
-
                             return (
                               <SelectItem
                                 key={statusColumn.statusId}
@@ -155,32 +199,28 @@ export const EditTaskForm = function ({
                   return (
                     <FormItem>
                       <FormLabel className="tracking-wide">Priority</FormLabel>
-
                       <Select
                         value={field.value}
                         onValueChange={field.onChange}
                       >
                         <FormControl>
                           <SelectTrigger className="!mt-1 h-[45px] border-neutral-400/60 text-[15px] md:h-[42px]">
-                            <SelectValue placeholder="Select priority" />
+                            <SelectValue
+                              placeholder={field.value || "Select priority"}
+                            />
                           </SelectTrigger>
                         </FormControl>
-
                         <SelectContent>
                           <SelectItem value={TaskPriority.HIGHEST}>
                             Highest
                           </SelectItem>
-
                           <SelectItem value={TaskPriority.HIGH}>
                             High
                           </SelectItem>
-
                           <SelectItem value={TaskPriority.MEDIUM}>
                             Medium
                           </SelectItem>
-
                           <SelectItem value={TaskPriority.LOW}>Low</SelectItem>
-
                           <SelectItem value={TaskPriority.LOWEST}>
                             Lowest
                           </SelectItem>
@@ -200,7 +240,6 @@ export const EditTaskForm = function ({
                       <FormLabel className="tracking-wide">
                         Description
                       </FormLabel>
-
                       <FormControl>
                         <Textarea
                           {...field}
@@ -209,7 +248,6 @@ export const EditTaskForm = function ({
                           className="!mt-1 h-[80px] border-neutral-400/60 text-[15px] md:h-[80px]"
                         />
                       </FormControl>
-
                       <FormMessage />
                     </FormItem>
                   );
@@ -223,7 +261,12 @@ export const EditTaskForm = function ({
                 className="border-b-2 border-dashed border-neutral-400/50"
               >
                 <AccordionTrigger className="pb-4 text-sm !no-underline">
-                  Optional minor tasks
+                  <div className="flex items-center gap-x-2">
+                    Your subtasks
+                    <div className="text-neutal-700 flex size-5 items-center justify-center rounded-md bg-neutral-200 text-xs font-medium">
+                      {fields.length}
+                    </div>
+                  </div>
                 </AccordionTrigger>
 
                 <AccordionContent>
@@ -240,7 +283,7 @@ export const EditTaskForm = function ({
 
                           <Button
                             type="button"
-                            disabled={false}
+                            disabled={fields.length === 1 && !fields[0].value}
                             className="h-[40px] px-3"
                             onClick={() => removeSubtask(index)}
                           >
@@ -272,14 +315,14 @@ export const EditTaskForm = function ({
                 disabled={false}
                 className="h-[42px] w-full tracking-wide"
               >
-                {false ? "Loading..." : "Create"}
+                {false ? "Loading..." : "Update"}
               </Button>
 
               <Button
                 type="button"
                 disabled={false}
                 variant="secondary"
-                onClick={onCancel}
+                onClick={closeEditModal}
                 className="h-[42px] w-full border tracking-wide"
               >
                 Cancel

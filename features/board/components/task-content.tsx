@@ -19,39 +19,39 @@ import { Task, StatusColumnItem } from "../types";
 
 import { MoreVertical } from "lucide-react";
 
+type SubTask = {
+  title: string;
+  isCompleted: boolean;
+};
+
 interface TaskContentProps {
-  onCancel?: () => void;
   task: Task;
   statusColumn: {
     columns: StatusColumnItem[];
     boardId: string;
   };
+  closeTaskModal?: () => void;
 }
 
 export default function TaskContent({
-  onCancel,
   task,
   statusColumn,
+  closeTaskModal,
 }: TaskContentProps) {
   const [subTasks, setSubTasks] = useState(task.subtasks);
 
-  const currentStatus = statusColumn.columns.find(
-    (status) => status.statusId === task.columnId,
-  );
+  const [status, setStatus] = useState(task.statusId);
 
-  const [status, setStatus] = useState(
-    customizeUpperCase(currentStatus?.statusName || "TODO"),
-  );
-
-  const checkboxHandler = function (i: number) {
-    const updatedSubTasks = [...subTasks];
-
-    updatedSubTasks[i] = {
-      ...updatedSubTasks[i],
-      isCompleted: !updatedSubTasks[i].isCompleted,
-    };
-
-    setSubTasks(updatedSubTasks);
+  const checkboxHandler = function (subTaskIndex: number) {
+    setSubTasks((prev: SubTask[]) =>
+      prev.map((subTask: SubTask, stateIndex: number) => {
+        if (stateIndex === subTaskIndex) {
+          return { ...subTask, isCompleted: !subTask.isCompleted };
+        } else {
+          return subTask;
+        }
+      }),
+    );
   };
 
   return (
@@ -59,7 +59,11 @@ export default function TaskContent({
       <CardHeader className="flex flex-row items-center justify-between gap-x-3 space-y-0 pb-5 sm:pt-10">
         <CardTitle className="text-lg font-semibold">{task.taskName}</CardTitle>
 
-        <TaskContentActions>
+        <TaskContentActions
+          task={task}
+          statusColumn={statusColumn}
+          onCancel={closeTaskModal}
+        >
           <MoreVertical className="!size-5" />
         </TaskContentActions>
       </CardHeader>
@@ -73,7 +77,7 @@ export default function TaskContent({
           <ul className="flex flex-col gap-y-1.5">
             {subTasks.length > 0 ? (
               subTasks.map((task: Task, index: number) => (
-                <li key={task.id} className="text-[13px]">
+                <li key={`task-${index}`} className="text-[13px]">
                   <label
                     htmlFor={`task-${index}`}
                     className="flex cursor-pointer items-center gap-x-3 rounded-md bg-neutral-100 p-3 transition-colors hover:bg-neutral-200/70"
@@ -102,7 +106,7 @@ export default function TaskContent({
             Current status
           </h4>
 
-          <Select onValueChange={setStatus}>
+          <Select value={status} onValueChange={setStatus}>
             <SelectTrigger className="h-[45px] border-neutral-400/60 text-[15px] md:h-[42px]">
               <SelectValue placeholder={status} />
             </SelectTrigger>
@@ -122,12 +126,15 @@ export default function TaskContent({
         </div>
 
         <div className="flex gap-x-2">
-          <Button onClick={onCancel} className="h-[42px] w-full tracking-wide">
+          <Button
+            onClick={closeTaskModal}
+            className="h-[42px] w-full tracking-wide"
+          >
             Save
           </Button>
 
           <Button
-            onClick={onCancel}
+            onClick={closeTaskModal}
             variant="secondary"
             className="h-[42px] w-full border tracking-wide"
           >

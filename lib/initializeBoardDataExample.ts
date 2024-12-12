@@ -11,7 +11,7 @@ import {
   SUB_TASKS_ID,
 } from "@/config";
 
-import { MAX_SUB_TASKS } from "@/features/board/constants";
+import { MAX_SUB_TASKS, MAX_COLUMNS } from "@/features/board/constants";
 
 export async function initializeBoardDataExample(
   databases: Databases,
@@ -42,7 +42,7 @@ export async function initializeBoardDataExample(
     });
 
     // Ensure attributes for all columns exist, even if not provided in `statusColumnExample`
-    for (let i = statusColumnExample.length; i < 5; i++) {
+    for (let i = statusColumnExample.length; i < MAX_COLUMNS; i++) {
       statusColumnsData[`column_${i}`] = null;
       statusColumnsData[`column_${i}_id`] = null;
     }
@@ -96,7 +96,7 @@ export async function initializeBoardDataExample(
           position,
           priority,
           subtasksId,
-          columnId: statusId,
+          statusId,
         },
       );
 

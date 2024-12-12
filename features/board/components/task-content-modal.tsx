@@ -12,22 +12,22 @@ interface TaskContentModalProps {
     boardId: string;
   };
 
-  isOpen: boolean;
-  onClose: () => void;
+  isTaskModalOpen: boolean;
+  closeTaskModal: () => void;
 }
 
 export function TaskContentModal({
   task,
   statusColumn,
-  isOpen,
-  onClose,
+  isTaskModalOpen,
+  closeTaskModal,
 }: TaskContentModalProps) {
   return (
-    <ResponsiveModal open={isOpen} onOpenChange={onClose}>
+    <ResponsiveModal open={isTaskModalOpen} onOpenChange={closeTaskModal}>
       <TaskContentWrapper
-        onCancel={onClose}
         task={task}
         statusColumn={statusColumn}
+        closeTaskModal={closeTaskModal}
       />
     </ResponsiveModal>
   );

@@ -1,19 +1,24 @@
 import { EditTaskForm } from "./edit-task-form";
 
-import { StatusColumn } from "../types";
+import { Task, StatusColumnItem } from "../types";
 
 // import { Card, CardContent } from "@/components/ui/card";
 
 // import { Loader } from "lucide-react";
 
 interface EditTaskFormWrapperProps {
-  onCancel: () => void;
-  statusColumn: StatusColumn[];
+  task: Task;
+  statusColumn: {
+    columns: StatusColumnItem[];
+    boardId: string;
+  };
+  closeEditModal: () => void;
 }
 
 export const EditTaskFormWrapper = function ({
-  onCancel,
+  task,
   statusColumn,
+  closeEditModal,
 }: EditTaskFormWrapperProps) {
   //   if (false) {
   //     return (
@@ -25,5 +30,11 @@ export const EditTaskFormWrapper = function ({
   //     );
   //   }
 
-  return <EditTaskForm statusColumn={statusColumn} onCancel={onCancel} />;
+  return (
+    <EditTaskForm
+      task={task}
+      statusColumn={statusColumn}
+      closeEditModal={closeEditModal}
+    />
+  );
 };

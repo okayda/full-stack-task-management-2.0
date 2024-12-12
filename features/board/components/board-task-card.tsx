@@ -95,29 +95,26 @@ export default function BoardTaskCard({
   task,
   statusColumn,
 }: BoardTaskCardProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
 
   const defaultClass =
     "relative cursor-pointer rounded-lg border border-l-4 border-y-transparent border-r-transparent bg-white px-4 py-6 shadow-task transition";
 
   const borderColor = priorityBorderColors[task.priority];
 
-  const handleOpenModal = () => setIsModalOpen(true);
-  const handleCloseModal = () => setIsModalOpen(false);
+  const openTaskModal = () => setIsTaskModalOpen(true);
+  const closeTaskModal = () => setIsTaskModalOpen(false);
 
   return (
     <React.Fragment>
       <TaskContentModal
         task={task}
         statusColumn={statusColumn}
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
+        isTaskModalOpen={isTaskModalOpen}
+        closeTaskModal={closeTaskModal}
       />
 
-      <div
-        className={`${defaultClass} ${borderColor}`}
-        onClick={handleOpenModal}
-      >
+      <div className={`${defaultClass} ${borderColor}`} onClick={openTaskModal}>
         <div className="absolute right-2 top-2">
           {getPriorityType(task.priority)}
         </div>

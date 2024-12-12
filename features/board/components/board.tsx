@@ -44,7 +44,7 @@ const buildTasksState = function (data: Task[]): TasksState {
   const tasksState: TasksState = {};
 
   data.forEach((task) => {
-    const statusId = task.columnId;
+    const statusId = task.statusId;
 
     if (!tasksState[statusId]) tasksState[statusId] = [];
     tasksState[statusId].push(task);
@@ -111,7 +111,7 @@ export default function Board({
           sourceStatusId !== destStatusId
             ? {
                 ...movedTask,
-                columnId: destStatusId,
+                statusId: destStatusId,
                 statusName: destStatus.statusName,
               }
             : movedTask;

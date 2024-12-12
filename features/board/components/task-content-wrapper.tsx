@@ -7,18 +7,18 @@ import { Task, StatusColumnItem } from "../types";
 // import { Loader } from "lucide-react";
 
 interface TaskContentWrapperProps {
-  onCancel: () => void;
   task: Task;
   statusColumn: {
     columns: StatusColumnItem[];
     boardId: string;
   };
+  closeTaskModal: () => void;
 }
 
 export const TaskContentWrapper = function ({
-  onCancel,
   task,
   statusColumn,
+  closeTaskModal,
 }: TaskContentWrapperProps) {
   //   if (false) {
   //     return (
@@ -31,6 +31,10 @@ export const TaskContentWrapper = function ({
   //   }
 
   return (
-    <TaskContent task={task} statusColumn={statusColumn} onCancel={onCancel} />
+    <TaskContent
+      task={task}
+      statusColumn={statusColumn}
+      closeTaskModal={closeTaskModal}
+    />
   );
 };
