@@ -9,7 +9,6 @@ import { usePathname } from "next/navigation";
 import { Models } from "node-appwrite";
 
 import { useCreateBoardModal } from "@/features/board/hooks/use-create-board-modal";
-import { useCreateBoardDataExample } from "@/features/board/api/use-create-board-data-example";
 
 import CustomSlider from "@/components/custom-slider";
 
@@ -56,8 +55,6 @@ export default function Sidebar({
 
   const { open: openBoardFormModal } = useCreateBoardModal();
 
-  useCreateBoardDataExample();
-
   const [index, setIndex] = useState(getTargetIndex(viewportWidth));
   const [label, setLabel] = useState(VIEW_PORT_LABELS[index]);
   const [showSlider, setShowSlider] = useState(false);
@@ -78,7 +75,7 @@ export default function Sidebar({
       setShowSlider(true);
     }, 2000); // 2 second
 
-    return () => clearTimeout(timer); // Cleanup timer
+    return () => clearTimeout(timer);
   }, []);
 
   return (

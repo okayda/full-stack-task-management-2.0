@@ -24,7 +24,7 @@ export type Task = Models.Document & {
   subtasksId: string; // appwrite referential id
 };
 
-export type StatusColumnDoc = Models.Document & {
+export type StatusColumnDocument = Models.Document & {
   boardId: string;
   column_0?: string | null;
   column_0_id?: string | null;
@@ -38,23 +38,16 @@ export type StatusColumnDoc = Models.Document & {
   column_4_id?: string | null;
 };
 
-export type SubtasksDoc = Models.Document & {
+export type SubtasksDocument = Models.Document & {
   boardId: string;
-  subtask_0?: string;
-  subtask_1?: string;
-  subtask_2?: string;
-  subtask_3?: string;
-  subtask_4?: string;
-  subtask_check_0?: boolean;
-  subtask_check_1?: boolean;
-  subtask_check_2?: boolean;
-  subtask_check_3?: boolean;
-  subtask_check_4?: boolean;
-};
-
-export type UpdatedTask = Task & {
-  subtasks: {
-    title: string;
-    isCompleted: boolean;
-  }[];
+  subtask_0?: string | null;
+  subtask_1?: string | null;
+  subtask_2?: string | null;
+  subtask_3?: string | null;
+  subtask_4?: string | null;
+  subtask_check_0?: boolean | null;
+  subtask_check_1?: boolean | null;
+  subtask_check_2?: boolean | null;
+  subtask_check_3?: boolean | null;
+  subtask_check_4?: boolean | null;
 };

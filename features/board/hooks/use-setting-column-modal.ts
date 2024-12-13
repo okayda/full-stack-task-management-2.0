@@ -1,6 +1,6 @@
 import { useQueryState, parseAsBoolean } from "nuqs";
 
-export const useSettingColumnModal = () => {
+export const useSettingColumnModal = function () {
   const [isOpen, setIsOpen] = useQueryState(
     "setting-column",
     parseAsBoolean.withDefault(false).withOptions({ clearOnDefault: true }),

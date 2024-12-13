@@ -27,12 +27,14 @@ export const useCreateTask = function () {
       return await response.json();
     },
 
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
+      const { boardId } = variables.json;
+
       toast.success("Successfully created your task.", {
         description: currentDate(),
       });
 
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["tasks", boardId] });
     },
 
     onError: () => {

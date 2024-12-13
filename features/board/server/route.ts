@@ -13,18 +13,17 @@ import {
 
 import { sessionMiddleware } from "@/lib/session-middleware";
 
-import { initializeBoardDataExample } from "@/lib/initializeBoardDataExample";
+import { initializeBoardDataExample } from "@/lib/initializeExampleBoardData";
 
-import { createBoardSchema, createTaskSchema } from "../schemas";
+import { createBoardSchema, taskSchema } from "../schemas";
 
 import { MAX_COLUMNS, MAX_SUB_TASKS } from "../constants";
 
 import {
-  StatusColumnItem,
   Task,
-  UpdatedTask,
-  StatusColumnDoc,
-  SubtasksDoc,
+  StatusColumnItem,
+  SubtasksDocument,
+  StatusColumnDocument,
 } from "../types";
 
 const app = new Hono()
@@ -56,7 +55,7 @@ const app = new Hono()
   .post(
     "/create-task",
     sessionMiddleware,
-    zValidator("json", createTaskSchema),
+    zValidator("json", taskSchema),
     async (c) => {
       const databases = c.get("databases");
 
@@ -81,14 +80,9 @@ const app = new Hono()
       const subtaskData: Record<string, unknown> = { boardId };
 
       subtasks.forEach((subtask, index) => {
-        subtaskData[`subtask_${index}`] = subtask.value || "";
-        subtaskData[`subtask_check_${index}`] = subtask.value ? false : null;
+        subtaskData[`subtask_${index}`] = subtask.subtaskName;
+        subtaskData[`subtask_check_${index}`] = subtask.isCompleted;
       });
-
-      for (let i = subtasks.length; i < MAX_SUB_TASKS; i++) {
-        subtaskData[`subtask_${i}`] = "";
-        subtaskData[`subtask_check_${i}`] = null;
-      }
 
       const subtasksId = ID.unique();
 
@@ -108,7 +102,7 @@ const app = new Hono()
           taskName,
           statusId,
           priority,
-          description: description || "",
+          description,
           subtasksId,
           position: newPosition,
         },
@@ -122,7 +116,7 @@ const app = new Hono()
       return c.json({ task, subtasks: subtasksDocument });
     },
   )
-  .post("/create-board-data-example", sessionMiddleware, async (c) => {
+  .post("/create-example-board-data", sessionMiddleware, async (c) => {
     const user = c.get("user");
     const databases = c.get("databases");
 
@@ -144,20 +138,22 @@ const app = new Hono()
       );
     }
 
-    const [statusColumnRes, tasksRes] = await Promise.all([
-      databases.listDocuments<StatusColumnDoc>(DATABASE_ID, STATUS_COLUMN_ID, [
-        Query.equal("boardId", boardId),
-      ]),
+    const [statusColumnData, tasksData] = await Promise.all([
+      databases.listDocuments<StatusColumnDocument>(
+        DATABASE_ID,
+        STATUS_COLUMN_ID,
+        [Query.equal("boardId", boardId)],
+      ),
       databases.listDocuments<Task>(DATABASE_ID, TASKS_ID, [
         Query.equal("boardId", boardId),
       ]),
     ]);
 
-    const statusColumnDoc = statusColumnRes.documents[0];
-    const tasks = tasksRes.documents;
+    const statusColumn = statusColumnData.documents[0];
+    const tasks = tasksData.documents;
 
     if (tasks.length === 0) {
-      const fallbackBoardId = statusColumnDoc?.boardId || boardId;
+      const fallbackBoardId = statusColumn.boardId;
 
       return c.json({
         statusColumn: {
@@ -168,59 +164,54 @@ const app = new Hono()
       });
     }
 
-    const subtasksIds = tasks
-      .map((task) => task.subtasksId)
-      .filter((id): id is string => Boolean(id));
+    const subtasksIds = tasks.map((task) => task.subtasksId);
 
     const subtasksPromises = subtasksIds.map((id) =>
-      databases.getDocument<SubtasksDoc>(DATABASE_ID, SUB_TASKS_ID, id),
+      databases.getDocument<SubtasksDocument>(DATABASE_ID, SUB_TASKS_ID, id),
     );
 
-    const subtasksDocs = await Promise.all(subtasksPromises);
+    const subtasksDocuments = await Promise.all(subtasksPromises);
 
-    const subtasksMap = new Map<string, SubtasksDoc>();
-    for (const doc of subtasksDocs) {
-      subtasksMap.set(doc.$id, doc);
+    const subtasksMap = new Map<string, SubtasksDocument>();
+
+    for (const document of subtasksDocuments) {
+      subtasksMap.set(document.$id, document);
     }
 
     const columns: StatusColumnItem[] = [];
+
     let finalBoardId = boardId;
 
-    if (statusColumnDoc) {
-      finalBoardId = statusColumnDoc.boardId;
+    if (statusColumn) {
+      finalBoardId = statusColumn.boardId;
+
       for (let i = 0; i < MAX_COLUMNS; i++) {
-        const columnName =
-          statusColumnDoc[`column_${i}` as keyof StatusColumnDoc];
+        const getStatusName = statusColumn[`column_${i}`];
+        const getStatusId = statusColumn[`column_${i}_id`];
 
-        const statusId = statusColumnDoc[
-          `column_${i}_id` as keyof StatusColumnDoc
-        ] as string | undefined;
-
-        if (typeof columnName === "string" && columnName.trim() !== "") {
+        if (getStatusName && getStatusId) {
           columns.push({
-            statusName: columnName,
-            statusId: statusId || "",
+            statusName: getStatusName,
+            statusId: getStatusId,
           });
         }
       }
     }
 
-    const updatedTasks: UpdatedTask[] = tasks.map((task) => {
-      const subtasksDoc = subtasksMap.get(task.subtasksId);
+    const updatedTasks = tasks.map((task) => {
+      const subtasksDocument = subtasksMap.get(task.subtasksId);
 
-      const taskSubtasks: { title: string; isCompleted: boolean }[] = [];
+      const taskSubtasks: { subtaskName: string; isCompleted: boolean }[] = [];
 
-      if (subtasksDoc) {
+      if (subtasksDocument) {
         for (let i = 0; i < MAX_SUB_TASKS; i++) {
-          const subName = subtasksDoc[`subtask_${i}` as keyof SubtasksDoc];
+          const getSubtaskName = subtasksDocument[`subtask_${i}`];
+          const getIsCompleted = subtasksDocument[`subtask_check_${i}`];
 
-          const subCheck =
-            subtasksDoc[`subtask_check_${i}` as keyof SubtasksDoc];
-
-          if (typeof subName === "string" && subName.trim() !== "") {
+          if (getSubtaskName) {
             taskSubtasks.push({
-              title: subName,
-              isCompleted: subCheck === true,
+              subtaskName: getSubtaskName,
+              isCompleted: getIsCompleted,
             });
           }
         }

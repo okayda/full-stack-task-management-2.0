@@ -5,6 +5,8 @@ import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
+import { useGetBoardId } from "../hooks/use-get-board-id";
+
 import { useCreateTask } from "../api/use-create-task";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -36,7 +38,7 @@ import {
 import { customizeUpperCase } from "@/lib/utils";
 
 import { TaskPriority, StatusColumnItem } from "../types";
-import { createTaskSchema } from "../schemas";
+import { taskSchema } from "../schemas";
 
 import { MAX_SUB_TASKS } from "../constants";
 
@@ -47,20 +49,21 @@ interface CreateTaskFormProps {
   statusColumn: StatusColumnItem[];
 }
 
-type CreateTaskFormValues = z.infer<typeof createTaskSchema>;
+type CreateTaskFormValues = z.infer<typeof taskSchema>;
 
 export const CreateTaskForm = function ({
   onCancel,
   statusColumn,
 }: CreateTaskFormProps) {
+  const boardId = useGetBoardId();
+
   const { mutate: createTask, isPending: isCreating } = useCreateTask();
 
   const form = useForm<CreateTaskFormValues>({
-    resolver: zodResolver(createTaskSchema),
+    resolver: zodResolver(taskSchema),
     defaultValues: {
-      boardId: "bsa100",
-      taskName: "",
-      subtasks: [{ value: "" }],
+      boardId,
+      subtasks: [{ subtaskName: "" }],
     },
   });
 
@@ -71,7 +74,7 @@ export const CreateTaskForm = function ({
 
   const addSubtask = function () {
     if (fields.length < MAX_SUB_TASKS) {
-      append({ value: "" });
+      append({ subtaskName: "" });
     }
   };
 
@@ -79,14 +82,16 @@ export const CreateTaskForm = function ({
     remove(index);
   };
 
-  const onSubmit: SubmitHandler<CreateTaskFormValues> = function (data) {
+  const onSubmit: SubmitHandler<CreateTaskFormValues> = function (formValues) {
+    const validSubtasks = formValues.subtasks.filter(({ subtaskName }) => {
+      if (subtaskName?.trim()) return subtaskName;
+    });
+
     createTask(
-      { json: { ...data, boardId: "test100Id" } },
+      { json: { ...formValues, subtasks: validSubtasks } },
       {
         onSuccess: function () {
-          form.reset({
-            subtasks: [{ value: "" }],
-          });
+          form.reset();
           onCancel?.();
         },
       },
@@ -213,8 +218,11 @@ export const CreateTaskForm = function ({
                 render={({ field }) => {
                   return (
                     <FormItem>
-                      <FormLabel className="tracking-wide">
+                      <FormLabel className="flex items-center gap-x-2 tracking-wide">
                         Description
+                        <span className="text-xs text-muted-foreground">
+                          (Optional)
+                        </span>
                       </FormLabel>
 
                       <FormControl>
@@ -239,7 +247,12 @@ export const CreateTaskForm = function ({
                 className="border-b-2 border-dashed border-neutral-400/50"
               >
                 <AccordionTrigger className="pb-4 text-sm !no-underline">
-                  Optional minor tasks
+                  <div className="flex items-center gap-x-2">
+                    Subtasks
+                    <span className="text-xs text-muted-foreground">
+                      (Optional)
+                    </span>
+                  </div>
                 </AccordionTrigger>
 
                 <AccordionContent>
@@ -248,7 +261,7 @@ export const CreateTaskForm = function ({
                       return (
                         <div key={field.id} className="flex items-center gap-2">
                           <Input
-                            {...form.register(`subtasks.${index}.value`)}
+                            {...form.register(`subtasks.${index}.subtaskName`)}
                             autoComplete="off"
                             placeholder="Your minor task?"
                             className="h-[40px] border-neutral-400/60"

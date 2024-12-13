@@ -5,7 +5,7 @@ export const createBoardSchema = z.object({
   boardName: z.string().trim().min(1, "Required"),
 });
 
-export const createTaskSchema = z.object({
+export const taskSchema = z.object({
   boardId: z.string().trim().min(1, "Required"),
   taskName: z.string().trim().min(1, "Required"),
   statusId: z.string().trim(),
@@ -16,18 +16,8 @@ export const createTaskSchema = z.object({
   subtasks: z
     .array(
       z.object({
-        value: z.string().trim().optional(),
-      }),
-    )
-    .max(5, "Only 5 subtasks allowed"),
-});
-
-export const editTaskSchema = createTaskSchema.extend({
-  subtasks: z
-    .array(
-      z.object({
-        value: z.string().trim().optional(),
-        isCompleted: z.boolean().optional(), // New boolean field for checkbox
+        subtaskName: z.string().trim().optional(),
+        isCompleted: z.boolean().optional(),
       }),
     )
     .max(5, "Only 5 subtasks allowed"),

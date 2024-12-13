@@ -31,20 +31,20 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-import { useGetBoardId } from "../hooks/use-board-id";
+import { useGetBoardId } from "../hooks/use-get-board-id";
 
 import { customizeUpperCase } from "@/lib/utils";
 
 import { MAX_SUB_TASKS } from "../constants";
 
-import { editTaskSchema } from "../schemas";
+import { taskSchema } from "../schemas";
 
 import { Task, StatusColumnItem, TaskPriority } from "../types";
 
 import { BadgeXIcon } from "lucide-react";
 
 type SubTask = {
-  title: string;
+  subtaskName: string;
   isCompleted: boolean;
 };
 
@@ -57,7 +57,7 @@ interface EditTaskFormProps {
   closeEditModal: () => void;
 }
 
-type EditTaskFormValues = z.infer<typeof editTaskSchema>;
+type EditTaskFormValues = z.infer<typeof taskSchema>;
 
 export const EditTaskForm = function ({
   task,
@@ -67,15 +67,15 @@ export const EditTaskForm = function ({
   const boardId = useGetBoardId();
 
   const form = useForm<EditTaskFormValues>({
-    resolver: zodResolver(editTaskSchema),
+    resolver: zodResolver(taskSchema),
     defaultValues: {
-      boardId: boardId,
+      boardId,
       taskName: task.taskName,
       statusId: task.statusId,
       description: task.description,
       priority: task.priority,
       subtasks: task.subtasks.map((subtask: SubTask) => ({
-        value: subtask.title,
+        subtaskName: subtask.subtaskName,
         isCompleted: subtask.isCompleted,
       })),
     },
@@ -88,7 +88,7 @@ export const EditTaskForm = function ({
 
   const addSubtask = function () {
     if (fields.length < MAX_SUB_TASKS) {
-      append({ value: "" });
+      append({ subtaskName: "" });
     }
   };
 
@@ -96,25 +96,20 @@ export const EditTaskForm = function ({
     remove(index);
 
     if (fields.length - 1 === 0) {
-      append({ value: "" });
+      append({ subtaskName: "" });
     }
   };
 
-  const onSubmit: SubmitHandler<EditTaskFormValues> = function (values) {
+  const onSubmit: SubmitHandler<EditTaskFormValues> = function (formValues) {
     const taskId = task.$id;
     const subtasksId = task.subtasksId;
 
-    const validSubtasks = values.subtasks
-      .filter(({ value }) => {
-        if (value?.trim()) return value;
-      })
-      .map((subtask) => ({
-        title: subtask.value,
-        isCompleted: subtask.isCompleted,
-      }));
+    const validSubtasks = formValues.subtasks.filter(({ subtaskName }) => {
+      if (subtaskName?.trim()) return subtaskName;
+    });
 
     const editedTask = {
-      ...values,
+      ...formValues,
       taskId,
       subtasksId,
       subtasks: validSubtasks,
@@ -275,7 +270,7 @@ export const EditTaskForm = function ({
                       return (
                         <div key={field.id} className="flex items-center gap-2">
                           <Input
-                            {...form.register(`subtasks.${index}.value`)}
+                            {...form.register(`subtasks.${index}.subtaskName`)}
                             autoComplete="off"
                             placeholder="Your minor task?"
                             className="h-[40px] border-neutral-400/60"
@@ -283,7 +278,9 @@ export const EditTaskForm = function ({
 
                           <Button
                             type="button"
-                            disabled={fields.length === 1 && !fields[0].value}
+                            disabled={
+                              fields.length === 1 && !fields[0].subtaskName
+                            }
                             className="h-[40px] px-3"
                             onClick={() => removeSubtask(index)}
                           >

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { customizeUpperCase } from "@/lib/utils";
+import { customizeUpperCase, cn } from "@/lib/utils";
 
 import { TaskContentActions } from "./task-content-actions";
 import { Button } from "@/components/ui/button";
@@ -39,7 +39,6 @@ export default function TaskContent({
   closeTaskModal,
 }: TaskContentProps) {
   const [subTasks, setSubTasks] = useState(task.subtasks);
-
   const [status, setStatus] = useState(task.statusId);
 
   const checkboxHandler = function (subTaskIndex: number) {
@@ -69,14 +68,21 @@ export default function TaskContent({
       </CardHeader>
 
       <CardContent>
-        <p className="mb-5 text-sm text-muted-foreground">{task.description}</p>
+        <p
+          className={cn("mb-5 text-sm text-muted-foreground", {
+            "rounded-md bg-neutral-100 p-3 text-center text-[13px] text-foreground":
+              !task.description,
+          })}
+        >
+          {task.description ? task.description : "No Description"}
+        </p>
 
         <div className="mb-4">
           <h4 className="mb-2 text-sm font-medium text-foreground">Subtasks</h4>
 
           <ul className="flex flex-col gap-y-1.5">
             {subTasks.length > 0 ? (
-              subTasks.map((task: Task, index: number) => (
+              subTasks.map((subtask: Task, index: number) => (
                 <li key={`task-${index}`} className="text-[13px]">
                   <label
                     htmlFor={`task-${index}`}
@@ -85,11 +91,11 @@ export default function TaskContent({
                     <input
                       id={`task-${index}`}
                       type="checkbox"
-                      checked={task.isComplete}
+                      checked={subtask.isCompleted}
                       onChange={() => checkboxHandler(index)}
                       className="h-[14.5px] w-[14.5px] accent-[#0F0F0F] focus:outline-none focus:ring-0"
                     />
-                    {task.title}
+                    {subtask.subtaskName}
                   </label>
                 </li>
               ))

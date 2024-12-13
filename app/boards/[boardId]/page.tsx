@@ -9,7 +9,7 @@ import { CreateTaskModal } from "@/features/board/components/create-task-modal";
 
 import DashBoardLayout from "@/components/dash-board-layout";
 
-import { statusColumnExample } from "@/lib/exampleData";
+import { statusColumnExample } from "@/lib/exampleBoardData";
 import BoardClientPage from "./client-page";
 
 export default async function BoardIdPage() {

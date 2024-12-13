@@ -1,7 +1,7 @@
 import { Models } from "node-appwrite";
 
 import { useSettingColumnModal } from "@/features/board/hooks/use-setting-column-modal";
-import { useGetBoardId } from "@/features/board/hooks/use-board-id";
+import { useGetBoardId } from "@/features/board/hooks/use-get-board-id";
 
 import { Button } from "./ui/button";
 

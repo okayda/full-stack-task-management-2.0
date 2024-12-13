@@ -1,6 +1,6 @@
 "use client";
 
-import { useCreateBoardDataExample } from "../api/use-create-board-data-example";
+import { useCreateExampleBoardData } from "../api/use-create-example-board-data";
 
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,7 +9,7 @@ import { LoaderIcon } from "lucide-react";
 
 export default function GenerateExampleBox() {
   const { mutate: createBoardExample, isPending: isCreatingBoardExample } =
-    useCreateBoardDataExample();
+    useCreateExampleBoardData();
 
   return (
     <Card className="mx-auto w-full max-w-xs">
