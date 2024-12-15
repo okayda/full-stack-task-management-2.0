@@ -185,13 +185,12 @@ export default function Board({
               return (
                 <div
                   key={statusId}
-                  className="cursor-ew-resize rounded-md pb-1.5 pr-1.5"
+                  className="flex-1 cursor-ew-resize rounded-md pb-1.5 pr-1.5"
                 >
                   <BoardHeader
                     statusName={statusName}
                     taskCount={tasks[statusId]?.length || 0}
                   />
-
                   <Droppable
                     droppableId={statusId}
                     renderClone={

@@ -2,6 +2,10 @@
 
 import { useState } from "react";
 
+import { useGetBoardId } from "../hooks/use-get-board-id";
+
+import { useUpdateSubtasks } from "../api/use-update-subtasks";
+
 import { customizeUpperCase, cn } from "@/lib/utils";
 
 import { TaskContentActions } from "./task-content-actions";
@@ -41,6 +45,14 @@ export default function TaskContent({
   const [subTasks, setSubTasks] = useState(task.subtasks);
   const [status, setStatus] = useState(task.statusId);
 
+  const [originalSubTasks] = useState(task.subtasks);
+  const [originalStatus] = useState(task.statusId);
+
+  const boardId = useGetBoardId();
+
+  const { mutate: updateSubtasks, isPending: isUpdatingSubtasks } =
+    useUpdateSubtasks();
+
   const checkboxHandler = function (subTaskIndex: number) {
     setSubTasks((prev: SubTask[]) =>
       prev.map((subTask: SubTask, stateIndex: number) => {
@@ -52,6 +64,32 @@ export default function TaskContent({
       }),
     );
   };
+
+  const onSubmit = function () {
+    updateSubtasks(
+      {
+        json: {
+          boardId,
+          taskId: task.$id,
+          statusId: status,
+          subtasksId: task.subtasksId,
+          subtasks: subTasks,
+        },
+      },
+      {
+        onSuccess: () => {
+          closeTaskModal();
+        },
+      },
+    );
+  };
+
+  // Validating if there is any changes to the previous task data otherwise it will determine if the button is clickable
+  const subTasksChanged =
+    JSON.stringify(originalSubTasks) !== JSON.stringify(subTasks);
+  const statusChanged =
+    JSON.stringify(originalStatus) !== JSON.stringify(status);
+  const isSaveDisabled = !subTasksChanged && !statusChanged;
 
   return (
     <Card className="border-none shadow-none">
@@ -133,14 +171,16 @@ export default function TaskContent({
 
         <div className="flex gap-x-2">
           <Button
-            onClick={closeTaskModal}
+            onClick={onSubmit}
+            disabled={isUpdatingSubtasks || isSaveDisabled}
             className="h-[2.625rem] w-full tracking-wide"
           >
-            Save
+            {isUpdatingSubtasks ? "Loading..." : "Save"}
           </Button>
 
           <Button
             onClick={closeTaskModal}
+            disabled={isUpdatingSubtasks}
             variant="secondary"
             className="h-[2.625rem] w-full border tracking-wide"
           >

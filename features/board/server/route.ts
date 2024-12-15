@@ -15,7 +15,12 @@ import { sessionMiddleware } from "@/lib/session-middleware";
 
 import { initializeBoardDataExample } from "@/lib/initializeExampleBoardData";
 
-import { createBoardSchema, taskSchema, updateTaskSchema } from "../schemas";
+import {
+  createBoardSchema,
+  taskSchema,
+  updateTaskSchema,
+  updateSubtasksSchema,
+} from "../schemas";
 
 import { MAX_COLUMNS, MAX_SUB_TASKS } from "../constants";
 
@@ -288,6 +293,52 @@ const app = new Hono()
       ]);
 
       return c.json({ task: updatedTask, subtasks: subtasksDocument });
+    },
+  )
+  .patch(
+    "/update-subtasks",
+    sessionMiddleware,
+    zValidator("json", updateSubtasksSchema),
+    async (c) => {
+      const databases = c.get("databases");
+
+      const { boardId, taskId, statusId, subtasksId, subtasks } =
+        c.req.valid("json");
+
+      const subtaskData: Record<string, unknown> = { boardId };
+
+      subtasks.forEach((subtask, i) => {
+        subtaskData[`subtask_${i}`] = subtask.subtaskName;
+        subtaskData[`subtask_check_${i}`] = subtask.isCompleted;
+      });
+
+      for (let i = subtasks.length; i < MAX_SUB_TASKS; i++) {
+        subtaskData[`subtask_${i}`] = null;
+        subtaskData[`subtask_check_${i}`] = null;
+      }
+
+      const taskPromise = databases.updateDocument(
+        DATABASE_ID,
+        TASKS_ID,
+        taskId,
+        {
+          statusId,
+        },
+      );
+
+      const subtasksPromise = databases.updateDocument(
+        DATABASE_ID,
+        SUB_TASKS_ID,
+        subtasksId,
+        subtaskData,
+      );
+
+      const [updatedTask, updatedSubtasks] = await Promise.all([
+        taskPromise,
+        subtasksPromise,
+      ]);
+
+      return c.json({ task: updatedTask, subtasks: updatedSubtasks });
     },
   );
 

@@ -13,6 +13,11 @@ import { Task, StatusColumnItem } from "../types";
 
 import { FaGripLines } from "react-icons/fa6";
 
+type SubTask = {
+  title: string;
+  isCompleted: boolean;
+};
+
 interface BoardTaskCardProps {
   task: Task;
   statusColumn: {
@@ -105,6 +110,15 @@ export default function BoardTaskCard({
   const openTaskModal = () => setIsTaskModalOpen(true);
   const closeTaskModal = () => setIsTaskModalOpen(false);
 
+  const completedSubtasks = task.subtasks.filter(
+    (subtask: SubTask) => subtask.isCompleted,
+  ).length;
+  const totalSubtasks = task.subtasks.length;
+
+  if (!task) {
+    return <div>TANG INA MO!!</div>;
+  }
+
   return (
     <React.Fragment>
       <TaskContentModal
@@ -118,11 +132,13 @@ export default function BoardTaskCard({
         <div className="absolute right-2 top-2">
           {getPriorityType(task.priority)}
         </div>
+
         <h3 className="mb-2 pb-2.5 font-sans text-[15px] font-medium">
           {task.taskName}
         </h3>
+
         <p className="text-xs font-medium text-muted-foreground">
-          0 of 5 subtasks
+          {completedSubtasks} of {totalSubtasks} subtasks
         </p>
       </div>
     </React.Fragment>

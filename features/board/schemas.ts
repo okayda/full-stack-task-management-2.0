@@ -24,8 +24,24 @@ export const taskSchema = z.object({
     .max(MAX_SUB_TASKS),
 });
 
-// only use in the back-end only
+// should be use in the back-end only
 export const updateTaskSchema = taskSchema.extend({
   taskId: z.string().trim().min(1),
   subtasksId: z.string().trim().min(1),
+});
+
+// should be use in the back-end only
+export const updateSubtasksSchema = z.object({
+  boardId: z.string().trim().min(1),
+  subtasksId: z.string().trim().min(1),
+  taskId: z.string().trim(),
+  statusId: z.string().trim(),
+  subtasks: z
+    .array(
+      z.object({
+        subtaskName: z.string().trim().optional(),
+        isCompleted: z.boolean().optional(),
+      }),
+    )
+    .max(MAX_SUB_TASKS),
 });

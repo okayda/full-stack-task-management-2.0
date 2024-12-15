@@ -35,15 +35,15 @@ export default function Navbar({ userBoardsData }: NavbarProps) {
         </h1>
 
         <Button
-          className="px-6 tracking-wide"
-          size="icon"
+          className="rounded-lg border border-neutral-400/50 px-2.5 tracking-wide md:px-6"
+          variant="secondary"
           onClick={openSettingModal}
         >
           <span className="md:hidden">
             <CogIcon className="!size-5" />
           </span>
 
-          <span className="hidden md:block">Settings</span>
+          <span className="hidden md:block">Setting</span>
         </Button>
       </div>
     </nav>
