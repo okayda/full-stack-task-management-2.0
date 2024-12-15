@@ -21,7 +21,7 @@ export default function GenerateExampleBox() {
         </p>
 
         <RainbowButton
-          className="w-full text-[15px]"
+          className="w-full text-[0.9375rem]"
           disabled={isCreatingBoardExample}
           onClick={createBoardExample}
         >

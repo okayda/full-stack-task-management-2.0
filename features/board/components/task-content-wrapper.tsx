@@ -20,16 +20,6 @@ export const TaskContentWrapper = function ({
   statusColumn,
   closeTaskModal,
 }: TaskContentWrapperProps) {
-  //   if (false) {
-  //     return (
-  //       <Card className="h-[714px] w-full border-none shadow-none">
-  //         <CardContent className="flex h-full items-center justify-center">
-  //           <Loader className="size-5 animate-spin text-muted-foreground" />
-  //         </CardContent>
-  //       </Card>
-  //     );
-  //   }
-
   return (
     <TaskContent
       task={task}

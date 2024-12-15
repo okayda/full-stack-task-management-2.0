@@ -1,6 +1,6 @@
 import { CreateTaskForm } from "./create-task-form";
 
-import { StatusColumn } from "../types";
+import { StatusColumnItem } from "../types";
 
 // import { Card, CardContent } from "@/components/ui/card";
 
@@ -8,7 +8,7 @@ import { StatusColumn } from "../types";
 
 interface CreateTaskFormWrapperProps {
   onCancel: () => void;
-  statusColumn: StatusColumn[];
+  statusColumn: StatusColumnItem[];
 }
 
 export const CreateTaskFormWrapper = ({

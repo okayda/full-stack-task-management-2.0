@@ -5,6 +5,10 @@ import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
+import { useGetBoardId } from "../hooks/use-get-board-id";
+
+import { useUpdateTask } from "../api/use-update-task";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -31,8 +35,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-import { useGetBoardId } from "../hooks/use-get-board-id";
-
 import { customizeUpperCase } from "@/lib/utils";
 
 import { MAX_SUB_TASKS } from "../constants";
@@ -41,7 +43,7 @@ import { taskSchema } from "../schemas";
 
 import { Task, StatusColumnItem, TaskPriority } from "../types";
 
-import { BadgeXIcon } from "lucide-react";
+import { CircleXIcon } from "lucide-react";
 
 type SubTask = {
   subtaskName: string;
@@ -55,6 +57,7 @@ interface EditTaskFormProps {
     boardId: string;
   };
   closeEditModal: () => void;
+  closeTaskModal: () => void | undefined;
 }
 
 type EditTaskFormValues = z.infer<typeof taskSchema>;
@@ -63,8 +66,11 @@ export const EditTaskForm = function ({
   task,
   statusColumn,
   closeEditModal,
+  closeTaskModal,
 }: EditTaskFormProps) {
   const boardId = useGetBoardId();
+
+  const { mutate: updateTask, isPending: isUpdatingTask } = useUpdateTask();
 
   const form = useForm<EditTaskFormValues>({
     resolver: zodResolver(taskSchema),
@@ -72,12 +78,14 @@ export const EditTaskForm = function ({
       boardId,
       taskName: task.taskName,
       statusId: task.statusId,
-      description: task.description,
+      description: task.description || "",
       priority: task.priority,
-      subtasks: task.subtasks.map((subtask: SubTask) => ({
-        subtaskName: subtask.subtaskName,
-        isCompleted: subtask.isCompleted,
-      })),
+      subtasks: task.subtasks.length
+        ? task.subtasks.map((subtask: SubTask) => ({
+            subtaskName: subtask.subtaskName,
+            isCompleted: subtask.isCompleted,
+          }))
+        : [{ subtaskName: "", isCompleted: false }],
     },
   });
 
@@ -88,7 +96,7 @@ export const EditTaskForm = function ({
 
   const addSubtask = function () {
     if (fields.length < MAX_SUB_TASKS) {
-      append({ subtaskName: "" });
+      append({ subtaskName: "", isCompleted: false });
     }
   };
 
@@ -96,11 +104,11 @@ export const EditTaskForm = function ({
     remove(index);
 
     if (fields.length - 1 === 0) {
-      append({ subtaskName: "" });
+      append({ subtaskName: "", isCompleted: false });
     }
   };
 
-  const onSubmit: SubmitHandler<EditTaskFormValues> = function (formValues) {
+  const onSubmit: SubmitHandler<EditTaskFormValues> = (formValues) => {
     const taskId = task.$id;
     const subtasksId = task.subtasksId;
 
@@ -115,7 +123,15 @@ export const EditTaskForm = function ({
       subtasks: validSubtasks,
     };
 
-    console.log(editedTask);
+    updateTask(
+      { json: editedTask },
+      {
+        onSuccess: () => {
+          closeEditModal();
+          closeTaskModal();
+        },
+      },
+    );
   };
 
   return (
@@ -140,7 +156,7 @@ export const EditTaskForm = function ({
                           {...field}
                           autoComplete="off"
                           placeholder="Your task name?"
-                          className="!mt-1 h-[45px] border-neutral-400/60 text-[15px] md:h-[42px]"
+                          className="!mt-1 h-[2.8125rem] border-neutral-400/60 text-[0.9375rem] md:h-[2.625rem]"
                         />
                       </FormControl>
                     </FormItem>
@@ -162,7 +178,7 @@ export const EditTaskForm = function ({
                         onValueChange={field.onChange}
                       >
                         <FormControl>
-                          <SelectTrigger className="!mt-1 h-[45px] border-neutral-400/60 text-[15px] md:h-[42px]">
+                          <SelectTrigger className="!mt-1 h-[2.8125rem] border-neutral-400/60 text-[0.9375rem] md:h-[2.625rem]">
                             <SelectValue placeholder={task.statusId} />
                           </SelectTrigger>
                         </FormControl>
@@ -199,7 +215,7 @@ export const EditTaskForm = function ({
                         onValueChange={field.onChange}
                       >
                         <FormControl>
-                          <SelectTrigger className="!mt-1 h-[45px] border-neutral-400/60 text-[15px] md:h-[42px]">
+                          <SelectTrigger className="!mt-1 h-[2.8125rem] border-neutral-400/60 text-[0.9375rem] md:h-[2.625rem]">
                             <SelectValue
                               placeholder={field.value || "Select priority"}
                             />
@@ -240,7 +256,7 @@ export const EditTaskForm = function ({
                           {...field}
                           autoComplete="off"
                           placeholder="Do you have any description?"
-                          className="!mt-1 h-[80px] border-neutral-400/60 text-[15px] md:h-[80px]"
+                          className="!mt-1 h-[5rem] border-neutral-400/60 text-[0.9375rem]"
                         />
                       </FormControl>
                       <FormMessage />
@@ -273,18 +289,19 @@ export const EditTaskForm = function ({
                             {...form.register(`subtasks.${index}.subtaskName`)}
                             autoComplete="off"
                             placeholder="Your minor task?"
-                            className="h-[40px] border-neutral-400/60"
+                            className="h-[2.5rem] border-neutral-400/60"
                           />
 
                           <Button
                             type="button"
                             disabled={
-                              fields.length === 1 && !fields[0].subtaskName
+                              (fields.length === 1 && !fields[0].subtaskName) ||
+                              isUpdatingTask
                             }
-                            className="h-[40px] px-3"
+                            className="h-[2.5rem] px-3"
                             onClick={() => removeSubtask(index)}
                           >
-                            <BadgeXIcon className="!size-5" />
+                            <CircleXIcon className="!size-5" />
                           </Button>
                         </div>
                       );
@@ -294,9 +311,9 @@ export const EditTaskForm = function ({
                   {fields.length < MAX_SUB_TASKS && (
                     <Button
                       type="button"
-                      disabled={false}
+                      disabled={isUpdatingTask}
                       variant="outline"
-                      className="mt-2 h-[40px] w-full border-neutral-400/60"
+                      className="mt-2 h-[2.5rem] w-full border-neutral-400/60"
                       onClick={addSubtask}
                     >
                       New Subtask
@@ -309,18 +326,18 @@ export const EditTaskForm = function ({
             <div className="mt-6 flex gap-x-2">
               <Button
                 type="submit"
-                disabled={false}
-                className="h-[42px] w-full tracking-wide"
+                disabled={isUpdatingTask}
+                className="h-[2.625rem] w-full tracking-wide"
               >
-                {false ? "Loading..." : "Update"}
+                {isUpdatingTask ? "Loading..." : "Update"}
               </Button>
 
               <Button
                 type="button"
-                disabled={false}
+                disabled={isUpdatingTask}
                 variant="secondary"
                 onClick={closeEditModal}
-                className="h-[42px] w-full border tracking-wide"
+                className="h-[2.625rem] w-full border tracking-wide"
               >
                 Cancel
               </Button>

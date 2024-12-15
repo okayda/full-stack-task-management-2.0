@@ -15,7 +15,7 @@ import { sessionMiddleware } from "@/lib/session-middleware";
 
 import { initializeBoardDataExample } from "@/lib/initializeExampleBoardData";
 
-import { createBoardSchema, taskSchema } from "../schemas";
+import { createBoardSchema, taskSchema, updateTaskSchema } from "../schemas";
 
 import { MAX_COLUMNS, MAX_SUB_TASKS } from "../constants";
 
@@ -67,7 +67,7 @@ const app = new Hono()
         TASKS_ID,
         [
           Query.equal("boardId", boardId),
-          Query.orderAsc("position"),
+          Query.orderDesc("position"),
           Query.limit(1),
         ],
       );
@@ -230,6 +230,65 @@ const app = new Hono()
       },
       tasks: updatedTasks,
     });
-  });
+  })
+  .patch(
+    "/update-task",
+    sessionMiddleware,
+    zValidator("json", updateTaskSchema),
+    async (c) => {
+      const databases = c.get("databases");
+      const {
+        taskId,
+        subtasksId,
+        boardId,
+        taskName,
+        statusId,
+        priority,
+        description,
+        subtasks,
+      } = c.req.valid("json");
+
+      const subtaskData: Record<string, unknown> = { boardId };
+
+      subtasks.forEach((subtask, i) => {
+        subtaskData[`subtask_${i}`] = subtask.subtaskName;
+        subtaskData[`subtask_check_${i}`] = subtask.isCompleted || false;
+      });
+
+      for (let i = subtasks.length; i < MAX_SUB_TASKS; i++) {
+        subtaskData[`subtask_${i}`] = null;
+        subtaskData[`subtask_check_${i}`] = null;
+      }
+
+      const subtasksPromise = databases.updateDocument(
+        DATABASE_ID,
+        SUB_TASKS_ID,
+        subtasksId,
+        subtaskData,
+      );
+
+      const taskUpdateData = {
+        boardId,
+        taskName,
+        statusId,
+        priority,
+        description,
+      };
+
+      const taskPromise = databases.updateDocument(
+        DATABASE_ID,
+        TASKS_ID,
+        taskId,
+        taskUpdateData,
+      );
+
+      const [updatedTask, subtasksDocument] = await Promise.all([
+        taskPromise,
+        subtasksPromise,
+      ]);
+
+      return c.json({ task: updatedTask, subtasks: subtasksDocument });
+    },
+  );
 
 export default app;

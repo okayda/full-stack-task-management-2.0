@@ -129,13 +129,13 @@ export default function Board({
           $id: updatedMovedTask.$id,
           statusId: destStatusId,
           statusName: destStatus.statusName,
-          position: Math.min((destination.index + 1) * 1000, 100_000),
+          position: Math.min((destination.index + 1) * 1000, 50_000),
         });
 
         // Update positions for tasks in the destination column
         newTasks[destStatusId].forEach((task, index) => {
           if (task && task.$id !== updatedMovedTask.$id) {
-            const newPosition = Math.min((index + 1) * 1000, 100_000);
+            const newPosition = Math.min((index + 1) * 1000, 50_000);
             if (task.position !== newPosition) {
               updatesPayload.push({
                 $id: task.$id,
@@ -179,13 +179,13 @@ export default function Board({
       ignoreElements={".board-task"}
     >
       <DragDropContext onDragEnd={onDragEnd}>
-        <div className="h-[calc(100vh-127px)] lg:h-[calc(100vh-138px)]">
+        <div className="h-[calc(100vh-6.625rem)] lg:h-[calc(100vh-7rem)]">
           <div className="flex h-full cursor-ew-resize gap-x-6 pb-2 2xl:gap-x-2">
             {statusColumn.columns.map(({ statusId, statusName }) => {
               return (
                 <div
                   key={statusId}
-                  className="cursor-ew-resize rounded-md px-1.5 pb-1.5"
+                  className="cursor-ew-resize rounded-md pb-1.5 pr-1.5"
                 >
                   <BoardHeader
                     statusName={statusName}
@@ -225,7 +225,7 @@ export default function Board({
                       <div
                         {...provided.droppableProps}
                         ref={provided.innerRef}
-                        className="h-full min-h-fit w-[300px] pb-6 2xl:max-h-[calc(100vh-215px)] 2xl:min-h-0 2xl:w-[310px] 2xl:overflow-y-auto 2xl:overflow-x-hidden 2xl:pb-0 2xl:pr-2.5 2xl:pt-1"
+                        className="h-full min-h-fit w-[18.75rem] pb-6 2xl:max-h-[calc(100vh-11.875rem)] 2xl:min-h-0 2xl:w-[19.375rem] 2xl:overflow-y-auto 2xl:overflow-x-hidden 2xl:pb-0 2xl:pr-2.5 2xl:pt-1"
                       >
                         {tasks[statusId]?.map((task, index) => {
                           const shouldRenderClone =
@@ -275,7 +275,7 @@ export default function Board({
               <div className="on cursor-move rounded-md pb-1.5 pr-2 2xl:pr-0">
                 <div
                   onClick={openColumnFormModal}
-                  className="flex h-full w-[300px] cursor-pointer flex-col justify-center rounded-lg border border-dashed border-neutral-300 bg-neutral-100 text-muted-foreground transition 2xl:w-[310px]"
+                  className="flex h-full w-[18.75rem] cursor-pointer flex-col justify-center rounded-lg border border-dashed border-neutral-300 bg-neutral-100 text-muted-foreground transition 2xl:w-[19.375rem]"
                 >
                   <h3 className="text-center text-2xl font-medium">
                     New Column

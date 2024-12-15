@@ -65,12 +65,12 @@ export default function SignUpCard() {
   };
 
   return (
-    <div className="md:mx-auto md:flex md:max-w-[900px] md:gap-x-6 md-l:gap-x-12 lg-l:block lg-l:max-w-none">
-      <div className="md:w-[400px] md:shrink-0 lg-l:w-auto lg-l:shrink">
-        <Card className="mx-auto max-w-[400px] rounded-none border-x-0 border-b border-t-0 border-dashed border-muted-foreground shadow-none sm:max-w-[410px] sm:border-none lg-l:mx-0 lg-l:flex lg-l:w-full lg-l:max-w-none lg-l:gap-x-6 lg-l:bg-transparent">
-          <div className="sm:rounded-lg sm:border sm:bg-background sm:shadow-sm lg-l:w-full lg-l:max-w-[410px]">
+    <div className="md:mx-auto md:flex md:max-w-[56.25rem] md:gap-x-6 md-l:gap-x-12 lg-l:block lg-l:max-w-none">
+      <div className="md:w-[25rem] md:shrink-0 lg-l:w-auto lg-l:shrink">
+        <Card className="mx-auto max-w-[25rem] rounded-none border-x-0 border-b border-t-0 border-dashed border-muted-foreground shadow-none sm:max-w-[25.625rem] sm:border-none lg-l:mx-0 lg-l:flex lg-l:w-full lg-l:max-w-none lg-l:gap-x-6 lg-l:bg-transparent">
+          <div className="sm:rounded-lg sm:border sm:bg-background sm:shadow-sm lg-l:w-full lg-l:max-w-[25.625rem]">
             <CardHeader className="px-0 pt-9 sm:px-6">
-              <CardTitle className="mb-1 text-[32px]">Create account</CardTitle>
+              <CardTitle className="mb-1 text-[2rem]">Create account</CardTitle>
 
               <CardDescription className="text-base">
                 Join us and start organizing your tasks effortlessly. Together,
@@ -133,11 +133,11 @@ export default function SignUpCard() {
                             type="username"
                             placeholder="linus_torvalds"
                             {...field}
-                            className="!mt-1 h-[45px] border-neutral-400/60 text-[15px]"
+                            className="!mt-1 h-[2.8125rem] border-neutral-400/60 text-[15px]"
                           />
                         </FormControl>
 
-                        <FormMessage className="!mt-[5.5px]" />
+                        <FormMessage className="!mt-[0.34375rem]" />
                       </FormItem>
                     )}
                   />
@@ -160,17 +160,17 @@ export default function SignUpCard() {
                             type="email"
                             placeholder="hello_world@navercorp.com"
                             {...field}
-                            className="h-[45px] border-neutral-400/60 text-[15px]"
+                            className="h-[2.8125rem] border-neutral-400/60 text-[15px]"
                           />
                         </FormControl>
 
-                        <FormMessage className="!mt-[5.5px]" />
+                        <FormMessage className="!mt-[0.34375rem]" />
                       </FormItem>
                     )}
                   />
 
                   {form.formState.errors.root?.serverError && (
-                    <p className="!mt-[5.5px] text-[12.8px] text-rose-500">
+                    <p className="!mt-[0.34375rem] text-[0.8rem] text-rose-500">
                       {form.formState.errors.root.serverError.message}
                     </p>
                   )}
@@ -188,11 +188,11 @@ export default function SignUpCard() {
                             type="password"
                             placeholder="Password (at least 8 characters)"
                             {...field}
-                            className="!mt-1 h-[45px] border-neutral-400/60 text-[15px]"
+                            className="!mt-1 h-[2.8125rem] border-neutral-400/60 text-[15px]"
                           />
                         </FormControl>
 
-                        <FormMessage className="!mt-[5.5px]" />
+                        <FormMessage className="!mt-[0.34375rem]" />
                       </FormItem>
                     )}
                   />
@@ -200,7 +200,7 @@ export default function SignUpCard() {
                   <Button
                     disabled={isCreatingAccount}
                     size="lg"
-                    className="h-[42px] w-full tracking-wide"
+                    className="h-[2.625rem] w-full tracking-wide"
                   >
                     {isCreatingAccount ? "Loading..." : "Create"}
                   </Button>
@@ -219,7 +219,7 @@ export default function SignUpCard() {
           </div>
 
           <div className="w-full">
-            <div className="relative hidden h-[320px] self-start rounded-lg lg-l:block">
+            <div className="relative hidden h-[20rem] self-start rounded-lg lg-l:block">
               <BadgeCheckIcon
                 className="absolute right-0 top-0 z-10 m-3 size-10 text-green-400"
                 strokeWidth="1.5px"
@@ -238,7 +238,7 @@ export default function SignUpCard() {
               <div className="absolute inset-0 px-10 pt-9">
                 <div className="text-left text-white">
                   <h2
-                    className="mb-3 text-[32px] font-semibold tracking-wide"
+                    className="mb-3 text-[2rem] font-semibold tracking-wide"
                     style={{ textShadow: "1px 1px 3px rgba(0, 0, 0, 0.45)" }}
                   >
                     Disclaimer
@@ -307,7 +307,7 @@ export default function SignUpCard() {
       <Separator className="mt-6 hidden py-2 sm:block md:hidden" />
 
       <div className="sm:relative">
-        <div className="relative mx-auto max-w-[400px] py-6 sm:static sm:max-w-[410px] md:mx-0 md:max-w-none md:flex-grow md:py-11 lg-l:hidden">
+        <div className="relative mx-auto max-w-[25rem] py-6 sm:static sm:max-w-[25.625rem] md:mx-0 md:max-w-none md:flex-grow md:py-11 lg-l:hidden">
           <GridPattern
             squares={[
               [7, 1],
@@ -328,7 +328,7 @@ export default function SignUpCard() {
               "inset-x-0 skew-y-0",
             )}
           />
-          <h4 className="mb-3 text-[26px] font-semibold md:text-[32px]">
+          <h4 className="mb-3 text-[1.625rem] font-semibold md:text-[2rem]">
             Disclaimer
           </h4>
 

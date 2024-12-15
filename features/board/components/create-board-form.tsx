@@ -72,7 +72,7 @@ export const CreateBoardForm = function ({ onCancel }: CreateBoardFormProps) {
                         {...field}
                         autoComplete="off"
                         placeholder="Your board name?"
-                        className="!mt-1 h-[45px] border-neutral-400/60 text-[15px] md:h-[42px]"
+                        className="!mt-1 h-[2.8125rem] border-neutral-400/60 text-[0.9375rem] md:h-[2.625rem]"
                       />
                     </FormControl>
                   </FormItem>
@@ -84,7 +84,7 @@ export const CreateBoardForm = function ({ onCancel }: CreateBoardFormProps) {
               <Button
                 type="submit"
                 disabled={isCreatingBoard}
-                className="h-[42px] w-full tracking-wide"
+                className="h-[2.625rem] w-full tracking-wide"
               >
                 {isCreatingBoard ? "Creating..." : "Create"}
               </Button>
@@ -94,7 +94,7 @@ export const CreateBoardForm = function ({ onCancel }: CreateBoardFormProps) {
                 variant="secondary"
                 disabled={isCreatingBoard}
                 onClick={onCancel}
-                className="h-[42px] w-full border tracking-wide"
+                className="h-[2.625rem] w-full border tracking-wide"
               >
                 Cancel
               </Button>

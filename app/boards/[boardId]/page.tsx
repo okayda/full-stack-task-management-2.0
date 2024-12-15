@@ -47,9 +47,7 @@ export default async function BoardIdPage() {
           hasBoardsData={hasBoardsData}
           userBoardsData={userBoardsData}
         >
-          <div className="flex flex-col px-2 pb-0 pt-8 lg:px-6 lg:pt-10">
-            <BoardClientPage isDesktop={false} />
-          </div>
+          <BoardClientPage isDesktop={false} />
         </DashBoardLayout>
       </div>
 
@@ -61,9 +59,7 @@ export default async function BoardIdPage() {
           hasBoardsData={hasBoardsData}
           userBoardsData={userBoardsData}
         >
-          <div className="flex flex-col px-2 pb-0 pt-8 lg:px-6 lg:pt-10">
-            <BoardClientPage isDesktop={true} />
-          </div>
+          <BoardClientPage isDesktop={true} />
         </DashBoardLayout>
       </div>
     </div>

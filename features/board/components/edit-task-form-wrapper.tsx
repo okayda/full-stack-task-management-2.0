@@ -13,12 +13,14 @@ interface EditTaskFormWrapperProps {
     boardId: string;
   };
   closeEditModal: () => void;
+  closeTaskModal: () => void;
 }
 
 export const EditTaskFormWrapper = function ({
   task,
   statusColumn,
   closeEditModal,
+  closeTaskModal,
 }: EditTaskFormWrapperProps) {
   //   if (false) {
   //     return (
@@ -35,6 +37,7 @@ export const EditTaskFormWrapper = function ({
       task={task}
       statusColumn={statusColumn}
       closeEditModal={closeEditModal}
+      closeTaskModal={closeTaskModal}
     />
   );
 };

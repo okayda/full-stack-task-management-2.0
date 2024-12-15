@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
 
 import { MAX_COLUMNS } from "../constants";
 
-import { BadgeXIcon, MoreVertical } from "lucide-react";
+import { CircleXIcon, MoreVertical } from "lucide-react";
 
 interface SettingColumnFormProps {
   onCancel?: () => void;
@@ -75,7 +75,7 @@ export const SettingColumnForm = function ({
                         {...field}
                         autoComplete="off"
                         placeholder="Your board name?"
-                        className="!mt-1 h-[45px] border-neutral-400/60 text-[15px] md:h-[42px]"
+                        className="!mt-1 h-[2.8125rem] border-neutral-400/60 text-[0.9375rem] md:h-[2.625rem]"
                       />
                     </FormControl>
 
@@ -97,16 +97,16 @@ export const SettingColumnForm = function ({
                       value={column}
                       onChange={(e) => updateColumn(index, e.target.value)}
                       placeholder="Your column name?"
-                      className="h-[40px] border-neutral-400/60"
+                      className="h-[2.8125rem] border-neutral-400/60 md:h-[2.625rem]"
                     />
 
                     <Button
                       type="button"
-                      className="h-[40px] px-3"
+                      className="h-[2.8125rem] px-3 md:h-[2.625rem]"
                       onClick={() => removeColumn(index)}
                       disabled={columns.length === 2}
                     >
-                      <BadgeXIcon className="!size-5" />
+                      <CircleXIcon className="!size-5" />
                     </Button>
                   </div>
                 ))}
@@ -118,7 +118,7 @@ export const SettingColumnForm = function ({
                     type="button"
                     variant="outline"
                     disabled={false}
-                    className="h-[40px] justify-center rounded-full border-neutral-400/60 px-10"
+                    className="h-[2.8125rem] justify-center rounded-full border-neutral-400/60 px-10 md:h-[2.625rem]"
                     onClick={addColumn}
                   >
                     New Column
@@ -137,7 +137,7 @@ export const SettingColumnForm = function ({
               <div className="flex gap-x-2">
                 <Button
                   type="submit"
-                  className="h-[42px] w-full tracking-wide"
+                  className="h-[2.625rem] w-full tracking-wide"
                   disabled={false}
                 >
                   Save
@@ -148,7 +148,7 @@ export const SettingColumnForm = function ({
                   variant="secondary"
                   disabled={false}
                   onClick={onCancel}
-                  className="h-[42px] w-full border"
+                  className="h-[2.625rem] w-full border"
                 >
                   Cancel
                 </Button>

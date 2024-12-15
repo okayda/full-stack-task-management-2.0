@@ -5,6 +5,8 @@ import { useGetBoardId } from "@/features/board/hooks/use-get-board-id";
 
 import { Button } from "./ui/button";
 
+import { CogIcon } from "lucide-react";
+
 interface NavbarProps {
   userBoardsData?: Models.DocumentList<Models.Document>;
 }
@@ -26,17 +28,22 @@ export default function Navbar({ userBoardsData }: NavbarProps) {
   }
 
   return (
-    <nav className="flex items-center justify-between px-4 pt-6 lg:px-[30px]">
-      <div className="flex w-full justify-between pt-6">
+    <nav className="flex items-center justify-between">
+      <div className="flex w-full justify-between">
         <h1 className="self-center text-2xl font-medium md:text-3xl">
           {board.boardName}
         </h1>
 
         <Button
-          className="rounded-full px-6 tracking-wide"
+          className="px-6 tracking-wide"
+          size="icon"
           onClick={openSettingModal}
         >
-          Settings
+          <span className="md:hidden">
+            <CogIcon className="!size-5" />
+          </span>
+
+          <span className="hidden md:block">Settings</span>
         </Button>
       </div>
     </nav>

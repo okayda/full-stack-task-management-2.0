@@ -45,7 +45,7 @@ export const CreateColumnForm = function ({ onCancel }: CreateColumnFormProps) {
                         {...field}
                         autoComplete="off"
                         placeholder="Your column name?"
-                        className="!mt-1 h-[45px] border-neutral-400/60 text-[15px] md:h-[42px]"
+                        className="!mt-1 h-[2.8125rem] border-neutral-400/60 text-[0.9375rem] md:h-[2.625rem]"
                       />
                     </FormControl>
 
@@ -60,7 +60,7 @@ export const CreateColumnForm = function ({ onCancel }: CreateColumnFormProps) {
                 type="submit"
                 disabled={false}
                 onClick={() => {}}
-                className="h-[42px] w-full tracking-wide"
+                className="h-[2.625rem] w-full tracking-wide"
               >
                 Create
               </Button>
@@ -70,7 +70,7 @@ export const CreateColumnForm = function ({ onCancel }: CreateColumnFormProps) {
                 variant="secondary"
                 disabled={false}
                 onClick={onCancel}
-                className="h-[42px] w-full border tracking-wide"
+                className="h-[2.625rem] w-full border tracking-wide"
               >
                 Cancel
               </Button>

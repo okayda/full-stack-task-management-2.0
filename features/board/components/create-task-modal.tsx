@@ -5,12 +5,12 @@ import { useCreateTaskModal } from "../hooks/use-create-task-modal";
 import { ResponsiveModal } from "@/components/responsive-modal";
 import { CreateTaskFormWrapper } from "./create-task-form-wrapper";
 
-import { StatusColumn } from "../types";
+import { StatusColumnItem } from "../types";
 
 export function CreateTaskModal({
   statusColumn,
 }: {
-  statusColumn: StatusColumn[];
+  statusColumn: StatusColumnItem[];
 }) {
   const { isOpen, setIsOpen, close } = useCreateTaskModal();
 

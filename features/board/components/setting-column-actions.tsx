@@ -22,10 +22,10 @@ export const SettingColumnActions = function ({
         <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
 
         <DropdownMenuContent align="end" className="w-48">
-          <DropdownMenuItem className="cursor-pointer p-[10px] font-medium text-rose-700 focus:text-rose-700">
+          <DropdownMenuItem className="cursor-pointer p-[0.625rem] font-medium text-rose-700 focus:text-rose-700">
             <Trash2Icon />
 
-            <span className="text-[13px]">Delete Board</span>
+            <span className="text-[0.8125rem]">Delete Board</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

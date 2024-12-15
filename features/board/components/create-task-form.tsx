@@ -42,7 +42,7 @@ import { taskSchema } from "../schemas";
 
 import { MAX_SUB_TASKS } from "../constants";
 
-import { BadgeXIcon } from "lucide-react";
+import { CircleXIcon } from "lucide-react";
 
 interface CreateTaskFormProps {
   onCancel?: () => void;
@@ -63,7 +63,7 @@ export const CreateTaskForm = function ({
     resolver: zodResolver(taskSchema),
     defaultValues: {
       boardId,
-      subtasks: [{ subtaskName: "" }],
+      subtasks: [{ subtaskName: "", isCompleted: false }],
     },
   });
 
@@ -74,7 +74,7 @@ export const CreateTaskForm = function ({
 
   const addSubtask = function () {
     if (fields.length < MAX_SUB_TASKS) {
-      append({ subtaskName: "" });
+      append({ subtaskName: "", isCompleted: false });
     }
   };
 
@@ -121,7 +121,7 @@ export const CreateTaskForm = function ({
                           {...field}
                           autoComplete="off"
                           placeholder="Your task name?"
-                          className="!mt-1 h-[45px] border-neutral-400/60 text-[15px] md:h-[42px]"
+                          className="!mt-1 h-[2.8125rem] border-neutral-400/60 text-[0.9375rem] md:h-[2.625rem]"
                         />
                       </FormControl>
                     </FormItem>
@@ -142,7 +142,7 @@ export const CreateTaskForm = function ({
                         onValueChange={field.onChange}
                       >
                         <FormControl>
-                          <SelectTrigger className="!mt-1 h-[45px] border-neutral-400/60 text-[15px] md:h-[42px]">
+                          <SelectTrigger className="!mt-1 h-[2.8125rem] border-neutral-400/60 text-[0.9375rem] md:h-[2.625rem]">
                             <SelectValue placeholder="Select status" />
                           </SelectTrigger>
                         </FormControl>
@@ -182,7 +182,7 @@ export const CreateTaskForm = function ({
                         onValueChange={field.onChange}
                       >
                         <FormControl>
-                          <SelectTrigger className="!mt-1 h-[45px] border-neutral-400/60 text-[15px] md:h-[42px]">
+                          <SelectTrigger className="!mt-1 h-[2.8125rem] border-neutral-400/60 text-[0.9375rem] md:h-[2.625rem]">
                             <SelectValue placeholder="Select priority" />
                           </SelectTrigger>
                         </FormControl>
@@ -230,7 +230,7 @@ export const CreateTaskForm = function ({
                           {...field}
                           autoComplete="off"
                           placeholder="Do you have any description?"
-                          className="!mt-1 h-[80px] border-neutral-400/60 text-[15px] md:h-[80px]"
+                          className="!mt-1 h-[5rem] border-neutral-400/60 text-[0.9375rem]"
                         />
                       </FormControl>
 
@@ -264,16 +264,16 @@ export const CreateTaskForm = function ({
                             {...form.register(`subtasks.${index}.subtaskName`)}
                             autoComplete="off"
                             placeholder="Your minor task?"
-                            className="h-[40px] border-neutral-400/60"
+                            className="h-[2.5rem] border-neutral-400/60"
                           />
 
                           <Button
                             type="button"
                             disabled={fields.length === 1 || isCreating}
-                            className="h-[40px] px-3"
+                            className="h-[2.5rem] px-3"
                             onClick={() => removeSubtask(index)}
                           >
-                            <BadgeXIcon className="!size-5" />
+                            <CircleXIcon className="!size-5" />
                           </Button>
                         </div>
                       );
@@ -285,7 +285,7 @@ export const CreateTaskForm = function ({
                       type="button"
                       disabled={isCreating}
                       variant="outline"
-                      className="mt-2 h-[40px] w-full border-neutral-400/60"
+                      className="mt-2 h-[2.5rem] w-full border-neutral-400/60"
                       onClick={addSubtask}
                     >
                       New Subtask
@@ -299,7 +299,7 @@ export const CreateTaskForm = function ({
               <Button
                 type="submit"
                 disabled={isCreating}
-                className="h-[42px] w-full tracking-wide"
+                className="h-[2.625rem] w-full tracking-wide"
               >
                 {isCreating ? "Loading..." : "Create"}
               </Button>
@@ -309,7 +309,7 @@ export const CreateTaskForm = function ({
                 disabled={isCreating}
                 variant="secondary"
                 onClick={onCancel}
-                className="h-[42px] w-full border tracking-wide"
+                className="h-[2.625rem] w-full border tracking-wide"
               >
                 Cancel
               </Button>

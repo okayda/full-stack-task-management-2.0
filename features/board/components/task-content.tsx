@@ -30,7 +30,7 @@ interface TaskContentProps {
     columns: StatusColumnItem[];
     boardId: string;
   };
-  closeTaskModal?: () => void;
+  closeTaskModal: () => void;
 }
 
 export default function TaskContent({
@@ -61,7 +61,7 @@ export default function TaskContent({
         <TaskContentActions
           task={task}
           statusColumn={statusColumn}
-          onCancel={closeTaskModal}
+          closeTaskModal={closeTaskModal}
         >
           <MoreVertical className="!size-5" />
         </TaskContentActions>
@@ -70,7 +70,7 @@ export default function TaskContent({
       <CardContent>
         <p
           className={cn("mb-5 text-sm text-muted-foreground", {
-            "rounded-md bg-neutral-100 p-3 text-center text-[13px] text-foreground":
+            "rounded-md bg-neutral-100 p-3 text-center text-[0.8125rem] text-foreground":
               !task.description,
           })}
         >
@@ -83,7 +83,7 @@ export default function TaskContent({
           <ul className="flex flex-col gap-y-1.5">
             {subTasks.length > 0 ? (
               subTasks.map((subtask: Task, index: number) => (
-                <li key={`task-${index}`} className="text-[13px]">
+                <li key={`task-${index}`} className="text-[0.8125rem]">
                   <label
                     htmlFor={`task-${index}`}
                     className="flex cursor-pointer items-center gap-x-3 rounded-md bg-neutral-100 p-3 transition-colors hover:bg-neutral-200/70"
@@ -93,14 +93,14 @@ export default function TaskContent({
                       type="checkbox"
                       checked={subtask.isCompleted}
                       onChange={() => checkboxHandler(index)}
-                      className="h-[14.5px] w-[14.5px] accent-[#0F0F0F] focus:outline-none focus:ring-0"
+                      className="size-[0.90625rem] accent-[#0F0F0F] focus:outline-none focus:ring-0"
                     />
                     {subtask.subtaskName}
                   </label>
                 </li>
               ))
             ) : (
-              <li className="rounded-md bg-neutral-100 p-3 text-center text-[13px]">
+              <li className="rounded-md bg-neutral-100 p-3 text-center text-[0.8125rem]">
                 Empty
               </li>
             )}
@@ -113,7 +113,7 @@ export default function TaskContent({
           </h4>
 
           <Select value={status} onValueChange={setStatus}>
-            <SelectTrigger className="h-[45px] border-neutral-400/60 text-[15px] md:h-[42px]">
+            <SelectTrigger className="h-[2.8125rem] border-neutral-400/60 text-[0.9375rem] md:h-[2.625rem]">
               <SelectValue placeholder={status} />
             </SelectTrigger>
 
@@ -134,7 +134,7 @@ export default function TaskContent({
         <div className="flex gap-x-2">
           <Button
             onClick={closeTaskModal}
-            className="h-[42px] w-full tracking-wide"
+            className="h-[2.625rem] w-full tracking-wide"
           >
             Save
           </Button>
@@ -142,7 +142,7 @@ export default function TaskContent({
           <Button
             onClick={closeTaskModal}
             variant="secondary"
-            className="h-[42px] w-full border tracking-wide"
+            className="h-[2.625rem] w-full border tracking-wide"
           >
             Cancel
           </Button>

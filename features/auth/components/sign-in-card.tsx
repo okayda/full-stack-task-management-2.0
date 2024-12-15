@@ -54,12 +54,12 @@ export default function SignInCard() {
   };
 
   return (
-    <div className="md:mx-auto md:flex md:max-w-[900px] md:gap-x-6 md-l:gap-x-12 lg-l:block lg-l:max-w-none">
-      <div className="md:w-[400px] md:shrink-0 lg-l:w-auto lg-l:shrink">
-        <Card className="mx-auto max-w-[400px] rounded-none border-x-0 border-b border-t-0 border-dashed border-muted-foreground shadow-none sm:max-w-[410px] sm:border-none sm:bg-transparent lg-l:mx-0 lg-l:flex lg-l:w-full lg-l:max-w-none lg-l:gap-x-6">
-          <div className="sm:rounded-lg sm:border sm:bg-background sm:shadow-sm lg-l:w-full lg-l:max-w-[410px]">
+    <div className="md:mx-auto md:flex md:max-w-[56.25rem] md:gap-x-6 md-l:gap-x-12 lg-l:block lg-l:max-w-none">
+      <div className="md:w-[25rem] md:shrink-0 lg-l:w-auto lg-l:shrink">
+        <Card className="mx-auto max-w-[25rem] rounded-none border-x-0 border-b border-t-0 border-dashed border-muted-foreground shadow-none sm:max-w-[25.625rem] sm:border-none sm:bg-transparent lg-l:mx-0 lg-l:flex lg-l:w-full lg-l:max-w-none lg-l:gap-x-6">
+          <div className="sm:rounded-lg sm:border sm:bg-background sm:shadow-sm lg-l:w-full lg-l:max-w-[25.625rem]">
             <CardHeader className="px-0 pt-9 sm:px-6">
-              <CardTitle className="mb-1 text-[32px]">Get started</CardTitle>
+              <CardTitle className="mb-1 text-[2rem]">Get started</CardTitle>
 
               <CardDescription className="text-base">
                 Log in to stay organized and keep your tasks on track.
@@ -72,7 +72,7 @@ export default function SignInCard() {
                 onClick={() => {}}
                 disabled={isVerifyingAccount}
                 variant="outline"
-                className="h-[43px] w-full border-neutral-700/20 p-3"
+                className="h-[2.6875rem] w-full border-neutral-700/20 p-3"
                 size="lg"
               >
                 <FaGithub />
@@ -83,7 +83,7 @@ export default function SignInCard() {
                 onClick={() => {}}
                 disabled={isVerifyingAccount}
                 variant="outline"
-                className="h-[43px] w-full border-neutral-700/20 p-3"
+                className="h-[2.6875rem] w-full border-neutral-700/20 p-3"
                 size="lg"
               >
                 <FaGoogle />
@@ -121,11 +121,11 @@ export default function SignInCard() {
                             type="email"
                             placeholder="hello_world@navercorp.com"
                             {...field}
-                            className="!mt-1 h-[45px] border-neutral-400/60 text-[15px]"
+                            className="!mt-1 h-[2.8125rem] border-neutral-400/60 text-[0.9375rem]"
                           />
                         </FormControl>
 
-                        <FormMessage className="!mt-[5.5px]" />
+                        <FormMessage className="!mt-[0.34375rem]" />
                       </FormItem>
                     )}
                   />
@@ -143,11 +143,11 @@ export default function SignInCard() {
                             type="password"
                             placeholder="Enter your password"
                             {...field}
-                            className="!mt-1 h-[45px] border-neutral-400/60 text-[15px]"
+                            className="!mt-1 h-[2.8125rem] border-neutral-400/60 text-[15px]"
                           />
                         </FormControl>
 
-                        <FormMessage className="!mt-[5.5px]" />
+                        <FormMessage className="!mt-[0.34375rem]" />
                       </FormItem>
                     )}
                   />
@@ -155,7 +155,7 @@ export default function SignInCard() {
                   <Button
                     disabled={isVerifyingAccount}
                     size="lg"
-                    className="h-[42px] w-full tracking-wide"
+                    className="h-[2.625rem] w-full tracking-wide"
                   >
                     {isVerifyingAccount ? "Loading..." : "Login"}
                   </Button>
@@ -174,7 +174,7 @@ export default function SignInCard() {
           </div>
 
           <div className="w-full">
-            <div className="relative hidden h-[320px] self-start rounded-lg lg-l:block">
+            <div className="relative hidden h-[20rem] self-start rounded-lg lg-l:block">
               <BadgeCheckIcon
                 className="absolute right-0 top-0 z-10 m-3 size-10 text-green-400"
                 strokeWidth="1.5px"
@@ -193,7 +193,7 @@ export default function SignInCard() {
               <div className="absolute inset-0 px-10 pt-9">
                 <div className="text-left text-white">
                   <h2
-                    className="mb-3 text-[32px] font-semibold tracking-wide"
+                    className="mb-3 text-[2rem] font-semibold tracking-wide"
                     style={{ textShadow: "1px 1px 3px rgba(0, 0, 0, 0.45)" }}
                   >
                     Disclaimer
@@ -262,7 +262,7 @@ export default function SignInCard() {
       <Separator className="mt-6 hidden py-2 sm:block md:hidden" />
 
       <div className="sm:relative">
-        <div className="relative mx-auto max-w-[400px] py-6 sm:static sm:max-w-[410px] md:mx-0 md:max-w-none md:flex-grow md:py-11 lg-l:hidden">
+        <div className="relative mx-auto max-w-[25rem] py-6 sm:static sm:max-w-[25.625rem] md:mx-0 md:max-w-none md:flex-grow md:py-11 lg-l:hidden">
           <GridPattern
             squares={[
               [7, 1],
@@ -283,7 +283,7 @@ export default function SignInCard() {
               "inset-x-0 skew-y-0",
             )}
           />
-          <h4 className="mb-3 text-[26px] font-semibold md:text-[32px]">
+          <h4 className="mb-3 text-[1.625rem] font-semibold md:text-[2rem]">
             Disclaimer
           </h4>
 

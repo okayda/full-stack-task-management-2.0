@@ -14,6 +14,7 @@ interface EditTaskModalProps {
 
   isEditModalOpen: boolean;
   closeEditModal: () => void;
+  closeTaskModal: () => void;
 }
 
 export function EditTaskModal({
@@ -21,6 +22,7 @@ export function EditTaskModal({
   statusColumn,
   isEditModalOpen,
   closeEditModal,
+  closeTaskModal,
 }: EditTaskModalProps) {
   return (
     <ResponsiveModal open={isEditModalOpen} onOpenChange={closeEditModal}>
@@ -28,6 +30,7 @@ export function EditTaskModal({
         task={task}
         statusColumn={statusColumn}
         closeEditModal={closeEditModal}
+        closeTaskModal={closeTaskModal}
       />
     </ResponsiveModal>
   );

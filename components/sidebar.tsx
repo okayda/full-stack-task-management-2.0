@@ -18,12 +18,8 @@ import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 
 import { MdOutlineDashboard } from "react-icons/md";
-import {
-  LogOut,
-  PanelLeftCloseIcon,
-  PanelRightOpenIcon,
-  LoaderIcon,
-} from "lucide-react";
+import { LogOut, Columns2Icon, LoaderIcon } from "lucide-react";
+import SparklesText from "./ui/sparkles-text";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -81,29 +77,29 @@ export default function Sidebar({
   return (
     <div
       className={cn(
-        "h-full w-[280px] bg-neutral-50 p-4 transition-transform duration-300",
+        "flex h-full w-[17.5rem] flex-col justify-between border-r bg-neutral-50 pb-4 transition-transform duration-300",
         isOpen ? "translate-x-0" : "-translate-x-full",
       )}
     >
       <Button
         onClick={toggle}
-        className="absolute right-[-31px] top-1.5 h-auto border border-transparent p-1 text-xs"
+        variant="ghost"
+        className="absolute right-[-1.9375rem] top-16 h-auto border-transparent p-1 text-xs"
       >
-        {isOpen ? (
-          <PanelLeftCloseIcon className="cursor-pointer" />
-        ) : (
-          <PanelRightOpenIcon className="cursor-pointer" />
-        )}
+        <Columns2Icon className="cursor-pointer" />
       </Button>
 
-      <div className="flex h-full flex-col justify-between">
-        <div>
-          <Link href="/">
-            <Image src="/logo.svg" alt="Logo" width={116} height={56} />
-          </Link>
+      <div>
+        <div className="mb-5 border-b px-4 py-3">
+          <SparklesText
+            text="Version 2.0"
+            className="text-3xl font-medium"
+            sparklesCount={6}
+            colors={{ first: "#8b5cf6", second: "#10b981" }}
+          />
+        </div>
 
-          <Separator className="mb-5 mt-4 bg-neutral-400/50" />
-
+        <div className="px-4">
           <ul>
             {userBoardsData && userBoardsData.total > 0 ? (
               userBoardsData.documents.map((board) => {
@@ -132,7 +128,7 @@ export default function Sidebar({
 
             <li className="mt-5 border-t-2 border-dashed border-neutral-400/60 pt-4">
               <Button
-                className="h-[42px] w-full lg:h-auto"
+                className="h-[2.625rem] w-full lg:h-auto"
                 onClick={openBoardFormModal}
               >
                 Create Board
@@ -161,7 +157,7 @@ export default function Sidebar({
                     }}
                   />
 
-                  <span className="flex h-[36px] items-center justify-center rounded-full border border-[#0F0F0F] px-3 py-1 text-center text-[15px] font-medium tracking-wide text-neutral-900">
+                  <span className="flex h-[2.25rem] items-center justify-center rounded-full border border-[#0F0F0F] px-3 py-1 text-center text-[0.9375rem] font-medium tracking-wide text-neutral-900">
                     {label}
                   </span>
                 </div>
@@ -173,9 +169,9 @@ export default function Sidebar({
             </div>
           )}
 
-          <div className="text-[13px] font-semibold text-neutral-600">
+          <div className="text-[0.8125rem] font-semibold text-neutral-600">
             <p>
-              <span className="text-emerald-600">Developed: </span>
+              <span className="text-purple-600">Developed: </span>
               Jhon Que&ntilde;ano
             </p>
             <p>
@@ -184,25 +180,25 @@ export default function Sidebar({
             </p>
           </div>
         </div>
+      </div>
 
-        <div>
-          <Image
-            src="/hatsune.webp"
-            width={150}
-            height={150}
-            alt="meme picture"
-            className="mx-auto"
-          />
+      <div className="px-4">
+        <Image
+          src="/hatsune.webp"
+          width={150}
+          height={150}
+          alt="meme picture"
+          className="mx-auto"
+        />
 
-          <Button
-            variant="outline"
-            className="flex h-[42px] w-full items-center gap-x-3 lg:h-auto"
-            onClick={() => {}}
-          >
-            Log out
-            <LogOut className="size-5" />
-          </Button>
-        </div>
+        <Button
+          variant="outline"
+          className="flex h-[2.625rem] w-full items-center gap-x-3 lg:h-auto"
+          onClick={() => {}}
+        >
+          Log out
+          <LogOut className="size-5" />
+        </Button>
       </div>
     </div>
   );
