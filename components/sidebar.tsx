@@ -76,7 +76,7 @@ export default function Sidebar({
   return (
     <div
       className={cn(
-        "flex h-full w-[17.5rem] flex-col justify-between border-r bg-neutral-50 pb-4 transition-transform duration-300",
+        "flex h-full w-[17.5rem] flex-col justify-between border-r bg-[#FBFBFB] pb-4 transition-transform duration-300",
         isOpen ? "translate-x-0" : "-translate-x-full",
       )}
     >

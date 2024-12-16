@@ -194,6 +194,7 @@ export default function Board({
                   className="flex-1 cursor-ew-resize rounded-md pb-1.5 pr-1.5"
                 >
                   <BoardHeader
+                    statusId={statusId}
                     statusName={statusName}
                     taskCount={tasks[statusId]?.length || 0}
                   />
