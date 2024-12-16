@@ -45,14 +45,14 @@ import { MAX_SUB_TASKS } from "../constants";
 import { CircleXIcon } from "lucide-react";
 
 interface CreateTaskFormProps {
-  onCancel?: () => void;
+  closeCreateTaskForm: () => void;
   statusColumn: StatusColumnItem[];
 }
 
 type CreateTaskFormValues = z.infer<typeof taskSchema>;
 
 export const CreateTaskForm = function ({
-  onCancel,
+  closeCreateTaskForm,
   statusColumn,
 }: CreateTaskFormProps) {
   const boardId = useGetBoardId();
@@ -92,7 +92,7 @@ export const CreateTaskForm = function ({
       {
         onSuccess: function () {
           form.reset();
-          onCancel?.();
+          closeCreateTaskForm();
         },
       },
     );
@@ -308,7 +308,7 @@ export const CreateTaskForm = function ({
                 type="button"
                 disabled={isCreating}
                 variant="secondary"
-                onClick={onCancel}
+                onClick={closeCreateTaskForm}
                 className="h-[2.625rem] w-full border tracking-wide"
               >
                 Cancel

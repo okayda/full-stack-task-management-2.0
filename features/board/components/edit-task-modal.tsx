@@ -1,7 +1,8 @@
 "use client";
 
 import { ResponsiveModal } from "@/components/responsive-modal";
-import { EditTaskFormWrapper } from "./edit-task-form-wrapper";
+
+import { EditTaskForm } from "./edit-task-form";
 
 import { Task, StatusColumnItem } from "../types";
 
@@ -26,7 +27,7 @@ export function EditTaskModal({
 }: EditTaskModalProps) {
   return (
     <ResponsiveModal open={isEditModalOpen} onOpenChange={closeEditModal}>
-      <EditTaskFormWrapper
+      <EditTaskForm
         task={task}
         statusColumn={statusColumn}
         closeEditModal={closeEditModal}

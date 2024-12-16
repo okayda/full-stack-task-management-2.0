@@ -41,14 +41,9 @@ import { MAX_SUB_TASKS } from "../constants";
 
 import { taskSchema } from "../schemas";
 
-import { Task, StatusColumnItem, TaskPriority } from "../types";
+import { Task, StatusColumnItem, SubTask, TaskPriority } from "../types";
 
 import { CircleXIcon } from "lucide-react";
-
-type SubTask = {
-  subtaskName: string;
-  isCompleted: boolean;
-};
 
 interface EditTaskFormProps {
   task: Task;

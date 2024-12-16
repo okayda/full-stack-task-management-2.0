@@ -46,6 +46,7 @@ const app = new Hono()
       const { email, password } = c.req.valid("json");
 
       const { account } = await createAdminClient();
+
       const session = await account.createEmailPasswordSession(email, password);
 
       setCookie(c, AUTH_COOKIE, session.secret, {

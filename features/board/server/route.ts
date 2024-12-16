@@ -17,7 +17,8 @@ import { initializeBoardDataExample } from "@/lib/initializeExampleBoardData";
 
 import {
   createBoardSchema,
-  updateColumnSchema,
+  createColumnSchema,
+  deleteTaskSchema,
   taskSchema,
   updateTaskSchema,
   updateSubtasksSchema,
@@ -61,7 +62,7 @@ const app = new Hono()
   .post(
     "/create-column",
     sessionMiddleware,
-    zValidator("json", updateColumnSchema),
+    zValidator("json", createColumnSchema),
     async (c) => {
       const databases = c.get("databases");
       const { boardId, statusName } = c.req.valid("json");
@@ -91,7 +92,7 @@ const app = new Hono()
       );
 
       if (!availableStatusId) {
-        return c.json({ error: "No more available columns to add." }, 400);
+        return c.json({ error: "No more available columns to add" }, 400);
       }
 
       const indexToFill = VALID_STATUS_ID.indexOf(availableStatusId);
@@ -349,7 +350,7 @@ const app = new Hono()
     },
   )
   .patch(
-    "/update-subtasks",
+    "/update-task-content",
     sessionMiddleware,
     zValidator("json", updateSubtasksSchema),
     async (c) => {
@@ -392,6 +393,45 @@ const app = new Hono()
       ]);
 
       return c.json({ task: updatedTask, subtasks: updatedSubtasks });
+    },
+  )
+  .delete(
+    "/delete-task",
+    sessionMiddleware,
+    zValidator("json", deleteTaskSchema),
+    async (c) => {
+      const databases = c.get("databases");
+      const { taskId, boardId } = c.req.valid("json");
+
+      const taskDocuments = await databases.listDocuments(
+        DATABASE_ID,
+        TASKS_ID,
+        [
+          Query.equal("$id", taskId),
+          Query.equal("boardId", boardId),
+          Query.limit(1),
+        ],
+      );
+
+      const task = taskDocuments.documents[0];
+
+      const deleteTaskPromise = databases.deleteDocument(
+        DATABASE_ID,
+        TASKS_ID,
+        taskId,
+      );
+
+      const deleteSubtasksPromise = databases.deleteDocument(
+        DATABASE_ID,
+        SUB_TASKS_ID,
+        task.subtasksId,
+      );
+
+      await Promise.all([deleteTaskPromise, deleteSubtasksPromise]);
+
+      return c.json({
+        message: "Task & Subtasks deleted successfully",
+      });
     },
   );
 

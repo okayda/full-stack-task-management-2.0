@@ -23,12 +23,14 @@ import { Button } from "@/components/ui/button";
 import { createColumnSchema } from "../schemas";
 
 interface CreateColumnFormProps {
-  onCancel?: () => void;
+  closeCreateColumnForm: () => void;
 }
 
 type CreateColumnFormValue = z.infer<typeof createColumnSchema>;
 
-export const CreateColumnForm = function ({ onCancel }: CreateColumnFormProps) {
+export const CreateColumnForm = function ({
+  closeCreateColumnForm,
+}: CreateColumnFormProps) {
   const { mutate: createColumn, isPending: isCreatingColumn } =
     useCreateColumn();
 
@@ -50,7 +52,7 @@ export const CreateColumnForm = function ({ onCancel }: CreateColumnFormProps) {
           form.reset({
             statusName: "",
           });
-          onCancel?.();
+          closeCreateColumnForm();
         },
       },
     );
@@ -100,7 +102,7 @@ export const CreateColumnForm = function ({ onCancel }: CreateColumnFormProps) {
                 type="button"
                 variant="secondary"
                 disabled={isCreatingColumn}
-                onClick={onCancel}
+                onClick={closeCreateColumnForm}
                 className="h-[2.625rem] w-full border tracking-wide"
               >
                 Cancel

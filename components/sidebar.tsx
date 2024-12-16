@@ -10,8 +10,7 @@ import { Models } from "node-appwrite";
 
 import { useCreateBoardModal } from "@/features/board/hooks/use-create-board-modal";
 
-import CustomSlider from "@/components/custom-slider";
-
+import CustomSlider from "./ui/custom-slider";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
 
@@ -95,7 +94,7 @@ export default function Sidebar({
             text="Version 2.0"
             className="text-3xl font-medium"
             sparklesCount={6}
-            colors={{ first: "#8b5cf6", second: "#10b981" }}
+            colors={{ first: "#8B5CF6", second: "#10B981" }}
           />
         </div>
 

@@ -9,7 +9,7 @@ export const CreateBoardModal = function () {
 
   return (
     <ResponsiveModal open={isOpen} onOpenChange={setIsOpen}>
-      <CreateBoardForm onCancel={close} />
+      <CreateBoardForm closeBoardForm={close} />
     </ResponsiveModal>
   );
 };

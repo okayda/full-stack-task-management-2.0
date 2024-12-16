@@ -19,8 +19,11 @@ interface TaskContentActionsProps {
     columns: StatusColumnItem[];
     boardId: string;
   };
+
   children: React.ReactNode;
+
   closeTaskModal: () => void;
+  deleteTaskHander: () => void;
 }
 
 export const TaskContentActions = function ({
@@ -28,6 +31,7 @@ export const TaskContentActions = function ({
   statusColumn,
   children,
   closeTaskModal,
+  deleteTaskHander,
 }: TaskContentActionsProps) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
@@ -66,7 +70,7 @@ export const TaskContentActions = function ({
 
             <DropdownMenuItem
               className="cursor-pointer p-[0.625rem] font-medium text-rose-700 focus:text-rose-700"
-              onClick={closeTaskModal}
+              onClick={deleteTaskHander}
             >
               <CalendarOffIcon />
 

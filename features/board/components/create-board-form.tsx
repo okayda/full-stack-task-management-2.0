@@ -21,12 +21,14 @@ import { Button } from "@/components/ui/button";
 import { createBoardSchema } from "../schemas";
 
 interface CreateBoardFormProps {
-  onCancel?: () => void;
+  closeBoardForm: () => void;
 }
 
 type CreateBoardFormValue = z.infer<typeof createBoardSchema>;
 
-export const CreateBoardForm = function ({ onCancel }: CreateBoardFormProps) {
+export const CreateBoardForm = function ({
+  closeBoardForm,
+}: CreateBoardFormProps) {
   const { mutate: createBoard, isPending: isCreatingBoard } = useCreateBoard();
 
   const form = useForm({
@@ -44,7 +46,7 @@ export const CreateBoardForm = function ({ onCancel }: CreateBoardFormProps) {
           form.reset({
             boardName: "",
           });
-          onCancel?.();
+          closeBoardForm();
         },
       },
     );
@@ -93,7 +95,7 @@ export const CreateBoardForm = function ({ onCancel }: CreateBoardFormProps) {
                 type="button"
                 variant="secondary"
                 disabled={isCreatingBoard}
-                onClick={onCancel}
+                onClick={closeBoardForm}
                 className="h-[2.625rem] w-full border tracking-wide"
               >
                 Cancel

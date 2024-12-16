@@ -21,11 +21,11 @@ import { MAX_COLUMNS } from "../constants";
 import { CircleXIcon, MoreVertical } from "lucide-react";
 
 interface SettingColumnFormProps {
-  onCancel?: () => void;
+  closeSettingColumnForm: () => void;
 }
 
 export const SettingColumnForm = function ({
-  onCancel,
+  closeSettingColumnForm,
 }: SettingColumnFormProps) {
   const form = useForm({});
   const [columns, setColumns] = useState<string[]>(["", ""]);
@@ -147,7 +147,7 @@ export const SettingColumnForm = function ({
                   type="button"
                   variant="secondary"
                   disabled={false}
-                  onClick={onCancel}
+                  onClick={closeSettingColumnForm}
                   className="h-[2.625rem] w-full border"
                 >
                   Cancel

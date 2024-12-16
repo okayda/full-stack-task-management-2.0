@@ -26,6 +26,8 @@ export default async function Home() {
     <div>
       <CreateBoardModal />
 
+      {/* Different layout different styles for Sidebar Component*/}
+
       {/* For tablet */}
       <div className="lg:hidden">
         <DashBoardLayout

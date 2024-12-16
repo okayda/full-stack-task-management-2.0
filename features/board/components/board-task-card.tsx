@@ -9,14 +9,9 @@ import {
   MdOutlineKeyboardArrowDown,
 } from "react-icons/md";
 
-import { Task, StatusColumnItem } from "../types";
+import { Task, StatusColumnItem, SubTask } from "../types";
 
 import { FaGripLines } from "react-icons/fa6";
-
-type SubTask = {
-  title: string;
-  isCompleted: boolean;
-};
 
 interface BoardTaskCardProps {
   task: Task;
@@ -74,7 +69,7 @@ const priorityIcons: Record<string, { icon: JSX.Element; tooltip: string }> = {
   },
 };
 
-const getPriorityType = function (priorityStr: string): JSX.Element | null {
+const getPriorityType = function (priorityStr: string) {
   const priority = priorityIcons[priorityStr];
   if (!priority) return null;
 

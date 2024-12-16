@@ -4,7 +4,8 @@ import { useState } from "react";
 
 import { useGetBoardId } from "../hooks/use-get-board-id";
 
-import { useUpdateSubtasks } from "../api/use-update-subtasks";
+import { useUpdateTaskContent } from "../api/use-update-task-content";
+import { useDeleteTask } from "../api/use-delete-task";
 
 import { customizeUpperCase, cn } from "@/lib/utils";
 
@@ -19,14 +20,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { Task, StatusColumnItem } from "../types";
+import { Task, StatusColumnItem, SubTask } from "../types";
 
 import { MoreVertical } from "lucide-react";
-
-type SubTask = {
-  title: string;
-  isCompleted: boolean;
-};
 
 interface TaskContentProps {
   task: Task;
@@ -50,8 +46,10 @@ export default function TaskContent({
 
   const boardId = useGetBoardId();
 
-  const { mutate: updateSubtasks, isPending: isUpdatingSubtasks } =
-    useUpdateSubtasks();
+  const { mutate: updateTaskContent, isPending: isUpdatingTaskContent } =
+    useUpdateTaskContent();
+
+  const { mutate: deleteTask, isPending: isDeletingTask } = useDeleteTask();
 
   const checkboxHandler = function (subTaskIndex: number) {
     setSubTasks((prev: SubTask[]) =>
@@ -66,7 +64,7 @@ export default function TaskContent({
   };
 
   const onSubmit = function () {
-    updateSubtasks(
+    updateTaskContent(
       {
         json: {
           boardId,
@@ -74,6 +72,22 @@ export default function TaskContent({
           statusId: status,
           subtasksId: task.subtasksId,
           subtasks: subTasks,
+        },
+      },
+      {
+        onSuccess: () => {
+          closeTaskModal();
+        },
+      },
+    );
+  };
+
+  const deleteTaskHander = function () {
+    deleteTask(
+      {
+        json: {
+          boardId,
+          taskId: task.$id,
         },
       },
       {
@@ -100,6 +114,7 @@ export default function TaskContent({
           task={task}
           statusColumn={statusColumn}
           closeTaskModal={closeTaskModal}
+          deleteTaskHander={deleteTaskHander}
         >
           <MoreVertical className="!size-5" />
         </TaskContentActions>
@@ -172,15 +187,19 @@ export default function TaskContent({
         <div className="flex gap-x-2">
           <Button
             onClick={onSubmit}
-            disabled={isUpdatingSubtasks || isSaveDisabled}
+            disabled={isUpdatingTaskContent || isSaveDisabled || isDeletingTask}
             className="h-[2.625rem] w-full tracking-wide"
           >
-            {isUpdatingSubtasks ? "Loading..." : "Save"}
+            {isUpdatingTaskContent
+              ? "Loading..."
+              : isDeletingTask
+                ? "Deleting..."
+                : "Save"}
           </Button>
 
           <Button
             onClick={closeTaskModal}
-            disabled={isUpdatingSubtasks}
+            disabled={isUpdatingTaskContent || isDeletingTask}
             variant="secondary"
             className="h-[2.625rem] w-full border tracking-wide"
           >

@@ -9,7 +9,7 @@ export const CreateColumnModal = function () {
 
   return (
     <ResponsiveModal open={isOpen} onOpenChange={setIsOpen}>
-      <CreateColumnForm onCancel={close} />
+      <CreateColumnForm closeCreateColumnForm={close} />
     </ResponsiveModal>
   );
 };

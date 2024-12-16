@@ -37,7 +37,7 @@ export default async function BoardIdPage() {
 
       <CreateTaskModal statusColumn={statusColumnExample} />
 
-      {/* Different layout different functionalities */}
+      {/* Different layout different functionalities for Board Component */}
 
       {/* For tablet */}
       <div className="lg:hidden">

@@ -1,7 +1,8 @@
 "use client";
 
 import { ResponsiveModal } from "@/components/responsive-modal";
-import { TaskContentWrapper } from "./task-content-wrapper";
+
+import TaskContent from "./task-content";
 
 import { Task, StatusColumnItem } from "../types";
 
@@ -24,7 +25,7 @@ export function TaskContentModal({
 }: TaskContentModalProps) {
   return (
     <ResponsiveModal open={isTaskModalOpen} onOpenChange={closeTaskModal}>
-      <TaskContentWrapper
+      <TaskContent
         task={task}
         statusColumn={statusColumn}
         closeTaskModal={closeTaskModal}

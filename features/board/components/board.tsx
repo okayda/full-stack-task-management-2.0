@@ -73,8 +73,6 @@ export default function Board({
     buildTasksState(dataTasks, statusColumn),
   );
 
-  // console.log(tasks);
-
   useEffect(() => {
     setTasks(buildTasksState(dataTasks, statusColumn));
   }, [dataTasks, statusColumn]);
@@ -86,21 +84,17 @@ export default function Board({
       const { source, destination } = result;
       const sourceStatusId = source.droppableId;
       const destStatusId = destination.droppableId;
-      console.log(sourceStatusId, destStatusId);
-      // console.log(statusColumn);
 
       const sameStatus = sourceStatusId === destStatusId;
       const sameIndexPosition = source.index === destination.index;
 
-      // If the task is dropped in the same column & same order, do nothing
+      // if the task is dropped in the same column & same order, do nothing
       if (sameStatus && sameIndexPosition) return;
 
       let updatesPayload: Payloads[] = [];
 
       setTasks((prevTasks) => {
         const newTasks = { ...prevTasks };
-
-        console.log(newTasks);
 
         const sourceColumn = [...newTasks[sourceStatusId]];
         const [movedTask] = sourceColumn.splice(source.index, 1);
@@ -136,7 +130,7 @@ export default function Board({
 
         updatesPayload = [];
 
-        // Update the moved task
+        // update the moved task
         updatesPayload.push({
           $id: updatedMovedTask.$id,
           statusId: destStatusId,
@@ -144,7 +138,7 @@ export default function Board({
           position: Math.min((destination.index + 1) * 1000, 50_000),
         });
 
-        // Update positions for tasks in the destination column
+        // update positions for tasks in the destination column
         newTasks[destStatusId].forEach((task, index) => {
           if (task && task.$id !== updatedMovedTask.$id) {
             const newPosition = Math.min((index + 1) * 1000, 50_000);
@@ -159,7 +153,7 @@ export default function Board({
           }
         });
 
-        // Update positions for tasks in the source column if column changed
+        // update positions for tasks in the source column if column changed
         if (sourceStatusId !== destStatusId) {
           newTasks[sourceStatusId].forEach((task, index) => {
             if (task) {

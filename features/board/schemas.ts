@@ -30,12 +30,6 @@ export const taskSchema = z.object({
 });
 
 // should be use in the back-end only
-export const updateColumnSchema = z.object({
-  boardId: z.string().trim(),
-  statusName: z.string().trim().min(1),
-});
-
-// should be use in the back-end only
 export const updateTaskSchema = taskSchema.extend({
   taskId: z.string().trim(),
   subtasksId: z.string().trim(),
@@ -55,4 +49,10 @@ export const updateSubtasksSchema = z.object({
       }),
     )
     .max(MAX_SUB_TASKS),
+});
+
+// should be use in the back-end only
+export const deleteTaskSchema = z.object({
+  boardId: z.string().trim(),
+  taskId: z.string().trim(),
 });
