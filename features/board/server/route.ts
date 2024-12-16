@@ -17,12 +17,13 @@ import { initializeBoardDataExample } from "@/lib/initializeExampleBoardData";
 
 import {
   createBoardSchema,
+  updateColumnSchema,
   taskSchema,
   updateTaskSchema,
   updateSubtasksSchema,
 } from "../schemas";
 
-import { MAX_COLUMNS, MAX_SUB_TASKS } from "../constants";
+import { VALID_STATUS_ID, MAX_COLUMNS, MAX_SUB_TASKS } from "../constants";
 
 import {
   Task,
@@ -55,6 +56,58 @@ const app = new Hono()
       );
 
       return c.json({ board });
+    },
+  )
+  .post(
+    "/create-column",
+    sessionMiddleware,
+    zValidator("json", updateColumnSchema),
+    async (c) => {
+      const databases = c.get("databases");
+      const { boardId, statusName } = c.req.valid("json");
+
+      const columnDocument = await databases.listDocuments(
+        DATABASE_ID,
+        STATUS_COLUMN_ID,
+        [Query.equal("boardId", boardId), Query.limit(1)],
+      );
+
+      if (columnDocument.total === 0) {
+        return c.json({ error: "No matching status column found" }, 404);
+      }
+
+      const columns = columnDocument.documents[0];
+
+      const usedStatusIds = [
+        columns.column_0_id,
+        columns.column_1_id,
+        columns.column_2_id,
+        columns.column_3_id,
+        columns.column_4_id,
+      ].filter(Boolean);
+
+      const availableStatusId = VALID_STATUS_ID.find(
+        (id) => !usedStatusIds.includes(id),
+      );
+
+      if (!availableStatusId) {
+        return c.json({ error: "No more available columns to add." }, 400);
+      }
+
+      const indexToFill = VALID_STATUS_ID.indexOf(availableStatusId);
+
+      const columnData: Record<string, unknown> = { boardId };
+      columnData[`column_${indexToFill}`] = statusName;
+      columnData[`column_${indexToFill}_id`] = availableStatusId;
+
+      const updated = await databases.updateDocument(
+        DATABASE_ID,
+        STATUS_COLUMN_ID,
+        columns.$id,
+        columnData,
+      );
+
+      return c.json({ board: updated });
     },
   )
   .post(

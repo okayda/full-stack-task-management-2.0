@@ -8,8 +8,13 @@ export const createBoardSchema = z.object({
   boardName: z.string().trim().min(1),
 });
 
+export const createColumnSchema = z.object({
+  boardId: z.string().trim(),
+  statusName: z.string().trim().min(1),
+});
+
 export const taskSchema = z.object({
-  boardId: z.string().trim().min(1),
+  boardId: z.string().trim(),
   taskName: z.string().trim().min(1),
   statusId: z.string().trim(),
   priority: z.nativeEnum(TaskPriority),
@@ -25,15 +30,21 @@ export const taskSchema = z.object({
 });
 
 // should be use in the back-end only
+export const updateColumnSchema = z.object({
+  boardId: z.string().trim(),
+  statusName: z.string().trim().min(1),
+});
+
+// should be use in the back-end only
 export const updateTaskSchema = taskSchema.extend({
-  taskId: z.string().trim().min(1),
-  subtasksId: z.string().trim().min(1),
+  taskId: z.string().trim(),
+  subtasksId: z.string().trim(),
 });
 
 // should be use in the back-end only
 export const updateSubtasksSchema = z.object({
-  boardId: z.string().trim().min(1),
-  subtasksId: z.string().trim().min(1),
+  boardId: z.string().trim(),
+  subtasksId: z.string().trim(),
   taskId: z.string().trim(),
   statusId: z.string().trim(),
   subtasks: z

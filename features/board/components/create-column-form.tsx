@@ -2,6 +2,13 @@
 
 import { useForm } from "react-hook-form";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+import { useGetBoardId } from "../hooks/use-get-board-id";
+
+import { useCreateColumn } from "../api/use-create-column";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,18 +17,44 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
+
+import { createColumnSchema } from "../schemas";
 
 interface CreateColumnFormProps {
   onCancel?: () => void;
 }
 
-export const CreateColumnForm = function ({ onCancel }: CreateColumnFormProps) {
-  const form = useForm({});
+type CreateColumnFormValue = z.infer<typeof createColumnSchema>;
 
-  const onSubmit = function () {};
+export const CreateColumnForm = function ({ onCancel }: CreateColumnFormProps) {
+  const { mutate: createColumn, isPending: isCreatingColumn } =
+    useCreateColumn();
+
+  const boardId = useGetBoardId();
+
+  const form = useForm({
+    resolver: zodResolver(createColumnSchema),
+    defaultValues: {
+      boardId,
+      statusName: "",
+    },
+  });
+
+  const onSubmit = function (data: CreateColumnFormValue) {
+    createColumn(
+      { json: data },
+      {
+        onSuccess: function () {
+          form.reset({
+            statusName: "",
+          });
+          onCancel?.();
+        },
+      },
+    );
+  };
 
   return (
     <Card className="h-full w-full border-none shadow-none">
@@ -35,7 +68,7 @@ export const CreateColumnForm = function ({ onCancel }: CreateColumnFormProps) {
             <div>
               <FormField
                 control={form.control}
-                name="name"
+                name="statusName"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="tracking-wide">Column Name</FormLabel>
@@ -48,8 +81,6 @@ export const CreateColumnForm = function ({ onCancel }: CreateColumnFormProps) {
                         className="!mt-1 h-[2.8125rem] border-neutral-400/60 text-[0.9375rem] md:h-[2.625rem]"
                       />
                     </FormControl>
-
-                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -58,17 +89,17 @@ export const CreateColumnForm = function ({ onCancel }: CreateColumnFormProps) {
             <div className="flex gap-x-2">
               <Button
                 type="submit"
-                disabled={false}
+                disabled={isCreatingColumn}
                 onClick={() => {}}
                 className="h-[2.625rem] w-full tracking-wide"
               >
-                Create
+                {isCreatingColumn ? "Creating..." : "Create"}
               </Button>
 
               <Button
                 type="button"
                 variant="secondary"
-                disabled={false}
+                disabled={isCreatingColumn}
                 onClick={onCancel}
                 className="h-[2.625rem] w-full border tracking-wide"
               >

@@ -40,13 +40,19 @@ type Payloads = {
   position: number;
 };
 
-const buildTasksState = function (data: Task[]): TasksState {
+const buildTasksState = function (
+  data: Task[],
+  statusColumn: StatusColumnData,
+): TasksState {
   const tasksState: TasksState = {};
+
+  statusColumn.columns.forEach((column) => {
+    tasksState[column.statusId] = [];
+  });
 
   data.forEach((task) => {
     const statusId = task.statusId;
 
-    if (!tasksState[statusId]) tasksState[statusId] = [];
     tasksState[statusId].push(task);
   });
 
@@ -64,12 +70,14 @@ export default function Board({
 }: DataBoardProps) {
   const { open: openColumnFormModal } = useCreateColumnModal();
   const [tasks, setTasks] = useState<TasksState>(() =>
-    buildTasksState(dataTasks),
+    buildTasksState(dataTasks, statusColumn),
   );
 
+  // console.log(tasks);
+
   useEffect(() => {
-    setTasks(buildTasksState(dataTasks));
-  }, [dataTasks]);
+    setTasks(buildTasksState(dataTasks, statusColumn));
+  }, [dataTasks, statusColumn]);
 
   const onDragEnd = useCallback(
     (result: DropResult) => {
@@ -78,6 +86,8 @@ export default function Board({
       const { source, destination } = result;
       const sourceStatusId = source.droppableId;
       const destStatusId = destination.droppableId;
+      console.log(sourceStatusId, destStatusId);
+      // console.log(statusColumn);
 
       const sameStatus = sourceStatusId === destStatusId;
       const sameIndexPosition = source.index === destination.index;
@@ -89,6 +99,8 @@ export default function Board({
 
       setTasks((prevTasks) => {
         const newTasks = { ...prevTasks };
+
+        console.log(newTasks);
 
         const sourceColumn = [...newTasks[sourceStatusId]];
         const [movedTask] = sourceColumn.splice(source.index, 1);

@@ -24,7 +24,7 @@ interface CreateBoardFormProps {
   onCancel?: () => void;
 }
 
-type CreateBoardFormValues = z.infer<typeof createBoardSchema>;
+type CreateBoardFormValue = z.infer<typeof createBoardSchema>;
 
 export const CreateBoardForm = function ({ onCancel }: CreateBoardFormProps) {
   const { mutate: createBoard, isPending: isCreatingBoard } = useCreateBoard();
@@ -36,7 +36,7 @@ export const CreateBoardForm = function ({ onCancel }: CreateBoardFormProps) {
     },
   });
 
-  const onSubmit = function (data: CreateBoardFormValues) {
+  const onSubmit = function (data: CreateBoardFormValue) {
     createBoard(
       { json: data },
       {

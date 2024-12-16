@@ -14,6 +14,8 @@ export default function BoardClientPage({ isDesktop }: BoardClientProps) {
   const boardId = useGetBoardId();
   const { data, isPending } = useGetTasks({ boardId });
 
+  console.log(data);
+
   if (isPending) {
     return <PageLoader />;
   }
