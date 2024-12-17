@@ -225,11 +225,13 @@ const app = new Hono()
 
     const subtasksIds = tasks.map((task) => task.subtasksId);
 
-    const subtasksPromises = subtasksIds.map((id) =>
-      databases.getDocument<SubtasksDocument>(DATABASE_ID, SUB_TASKS_ID, id),
+    const subtasksData = await databases.listDocuments<SubtasksDocument>(
+      DATABASE_ID,
+      SUB_TASKS_ID,
+      [Query.equal("$id", subtasksIds)],
     );
 
-    const subtasksDocuments = await Promise.all(subtasksPromises);
+    const subtasksDocuments = subtasksData.documents;
 
     const subtasksMap = new Map<string, SubtasksDocument>();
 

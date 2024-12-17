@@ -13,8 +13,8 @@ interface SidebarLayoutProps {
   children: React.ReactNode;
   isDesktop: boolean;
   isHomePage?: boolean;
-  hasBoardsData: boolean;
-  userBoardsData?: Models.DocumentList<Models.Document>;
+  hasBoardsData?: boolean;
+  userBoardsData: Models.DocumentList<Models.Document>;
 }
 
 const VIEWPORT_WIDTH = 1680;
@@ -70,7 +70,7 @@ export default function DashBoardLayout({
           </div>
         )}
 
-        <div className="pb-0 pl-2 pt-8 lg:px-6 lg:pt-9">
+        <div className="pb-0 pl-2 pt-8 lg:pl-6 lg:pt-9 2xl:px-6">
           <div className="mx-auto" style={{ maxWidth: `${viewportWidth}px` }}>
             {children}
           </div>

@@ -9,9 +9,9 @@ import {
   MdOutlineKeyboardArrowDown,
 } from "react-icons/md";
 
-import { Task, StatusColumnItem, SubTask } from "../types";
+import { LiaGripHorizontalSolid } from "react-icons/lia";
 
-import { FaGripLines } from "react-icons/fa6";
+import { Task, StatusColumnItem, SubTask } from "../types";
 
 interface BoardTaskCardProps {
   task: Task;
@@ -42,8 +42,8 @@ const priorityIcons: Record<string, { icon: JSX.Element; tooltip: string }> = {
   },
   MEDIUM: {
     icon: (
-      <FaGripLines
-        className="size-[18px] text-amber-400"
+      <LiaGripHorizontalSolid
+        className="size-5 text-amber-400"
         aria-label="Medium priority"
       />
     ),
@@ -98,7 +98,7 @@ export default function BoardTaskCard({
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
 
   const defaultClass =
-    "relative cursor-pointer rounded-lg border border-l-4 border-y-transparent border-r-transparent bg-white px-4 py-6 shadow-task transition";
+    "relative cursor-pointer rounded-lg border border-l-4 border-y-transparent border-r-transparent bg-white px-4 2xl:pr-6 py-6 shadow-task transition";
 
   const borderColor = priorityBorderColors[task.priority];
 
@@ -128,11 +128,11 @@ export default function BoardTaskCard({
           {getPriorityType(task.priority)}
         </div>
 
-        <h3 className="mb-2 pb-2.5 font-sans text-[15px] font-medium">
+        <h3 className="mb-2 pb-2.5 text-[0.90625rem] font-medium">
           {task.taskName}
         </h3>
 
-        <p className="text-xs font-medium text-muted-foreground">
+        <p className="text-xs font-medium text-muted-foreground/65">
           {completedSubtasks} of {totalSubtasks} subtasks
         </p>
       </div>

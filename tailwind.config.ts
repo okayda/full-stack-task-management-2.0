@@ -18,6 +18,7 @@ const config: Config = {
       },
       fontFamily: {
         rubik: ["var(--font-rubik)"],
+        roboto: ["var(--font-roboto)"],
       },
       screens: {
         "lg-l": "1205px",

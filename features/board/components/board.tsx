@@ -88,7 +88,7 @@ export default function Board({
       const sameStatus = sourceStatusId === destStatusId;
       const sameIndexPosition = source.index === destination.index;
 
-      // if the task is dropped in the same column & same order, do nothing
+      // if the task is dropped in the same column & same order do nothing
       if (sameStatus && sameIndexPosition) return;
 
       let updatesPayload: Payloads[] = [];
@@ -186,17 +186,17 @@ export default function Board({
     >
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="h-[calc(100vh-6.625rem)] lg:h-[calc(100vh-7rem)]">
-          <div className="flex h-full cursor-ew-resize gap-x-6 pb-2 2xl:gap-x-2">
+          <div className="flex h-full cursor-ew-resize gap-x-6 pb-2 2xl:gap-x-8">
             {statusColumn.columns.map(({ statusId, statusName }) => {
               return (
                 <div
                   key={statusId}
-                  className="flex-1 cursor-ew-resize rounded-md pb-1.5 pr-1.5"
+                  className="flex-1 cursor-ew-resize rounded-md pb-1.5"
                 >
                   <BoardHeader
                     statusId={statusId}
                     statusName={statusName}
-                    taskCount={tasks[statusId]?.length || 0}
+                    taskCount={tasks[statusId].length || 0}
                   />
                   <Droppable
                     droppableId={statusId}
@@ -231,7 +231,7 @@ export default function Board({
                       <div
                         {...provided.droppableProps}
                         ref={provided.innerRef}
-                        className="h-full min-h-fit w-[18.75rem] pb-6 2xl:max-h-[calc(100vh-11.875rem)] 2xl:min-h-0 2xl:w-[19.375rem] 2xl:overflow-y-auto 2xl:overflow-x-hidden 2xl:pb-0 2xl:pr-2.5 2xl:pt-1"
+                        className="h-full min-h-fit w-[18.75rem] pb-6 2xl:max-h-[calc(100vh-11.875rem)] 2xl:min-h-0 2xl:w-[19.375rem] 2xl:overflow-y-auto 2xl:overflow-x-hidden 2xl:pb-0 2xl:pr-2 2xl:pt-1"
                       >
                         {tasks[statusId]?.map((task, index) => {
                           const shouldRenderClone =
@@ -278,7 +278,7 @@ export default function Board({
             })}
 
             {statusColumn.columns.length !== MAX_COLUMNS && (
-              <div className="on cursor-move rounded-md pb-1.5 pr-2 2xl:pr-0">
+              <div className="on cursor-move rounded-md pb-1.5 pr-[0.375rem] lg:pr-[0.875rem] 2xl:pr-0">
                 <div
                   onClick={openColumnFormModal}
                   className="flex h-full w-[18.75rem] cursor-pointer flex-col justify-center rounded-lg border border-dashed border-neutral-300 bg-neutral-100 text-muted-foreground transition 2xl:w-[19.375rem]"

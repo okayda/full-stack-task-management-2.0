@@ -14,7 +14,7 @@ interface BoardHeaderProps {
   taskCount: number;
 }
 
-const colors = ["#38BDF8", "#F472B6", "#34D399", "#C084FC", "#C36E6E"];
+const colors = ["#F9A8D4", "#38BDF8", "#34D399", "#C084FC", "#C36E6E"];
 
 export default function BoardHeader({
   statusId,
@@ -28,7 +28,7 @@ export default function BoardHeader({
   const color = statusIndex >= 0 ? colors[statusIndex] : colors[0];
 
   return (
-    <div className="mb-6 flex cursor-auto items-center justify-between rounded-md border-b border-neutral-300 px-2 pb-3 2xl:mr-[0.625rem]">
+    <div className="mb-6 flex cursor-auto items-center justify-between rounded-md border-b border-neutral-300 px-2 pb-3">
       <div className="flex items-center gap-x-2">
         <div className="flex items-center gap-x-2">
           <div
@@ -37,7 +37,7 @@ export default function BoardHeader({
           />
 
           <div>
-            <h2 className="inline-block text-sm font-medium leading-none">
+            <h2 className="font-roboto inline-block text-sm font-medium leading-none tracking-wide">
               {customizeUpperCase(statusName)}
             </h2>
           </div>

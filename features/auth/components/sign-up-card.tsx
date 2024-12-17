@@ -133,7 +133,7 @@ export default function SignUpCard() {
                             type="username"
                             placeholder="linus_torvalds"
                             {...field}
-                            className="!mt-1 h-[2.8125rem] border-neutral-400/60 text-[15px]"
+                            className="!mt-1 h-[2.8125rem] border-neutral-400/60 text-[0.9375rem]"
                           />
                         </FormControl>
 
@@ -160,7 +160,7 @@ export default function SignUpCard() {
                             type="email"
                             placeholder="hello_world@navercorp.com"
                             {...field}
-                            className="h-[2.8125rem] border-neutral-400/60 text-[15px]"
+                            className="h-[2.8125rem] border-neutral-400/60 text-[0.9375rem]"
                           />
                         </FormControl>
 
@@ -188,7 +188,7 @@ export default function SignUpCard() {
                             type="password"
                             placeholder="Password (at least 8 characters)"
                             {...field}
-                            className="!mt-1 h-[2.8125rem] border-neutral-400/60 text-[15px]"
+                            className="!mt-1 h-[2.8125rem] border-neutral-400/60 text-[0.9375rem]"
                           />
                         </FormControl>
 

@@ -24,6 +24,11 @@ export type Task = Models.Document & {
   subtasksId: string; // appwrite referential id
 };
 
+export type BoardData = {
+  statusColumn: StatusColumnItem[];
+  tasks: Task[];
+};
+
 export type SubTask = {
   subtaskName: string;
   isCompleted: boolean;

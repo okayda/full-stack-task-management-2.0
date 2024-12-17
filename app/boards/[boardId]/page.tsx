@@ -31,9 +31,12 @@ export default async function BoardIdPage() {
     <div>
       <CreateBoardModal />
 
-      <SettingColumnModal />
+      <SettingColumnModal
+        userBoardsData={userBoardsData}
+        statusColumn={statusColumnExample}
+      />
 
-      <CreateColumnModal />
+      <CreateColumnModal statusColumn={statusColumnExample} />
 
       <CreateTaskModal statusColumn={statusColumnExample} />
 

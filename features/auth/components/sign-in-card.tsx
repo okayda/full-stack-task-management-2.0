@@ -143,7 +143,7 @@ export default function SignInCard() {
                             type="password"
                             placeholder="Enter your password"
                             {...field}
-                            className="!mt-1 h-[2.8125rem] border-neutral-400/60 text-[15px]"
+                            className="!mt-1 h-[2.8125rem] border-neutral-400/60 text-[0.9375rem]"
                           />
                         </FormControl>
 

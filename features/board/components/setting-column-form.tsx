@@ -3,6 +3,10 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
+import { Models } from "node-appwrite";
+
+import { useGetBoardId } from "../hooks/use-get-board-id";
+
 import { SettingColumnActions } from "./setting-column-actions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -18,17 +22,26 @@ import { Button } from "@/components/ui/button";
 
 import { MAX_COLUMNS } from "../constants";
 
+import { StatusColumnItem } from "../types";
+
 import { CircleXIcon, MoreVertical } from "lucide-react";
 
 interface SettingColumnFormProps {
+  userBoardsData: Models.DocumentList<Models.Document>;
+  statusColumn: StatusColumnItem[];
   closeSettingColumnForm: () => void;
 }
 
 export const SettingColumnForm = function ({
+  userBoardsData,
+  statusColumn,
   closeSettingColumnForm,
 }: SettingColumnFormProps) {
   const form = useForm({});
   const [columns, setColumns] = useState<string[]>(["", ""]);
+
+  const boardId = useGetBoardId();
+  const board = userBoardsData.documents.find((board) => board.$id === boardId);
 
   const addColumn = function () {
     if (columns.length < MAX_COLUMNS) {

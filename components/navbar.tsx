@@ -30,7 +30,7 @@ export default function Navbar({ userBoardsData }: NavbarProps) {
   return (
     <nav className="flex items-center justify-between">
       <div className="flex w-full justify-between">
-        <h1 className="self-center text-2xl font-medium md:text-3xl">
+        <h1 className="font-roboto self-center text-2xl font-medium md:text-3xl">
           {board.boardName}
         </h1>
 

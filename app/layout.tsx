@@ -14,6 +14,12 @@ const rubik = localFont({
   weight: "100 900",
 });
 
+const roboto = localFont({
+  src: "./fonts/Roboto.ttf",
+  variable: "--font-roboto",
+  weight: "100 900",
+});
+
 export const metadata: Metadata = {
   title: "Task Management 2.0",
   description: "Allow you to manage your tasks effectively",
@@ -26,7 +32,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${rubik.variable} font-rubik antialiased`}>
+      <body
+        className={`${roboto.variable} ${rubik.variable} font-rubik antialiased`}
+      >
         <GridPattern
           className="fixed left-0 top-0 -z-[10] h-full w-screen stroke-neutral-300/25"
           strokeDasharray="4 2"

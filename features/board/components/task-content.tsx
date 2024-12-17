@@ -64,22 +64,17 @@ export default function TaskContent({
   };
 
   const onSubmit = function () {
-    updateTaskContent(
-      {
-        json: {
-          boardId,
-          taskId: task.$id,
-          statusId: status,
-          subtasksId: task.subtasksId,
-          subtasks: subTasks,
-        },
+    updateTaskContent({
+      json: {
+        boardId,
+        taskId: task.$id,
+        statusId: status,
+        subtasksId: task.subtasksId,
+        subtasks: subTasks,
       },
-      {
-        onSuccess: () => {
-          closeTaskModal();
-        },
-      },
-    );
+    });
+
+    closeTaskModal();
   };
 
   const deleteTaskHander = function () {
