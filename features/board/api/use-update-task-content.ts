@@ -78,13 +78,13 @@ export const useUpdateTaskContent = function () {
       const { boardId } = variables.json;
       const contextData = context?.previousData;
 
-      if (contextData) {
-        queryClient.setQueryData(["tasks", boardId], contextData);
-      }
-
       toast.error(error.message, {
         description: currentDate(),
       });
+
+      if (contextData) {
+        queryClient.setQueryData(["tasks", boardId], contextData);
+      }
     },
 
     onSettled: (_data, _error, variables) => {

@@ -118,15 +118,9 @@ export const EditTaskForm = function ({
       subtasks: validSubtasks,
     };
 
-    updateTask(
-      { json: editedTask },
-      {
-        onSuccess: () => {
-          closeEditModal();
-          closeTaskModal();
-        },
-      },
-    );
+    updateTask({ json: editedTask });
+    closeEditModal();
+    closeTaskModal();
   };
 
   return (
