@@ -78,19 +78,14 @@ export default function TaskContent({
   };
 
   const deleteTaskHander = function () {
-    deleteTask(
-      {
-        json: {
-          boardId,
-          taskId: task.$id,
-        },
+    deleteTask({
+      json: {
+        boardId,
+        taskId: task.$id,
       },
-      {
-        onSuccess: () => {
-          closeTaskModal();
-        },
-      },
-    );
+    });
+
+    closeTaskModal();
   };
 
   // Validating if there is any changes to the previous task data otherwise it will determine if the button is clickable

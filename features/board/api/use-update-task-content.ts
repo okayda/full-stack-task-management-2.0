@@ -7,7 +7,7 @@ import { currentDate } from "@/lib/utils";
 
 import { toast } from "sonner";
 
-import { BoardData } from "../types";
+import { BoardData, Task } from "../types";
 
 type ResponseType = InferResponseType<
   (typeof client.api.board)["update-task-content"]["$patch"],
@@ -31,7 +31,9 @@ export const useUpdateTaskContent = function () {
         json,
       });
 
-      if (!response.ok) throw new Error("Failed to update your task content.");
+      if (!response.ok) {
+        throw new Error("Failed to update your task content.");
+      }
 
       return await response.json();
     },
@@ -56,7 +58,7 @@ export const useUpdateTaskContent = function () {
 
         const { statusColumn, tasks } = oldBoardData as BoardData;
 
-        const updatedTasks = tasks.map((task) => {
+        const updatedTasks = tasks.map((task: Task) => {
           if (task.$id === targetTaskId) {
             return { ...task, statusId, subtasks };
           } else return task;

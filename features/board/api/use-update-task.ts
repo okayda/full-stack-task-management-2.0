@@ -5,6 +5,7 @@ import { client } from "@/lib/rpc";
 import { currentDate } from "@/lib/utils";
 
 import { toast } from "sonner";
+
 import { BoardData, Task } from "../types";
 
 type ResponseType = InferResponseType<
@@ -85,13 +86,14 @@ export const useUpdateTask = function () {
 
     onError: (error, variables, context) => {
       const { boardId } = variables.json;
+      const contextData = context?.previousData;
 
       toast.error(error.message, {
         description: currentDate(),
       });
 
-      if (context?.previousData) {
-        queryClient.setQueryData(["tasks", boardId], context.previousData);
+      if (contextData) {
+        queryClient.setQueryData(["tasks", boardId], contextData);
       }
     },
 
