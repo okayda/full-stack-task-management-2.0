@@ -73,80 +73,84 @@ export const SettingColumnForm = function ({
         </SettingColumnActions>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="px-0 pb-0">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-            <div className="pb-3">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="tracking-wide">Board Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        autoComplete="off"
-                        placeholder="Your board name?"
-                        className="!mt-1 h-[2.8125rem] border-neutral-400/60 text-[0.9375rem] md:h-[2.625rem]"
-                      />
-                    </FormControl>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="px-4 sm:px-6">
+              <div className="mb-[1.125rem]">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="tracking-wide">
+                        Board Name
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          autoComplete="off"
+                          placeholder="Your board name?"
+                          className="!mt-1 h-[2.8125rem] border-neutral-400/60 text-[0.9375rem] md:h-[2.625rem]"
+                        />
+                      </FormControl>
 
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="border-b-2 border-dashed border-neutral-400/60 pb-4">
-              <FormLabel className="mb-2 block tracking-wide">
-                Columns available
-              </FormLabel>
-
-              <div className="mb-4 space-y-2">
-                {columns.map((column, index) => (
-                  <div key={index} className="flex items-center gap-2">
-                    <Input
-                      value={column}
-                      onChange={(e) => updateColumn(index, e.target.value)}
-                      placeholder="Your column name?"
-                      className="h-[2.8125rem] border-neutral-400/60 md:h-[2.625rem]"
-                    />
-
-                    <Button
-                      type="button"
-                      className="h-[2.8125rem] px-3 md:h-[2.625rem]"
-                      onClick={() => removeColumn(index)}
-                      disabled={columns.length === 2}
-                    >
-                      <CircleXIcon className="!size-5" />
-                    </Button>
-                  </div>
-                ))}
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
 
-              {columns.length < MAX_COLUMNS && (
-                <div className="flex justify-center">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    disabled={false}
-                    className="h-[2.8125rem] justify-center rounded-full border-neutral-400/60 px-10 md:h-[2.625rem]"
-                    onClick={addColumn}
-                  >
-                    New Column
-                  </Button>
-                </div>
-              )}
+              <div className="mb-6 border-b border-dashed border-neutral-400/70 pb-4">
+                <FormLabel className="mb-2 block tracking-wide">
+                  Columns available
+                </FormLabel>
 
-              {columns.length === 5 && (
-                <p className="text-center text-sm text-gray-500">
-                  Only 5 columns allowed
-                </p>
-              )}
+                <div className="mb-4 space-y-2">
+                  {columns.map((column, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <Input
+                        value={column}
+                        onChange={(e) => updateColumn(index, e.target.value)}
+                        placeholder="Your column name?"
+                        className="h-[2.8125rem] border-neutral-400/60 md:h-[2.625rem]"
+                      />
+
+                      <Button
+                        type="button"
+                        className="h-[2.8125rem] px-3 md:h-[2.625rem]"
+                        onClick={() => removeColumn(index)}
+                        disabled={columns.length === 2}
+                      >
+                        <CircleXIcon className="!size-5" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+
+                {columns.length < MAX_COLUMNS && (
+                  <div className="flex justify-center">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      disabled={false}
+                      className="h-[2.8125rem] justify-center rounded-full border-neutral-400/60 px-10 md:h-[2.625rem]"
+                      onClick={addColumn}
+                    >
+                      New Column
+                    </Button>
+                  </div>
+                )}
+
+                {columns.length === 5 && (
+                  <p className="text-center text-sm text-gray-500">
+                    Only 5 columns allowed
+                  </p>
+                )}
+              </div>
             </div>
 
-            <div className="mt-0 space-y-3 pt-1">
+            <div className="border-t bg-[#FAFAFA] px-4 py-4 sm:px-6">
               <div className="flex gap-x-2">
                 <Button
                   type="submit"
@@ -158,7 +162,7 @@ export const SettingColumnForm = function ({
 
                 <Button
                   type="button"
-                  variant="secondary"
+                  variant="outline"
                   disabled={false}
                   onClick={closeSettingColumnForm}
                   className="h-[2.625rem] w-full border"

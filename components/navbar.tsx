@@ -30,12 +30,12 @@ export default function Navbar({ userBoardsData }: NavbarProps) {
   return (
     <nav className="flex items-center justify-between">
       <div className="flex w-full justify-between">
-        <h1 className="font-roboto self-center text-2xl font-medium md:text-3xl">
+        <h1 className="self-center font-roboto text-2xl font-medium md:text-3xl">
           {board.boardName}
         </h1>
 
         <Button
-          className="rounded-lg border border-neutral-400/50 px-2.5 tracking-wide md:px-6"
+          className="rounded-lg border border-neutral-300/80 px-2.5 tracking-wide md:px-6"
           variant="secondary"
           onClick={openSettingModal}
         >

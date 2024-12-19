@@ -2,14 +2,15 @@
 
 import React, { useState, useEffect } from "react";
 
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { Models } from "node-appwrite";
 
 import { useCreateBoardModal } from "@/features/board/hooks/use-create-board-modal";
 
+import SparklesText from "./ui/sparkles-text";
 import CustomSlider from "./ui/custom-slider";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
@@ -18,7 +19,6 @@ import { cn } from "@/lib/utils";
 
 import { MdOutlineDashboard } from "react-icons/md";
 import { LogOut, Columns2Icon, LoaderIcon } from "lucide-react";
-import SparklesText from "./ui/sparkles-text";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -76,7 +76,7 @@ export default function Sidebar({
   return (
     <div
       className={cn(
-        "flex h-full w-[17.5rem] flex-col justify-between border-r bg-[#FBFBFB] pb-4 transition-transform duration-300",
+        "flex h-full w-[17.5rem] flex-col justify-between border-r bg-[#FAFAFA] pb-4 transition-transform duration-300",
         isOpen ? "translate-x-0" : "-translate-x-full",
       )}
     >

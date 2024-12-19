@@ -8,6 +8,7 @@ import { CreateColumnModal } from "@/features/board/components/create-column-mod
 import { CreateTaskModal } from "@/features/board/components/create-task-modal";
 
 import DashBoardLayout from "@/components/dash-board-layout";
+import GridPattern from "@/components/ui/grid-pattern";
 
 import { statusColumnExample } from "@/lib/exampleBoardData";
 import BoardClientPage from "./client-page";
@@ -29,6 +30,11 @@ export default async function BoardIdPage() {
 
   return (
     <div>
+      <GridPattern
+        className="fixed left-0 top-0 -z-[10] h-full w-screen stroke-neutral-300/25"
+        strokeDasharray="4 2"
+      />
+
       <CreateBoardModal />
 
       <SettingColumnModal

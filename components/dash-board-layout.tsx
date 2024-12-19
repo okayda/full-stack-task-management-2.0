@@ -14,7 +14,7 @@ interface SidebarLayoutProps {
   isDesktop: boolean;
   isHomePage?: boolean;
   hasBoardsData?: boolean;
-  userBoardsData: Models.DocumentList<Models.Document>;
+  userBoardsData?: Models.DocumentList<Models.Document>;
 }
 
 const VIEWPORT_WIDTH = 1680;

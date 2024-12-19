@@ -14,11 +14,13 @@ const config: Config = {
   theme: {
     extend: {
       boxShadow: {
-        task: "0 1px 1px rgba(9, 30, 66, .25), 0 0 1px 1px rgba(9, 30, 66, .13)",
+        task: "0 1px 1px rgba(9, 30, 66, 0.25), 0 0 1px 1px rgba(9, 30, 66, 0.13)",
+        form: "rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px",
       },
       fontFamily: {
         rubik: ["var(--font-rubik)"],
         roboto: ["var(--font-roboto)"],
+        geist: ["var(--font-geist-sans)"],
       },
       screens: {
         "lg-l": "1205px",
@@ -29,6 +31,7 @@ const config: Config = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         rainbow: "rainbow var(--speed, 2s) infinite linear",
+        rippling: "rippling var(--duration, 0.8s) ease-out",
       },
       keyframes: {
         aurora: {
@@ -56,8 +59,21 @@ const config: Config = {
           },
         },
         rainbow: {
-          "0%": { "background-position": "0%" },
-          "100%": { "background-position": "200%" },
+          "0%": {
+            "background-position": "0%",
+          },
+          "100%": {
+            "background-position": "200%",
+          },
+        },
+        rippling: {
+          "0%": {
+            opacity: "1",
+          },
+          "100%": {
+            transform: "scale(2)",
+            opacity: "0",
+          },
         },
       },
       colors: {
@@ -66,7 +82,6 @@ const config: Config = {
         "color-3": "hsl(var(--color-3))",
         "color-4": "hsl(var(--color-4))",
         "color-5": "hsl(var(--color-5))",
-
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {

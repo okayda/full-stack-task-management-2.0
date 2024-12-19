@@ -58,10 +58,10 @@ export const CreateBoardForm = function ({
         <CardTitle className="text-2xl font-medium">Create Board</CardTitle>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="px-0 pb-0">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <div>
+            <div className="px-4 sm:px-6">
               <FormField
                 control={form.control}
                 name="boardName"
@@ -82,24 +82,26 @@ export const CreateBoardForm = function ({
               />
             </div>
 
-            <div className="flex gap-x-2">
-              <Button
-                type="submit"
-                disabled={isCreatingBoard}
-                className="h-[2.625rem] w-full tracking-wide"
-              >
-                {isCreatingBoard ? "Creating..." : "Create"}
-              </Button>
+            <div className="border-t bg-[#FAFAFA] px-4 py-4 sm:px-6">
+              <div className="flex gap-x-2">
+                <Button
+                  type="submit"
+                  disabled={isCreatingBoard}
+                  className="h-[2.625rem] w-full tracking-wide"
+                >
+                  {isCreatingBoard ? "Creating..." : "Create"}
+                </Button>
 
-              <Button
-                type="button"
-                variant="secondary"
-                disabled={isCreatingBoard}
-                onClick={closeBoardForm}
-                className="h-[2.625rem] w-full border tracking-wide"
-              >
-                Cancel
-              </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={isCreatingBoard}
+                  onClick={closeBoardForm}
+                  className="h-[2.625rem] w-full border tracking-wide"
+                >
+                  Cancel
+                </Button>
+              </div>
             </div>
           </form>
         </Form>

@@ -61,7 +61,9 @@ export const TaskContentActions = function ({
             >
               <FilePenLineIcon />
 
-              <span className="text-[0.8125rem]">Edit your task</span>
+              <span className="self-end text-[0.8125rem] leading-[1.1]">
+                Edit your task
+              </span>
             </DropdownMenuItem>
 
             <div className="py-1">
@@ -74,7 +76,9 @@ export const TaskContentActions = function ({
             >
               <CalendarOffIcon />
 
-              <span className="text-[0.8125rem]">Finish | Delete</span>
+              <span className="self-end text-[0.8125rem] leading-[1.1]">
+                Finish | Delete
+              </span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -4,7 +4,7 @@ import { customizeUpperCase } from "@/lib/utils";
 
 import { useCreateTaskModal } from "../hooks/use-create-task-modal";
 
-import { CirclePlusIcon, CircleDashedIcon } from "lucide-react";
+import { CirclePlusIcon } from "lucide-react";
 
 import { VALID_STATUS_ID } from "../constants";
 
@@ -37,7 +37,7 @@ export default function BoardHeader({
           />
 
           <div>
-            <h2 className="font-roboto inline-block text-sm font-medium leading-none tracking-wide">
+            <h2 className="inline-block font-roboto text-sm font-medium leading-none tracking-wide">
               {customizeUpperCase(statusName)}
             </h2>
           </div>

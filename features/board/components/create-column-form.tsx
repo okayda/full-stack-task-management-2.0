@@ -64,10 +64,10 @@ export const CreateColumnForm = function ({
         <CardTitle className="text-2xl font-medium">Create Column</CardTitle>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="px-0 pb-0">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <div>
+            <div className="px-4 sm:px-6">
               <FormField
                 control={form.control}
                 name="statusName"
@@ -88,25 +88,27 @@ export const CreateColumnForm = function ({
               />
             </div>
 
-            <div className="flex gap-x-2">
-              <Button
-                type="submit"
-                disabled={isCreatingColumn}
-                onClick={() => {}}
-                className="h-[2.625rem] w-full tracking-wide"
-              >
-                {isCreatingColumn ? "Creating..." : "Create"}
-              </Button>
+            <div className="border-t bg-[#FAFAFA] px-4 py-4 sm:px-6">
+              <div className="flex gap-x-2">
+                <Button
+                  type="submit"
+                  disabled={isCreatingColumn}
+                  onClick={() => {}}
+                  className="h-[2.625rem] w-full tracking-wide"
+                >
+                  {isCreatingColumn ? "Creating..." : "Create"}
+                </Button>
 
-              <Button
-                type="button"
-                variant="secondary"
-                disabled={isCreatingColumn}
-                onClick={closeCreateColumnForm}
-                className="h-[2.625rem] w-full border tracking-wide"
-              >
-                Cancel
-              </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={isCreatingColumn}
+                  onClick={closeCreateColumnForm}
+                  className="h-[2.625rem] w-full border tracking-wide"
+                >
+                  Cancel
+                </Button>
+              </div>
             </div>
           </form>
         </Form>

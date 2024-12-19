@@ -6,7 +6,8 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { QueryProvider } from "@/components/query-provider";
 
 import { Toaster } from "@/components/ui/sonner";
-import GridPattern from "@/components/ui/grid-pattern";
+
+import { GeistSans } from "geist/font/sans";
 
 const rubik = localFont({
   src: "./fonts/Rubik.ttf",
@@ -33,13 +34,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${roboto.variable} ${rubik.variable} font-rubik antialiased`}
+        className={`${GeistSans.variable} ${roboto.variable} ${rubik.variable} font-rubik antialiased`}
       >
-        <GridPattern
-          className="fixed left-0 top-0 -z-[10] h-full w-screen stroke-neutral-300/25"
-          strokeDasharray="4 2"
-        />
-
         <main>
           <QueryProvider>
             <Toaster richColors />

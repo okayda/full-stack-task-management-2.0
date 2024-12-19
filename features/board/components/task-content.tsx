@@ -97,8 +97,10 @@ export default function TaskContent({
 
   return (
     <Card className="border-none shadow-none">
-      <CardHeader className="flex flex-row items-center justify-between gap-x-3 space-y-0 pb-5 sm:pt-10">
-        <CardTitle className="text-lg font-semibold">{task.taskName}</CardTitle>
+      <CardHeader className="flex flex-row items-center justify-between gap-x-3 space-y-0 px-4 pb-5 sm:px-6">
+        <CardTitle className="text-lg font-medium text-foreground">
+          {task.taskName}
+        </CardTitle>
 
         <TaskContentActions
           task={task}
@@ -106,95 +108,112 @@ export default function TaskContent({
           closeTaskModal={closeTaskModal}
           deleteTaskHander={deleteTaskHander}
         >
-          <MoreVertical className="!size-5" />
+          <MoreVertical className="!size-6" />
         </TaskContentActions>
       </CardHeader>
 
-      <CardContent>
-        <p
-          className={cn("mb-5 text-sm text-muted-foreground", {
-            "rounded-md bg-neutral-100 p-3 text-center text-[0.8125rem] text-foreground":
-              !task.description,
-          })}
-        >
-          {task.description ? task.description : "No Description"}
-        </p>
-
-        <div className="mb-4">
-          <h4 className="mb-2 text-sm font-medium text-foreground">Subtasks</h4>
-
-          <ul className="flex flex-col gap-y-1.5">
-            {subTasks.length > 0 ? (
-              subTasks.map((subtask: Task, index: number) => (
-                <li key={`task-${index}`} className="text-[0.8125rem]">
-                  <label
-                    htmlFor={`task-${index}`}
-                    className="flex cursor-pointer items-center gap-x-3 rounded-md bg-neutral-100 p-3 transition-colors hover:bg-neutral-200/70"
-                  >
-                    <input
-                      id={`task-${index}`}
-                      type="checkbox"
-                      checked={subtask.isCompleted}
-                      onChange={() => checkboxHandler(index)}
-                      className="size-[0.90625rem] accent-[#0F0F0F] focus:outline-none focus:ring-0"
-                    />
-                    {subtask.subtaskName}
-                  </label>
-                </li>
-              ))
-            ) : (
-              <li className="rounded-md bg-neutral-100 p-3 text-center text-[0.8125rem]">
-                Empty
-              </li>
+      <CardContent className="px-0 pb-0">
+        <div className="px-4 sm:px-6">
+          <p
+            className={cn(
+              "mb-5 font-geist text-[0.9375rem] text-muted-foreground",
+              {
+                "rounded-md bg-secondary p-3 text-[0.8125rem] text-foreground shadow-inner":
+                  !task.description,
+              },
             )}
-          </ul>
+          >
+            {task.description ? task.description : "No Description"}
+          </p>
+
+          <div className="mb-5">
+            <h4 className="mb-1.5 text-[0.90625rem] font-medium text-foreground">
+              Subtasks
+            </h4>
+
+            <ul className="flex flex-col gap-y-2">
+              {subTasks.length > 0 ? (
+                subTasks.map((subtask: Task, index: number) => (
+                  <li
+                    key={`task-${index}`}
+                    className="text-[0.8125rem] tracking-wide text-primary"
+                  >
+                    <label
+                      htmlFor={`task-${index}`}
+                      className="flex cursor-pointer items-center gap-x-2 rounded-md bg-secondary px-3 py-3.5 shadow-inner"
+                    >
+                      <input
+                        id={`task-${index}`}
+                        type="checkbox"
+                        checked={subtask.isCompleted}
+                        onChange={() => checkboxHandler(index)}
+                        className="cursor-pointer accent-[#0F0F0F] focus:outline-none focus:ring-0"
+                      />
+
+                      <span className="leading-none">
+                        {subtask.subtaskName}
+                      </span>
+                    </label>
+                  </li>
+                ))
+              ) : (
+                <li className="rounded-md bg-secondary p-3 font-geist text-[0.8125rem] shadow-inner">
+                  No Subtask
+                </li>
+              )}
+            </ul>
+          </div>
+
+          <div className="mb-6">
+            <h4 className="mb-1.5 text-[0.90625rem] font-medium">
+              Current status
+            </h4>
+
+            <Select value={status} onValueChange={setStatus}>
+              <SelectTrigger className="h-[2.8125rem] border-neutral-400/60 text-[0.9375rem] md:h-[2.625rem]">
+                <SelectValue placeholder={status} />
+              </SelectTrigger>
+
+              <SelectContent>
+                {statusColumn.columns.map((column) => {
+                  const columnName = customizeUpperCase(column.statusName);
+
+                  return (
+                    <SelectItem key={column.statusId} value={column.statusId}>
+                      {columnName}
+                    </SelectItem>
+                  );
+                })}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
-        <div className="mb-7">
-          <h4 className="mb-1 text-sm font-medium text-foreground">
-            Current status
-          </h4>
+        <div className="border-t bg-[#FAFAFA] px-4 py-4 sm:px-6">
+          <div className="flex gap-x-2">
+            <Button
+              onClick={onSubmit}
+              disabled={
+                isUpdatingTaskContent || isSaveDisabled || isDeletingTask
+              }
+              className="h-[2.625rem] w-full tracking-wide"
+            >
+              {isUpdatingTaskContent
+                ? "Loading..."
+                : isDeletingTask
+                  ? "Deleting..."
+                  : "Save"}
+            </Button>
 
-          <Select value={status} onValueChange={setStatus}>
-            <SelectTrigger className="h-[2.8125rem] border-neutral-400/60 text-[0.9375rem] md:h-[2.625rem]">
-              <SelectValue placeholder={status} />
-            </SelectTrigger>
-
-            <SelectContent>
-              {statusColumn.columns.map((column) => {
-                const columnName = customizeUpperCase(column.statusName);
-
-                return (
-                  <SelectItem key={column.statusId} value={column.statusId}>
-                    {columnName}
-                  </SelectItem>
-                );
-              })}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="flex gap-x-2">
-          <Button
-            onClick={onSubmit}
-            disabled={isUpdatingTaskContent || isSaveDisabled || isDeletingTask}
-            className="h-[2.625rem] w-full tracking-wide"
-          >
-            {isUpdatingTaskContent
-              ? "Loading..."
-              : isDeletingTask
-                ? "Deleting..."
-                : "Save"}
-          </Button>
-
-          <Button
-            onClick={closeTaskModal}
-            disabled={isUpdatingTaskContent || isDeletingTask}
-            variant="secondary"
-            className="h-[2.625rem] w-full border tracking-wide"
-          >
-            Cancel
-          </Button>
+            <Button
+              onClick={closeTaskModal}
+              disabled={isUpdatingTaskContent || isDeletingTask}
+              variant="outline"
+              className="h-[2.625rem] w-full border-neutral-300/80 tracking-wide"
+            >
+              Cancel
+            </Button>
+          </div>
         </div>
       </CardContent>
     </Card>

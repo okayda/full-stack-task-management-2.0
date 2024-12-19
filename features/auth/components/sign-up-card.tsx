@@ -2,7 +2,6 @@
 
 import { useForm } from "react-hook-form";
 
-import Image from "next/image";
 import Link from "next/link";
 
 import { z } from "zod";
@@ -11,11 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreate } from "../api/use-create";
 import { createUserSchema } from "@/features/auth/schemas";
 
-import { cn } from "@/lib/utils";
-
-import TechStack from "./tech-stack";
 import { Separator } from "@/components/ui/separator";
-import GridPattern from "@/components/ui/grid-pattern";
 import {
   Form,
   FormLabel,
@@ -32,11 +27,14 @@ import {
   CardTitle,
   CardFooter,
 } from "@/components/ui/card";
+import RippleButton from "@/components/ui/ripple-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { FaGithub, FaGoogle } from "react-icons/fa";
-import { BadgeCheckIcon, Github } from "lucide-react";
+
+import { LoaderIcon } from "lucide-react";
+import { DesktopDisclaimer, MobileDisclaimer } from "./disclaimer";
 
 export default function SignUpCard() {
   const { mutate: createAccount, isPending: isCreatingAccount } = useCreate();
@@ -83,22 +81,28 @@ export default function SignUpCard() {
                 onClick={() => {}}
                 disabled={isCreatingAccount}
                 variant="outline"
-                className="w-full border-neutral-700/20 p-3"
+                className="h-[2.6875rem] w-full border-neutral-700/20 p-3"
                 size="lg"
               >
                 <FaGithub />
-                <span className="font-semibold tracking-wide">Github</span>
+
+                <span className="self-end font-semibold leading-none tracking-wide">
+                  Github
+                </span>
               </Button>
 
               <Button
                 onClick={() => {}}
                 disabled={isCreatingAccount}
                 variant="outline"
-                className="w-full border-neutral-700/20 p-3"
+                className="h-[2.6875rem] w-full border-neutral-700/20 p-3"
                 size="lg"
               >
                 <FaGoogle />
-                <span className="font-semibold tracking-wide">Google</span>
+
+                <span className="self-end font-semibold leading-none tracking-wide">
+                  Google
+                </span>
               </Button>
             </CardContent>
 
@@ -107,6 +111,7 @@ export default function SignUpCard() {
                 <div className="absolute inset-0 flex items-center">
                   <span className="w-full border-t border-muted-foreground/30" />
                 </div>
+
                 <div className="relative flex justify-center text-xs uppercase">
                   <span className="bg-background px-2 text-muted-foreground/70">
                     or
@@ -127,6 +132,7 @@ export default function SignUpCard() {
                         <FormLabel className="tracking-wide">
                           Username
                         </FormLabel>
+
                         <FormControl>
                           <Input
                             autoComplete="off"
@@ -183,6 +189,7 @@ export default function SignUpCard() {
                         <FormLabel className="tracking-wide">
                           Password
                         </FormLabel>
+
                         <FormControl>
                           <Input
                             type="password"
@@ -197,18 +204,25 @@ export default function SignUpCard() {
                     )}
                   />
 
-                  <Button
+                  <RippleButton
                     disabled={isCreatingAccount}
-                    size="lg"
-                    className="h-[2.625rem] w-full tracking-wide"
+                    rippleColor="#059669"
+                    className="h-[2.625rem] w-full text-sm font-medium tracking-wide"
                   >
-                    {isCreatingAccount ? "Loading..." : "Create"}
-                  </Button>
+                    {isCreatingAccount ? (
+                      <span className="flex items-center gap-x-2">
+                        Creating
+                        <LoaderIcon className="!size-5 animate-spin" />
+                      </span>
+                    ) : (
+                      "Create"
+                    )}
+                  </RippleButton>
                 </form>
               </Form>
             </CardContent>
 
-            <CardFooter className="my-3 flex items-center justify-center py-4 sm:my-5 sm:bg-secondary">
+            <CardFooter className="my-3 flex items-center justify-center py-4 sm:my-5 sm:border-y sm:bg-[#FAFAFA]">
               <p className="text-sm font-medium">
                 Already have an account?
                 <Link href="/sign-in">
@@ -218,147 +232,13 @@ export default function SignUpCard() {
             </CardFooter>
           </div>
 
-          <div className="w-full">
-            <div className="relative hidden h-[20rem] self-start rounded-lg lg-l:block">
-              <BadgeCheckIcon
-                className="absolute right-0 top-0 z-10 m-3 size-10 text-green-400"
-                strokeWidth="1.5px"
-              />
-              <Image
-                src="/auth-background.webp"
-                className="h-full w-full rounded-lg object-cover"
-                alt="Authentication Background"
-                priority
-                width={700}
-                height={760}
-              />
-
-              <div className="absolute inset-0 rounded-lg bg-black opacity-75" />
-
-              <div className="absolute inset-0 px-10 pt-9">
-                <div className="text-left text-white">
-                  <h2
-                    className="mb-3 text-[2rem] font-semibold tracking-wide"
-                    style={{ textShadow: "1px 1px 3px rgba(0, 0, 0, 0.45)" }}
-                  >
-                    Disclaimer
-                  </h2>
-
-                  <p
-                    className="mb-5"
-                    style={{ textShadow: "1px 1px 3px rgba(0, 0, 0, 0.45)" }}
-                  >
-                    For the sake of transparency, I want to clarify that I
-                    don&apos;t collect or misuse any personal information. You
-                    can review the authentication functionality{" "}
-                    <Link href="#" className="text-sky-400">
-                      here
-                    </Link>{" "}
-                    to see how I handle it. All data stored in the database will
-                    be{" "}
-                    <span className="text-emerald-400">
-                      automatically deleted after 15 days
-                    </span>
-                    .
-                  </p>
-
-                  <p
-                    className="mb-5"
-                    style={{ textShadow: "1px 1px 3px rgba(0, 0, 0, 0.45)" }}
-                  >
-                    Any design similarities between this project and your
-                    project are{" "}
-                    <span className="text-emerald-400">
-                      purely coincidental
-                    </span>
-                    . I created this project solely for my own educational
-                    purposes. Thank you.
-                  </p>
-
-                  <p>
-                    Sincerely,{" "}
-                    <span className="text-emerald-400">
-                      {" "}
-                      Jhon Que&ntilde;ano
-                    </span>
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="hidden lg-l:block">
-              <Link
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://github.com/okayda/full-stack-task-management-2.0"
-                className="mt-6 flex items-center justify-between rounded-lg border bg-background/40 p-4 backdrop-blur-md transition-colors hover:border-neutral-400"
-              >
-                <h4 className="text-xl font-medium">Task Management v2.0</h4>
-
-                <Github className="size-7" />
-              </Link>
-
-              <TechStack />
-            </div>
-          </div>
+          <DesktopDisclaimer />
         </Card>
       </div>
 
       <Separator className="mt-6 hidden py-2 sm:block md:hidden" />
 
-      <div className="sm:relative">
-        <div className="relative mx-auto max-w-[25rem] py-6 sm:static sm:max-w-[25.625rem] md:mx-0 md:max-w-none md:flex-grow md:py-11 lg-l:hidden">
-          <GridPattern
-            squares={[
-              [7, 1],
-              [1, 9],
-              [0, 5],
-              [3, 6],
-              [2, 3],
-              [6, 8],
-              [9, 4],
-              [10, 10],
-              [4, 11],
-              [2, 13],
-              [7, 12],
-              [8, 12],
-            ]}
-            className={cn(
-              "[mask-image:radial-gradient(400px_circle_at_center,white,transparent)]",
-              "inset-x-0 skew-y-0",
-            )}
-          />
-          <h4 className="mb-3 text-[1.625rem] font-semibold md:text-[2rem]">
-            Disclaimer
-          </h4>
-
-          <p className="mb-4">
-            For the sake of transparency, I want to clarify that I don&apos;t
-            collect or misuse any personal information. You can review the
-            authentication functionality{" "}
-            <Link href="#" className="text-sky-500">
-              here
-            </Link>{" "}
-            to see how I handle it. All data stored in the database will be{" "}
-            <span className="text-emerald-500">
-              automatically deleted after 15 days
-            </span>
-            .
-          </p>
-
-          <p className="mb-4">
-            Any design similarities between this project and your project are{" "}
-            <span className="text-emerald-500">purely coincidental</span>. I
-            created this project solely for my own educational purposes. Thank
-            you.
-          </p>
-
-          <p>
-            Sincerely,{" "}
-            <span className="text-emerald-400"> Jhon Que&ntilde;ano</span>
-          </p>
-        </div>
-      </div>
+      <MobileDisclaimer />
     </div>
   );
 }
