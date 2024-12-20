@@ -8,36 +8,30 @@ import { Button } from "./ui/button";
 import { CogIcon } from "lucide-react";
 
 interface NavbarProps {
+  isHomePage?: boolean;
   userBoardsData?: Models.DocumentList<Models.Document>;
 }
 
-export default function Navbar({ userBoardsData }: NavbarProps) {
+export default function Navbar({ isHomePage, userBoardsData }: NavbarProps) {
   const boardId = useGetBoardId();
   const { open: openSettingModal } = useSettingColumnModal();
 
-  if (!userBoardsData) {
-    console.error("user boards data not found at Navbar");
-    return null;
-  }
-
-  const board = userBoardsData.documents.find((board) => board.$id === boardId);
-
-  if (!board) {
-    console.error("target board using board id not found at Navbar");
-    return null;
-  }
+  const board = userBoardsData?.documents.find(
+    (board) => board.$id === boardId,
+  );
 
   return (
     <nav className="flex items-center justify-between">
       <div className="flex w-full justify-between">
         <h1 className="self-center font-roboto text-2xl font-medium md:text-3xl">
-          {board.boardName}
+          {isHomePage ? "Welcome" : board?.boardName}
         </h1>
 
         <Button
           className="rounded-lg border border-neutral-300/80 px-2.5 tracking-wide md:px-6"
           variant="secondary"
           onClick={openSettingModal}
+          disabled={isHomePage}
         >
           <span className="md:hidden">
             <CogIcon className="!size-5" />

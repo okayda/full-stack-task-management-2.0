@@ -53,7 +53,6 @@ export default async function BoardIdPage() {
         <DashBoardLayout
           isDesktop={false}
           isHomePage={false}
-          hasBoardsData={hasBoardsData}
           userBoardsData={userBoardsData}
         >
           <BoardClientPage isDesktop={false} />
@@ -65,7 +64,6 @@ export default async function BoardIdPage() {
         <DashBoardLayout
           isDesktop={true}
           isHomePage={false}
-          hasBoardsData={hasBoardsData}
           userBoardsData={userBoardsData}
         >
           <BoardClientPage isDesktop={true} />

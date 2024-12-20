@@ -2,12 +2,12 @@
 
 import { useCreateExampleBoardData } from "../api/use-create-example-board-data";
 
-import { RainbowButton } from "@/components/ui/rainbow-button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 import { LoaderIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-export default function GenerateExampleBox() {
+export default function GenerateExampleColumnBox() {
   const { mutate: createBoardExample, isPending: isCreatingBoardExample } =
     useCreateExampleBoardData();
 
@@ -16,34 +16,33 @@ export default function GenerateExampleBox() {
       <div className="flex h-full flex-col justify-between">
         <div>
           <CardHeader className="pb-3">
-            <CardTitle className="text-lg">Columns & Tasks</CardTitle>
+            <CardTitle className="text-lg">Columns</CardTitle>
           </CardHeader>
 
-          <CardContent className="flex flex-col items-center justify-center space-y-6 px-6">
+          <CardContent className="flex flex-col items-center justify-between space-y-6 px-6">
             <p className="font-geist text-sm text-muted-foreground">
-              This feature populates the board with example columns and tasks,
-              allowing you to{" "}
+              This feature generates example columns with predefined names to
+              help you visualize a structured board layout. Its an easy way to{" "}
               <span className="font-semibold text-primary">
-                explore the full functionality
-              </span>{" "}
-              of the kanban board. It helps you understand how tasks and columns
-              work together to create an organized, visual workflow.
+                explore how columns can be used for organizing tasks.
+              </span>
             </p>
           </CardContent>
         </div>
 
         <div className="px-6 pb-6">
-          <RainbowButton
-            className="h-[2.625rem] w-full rounded-md font-geist text-[0.9375rem]"
+          <Button
+            variant="outline"
+            className="h-[2.625rem] w-full rounded-md border-neutral-300/80 bg-[#FAFAFA] font-geist text-[0.9375rem] text-primary"
             disabled={isCreatingBoardExample}
             onClick={createBoardExample}
           >
             {isCreatingBoardExample ? (
               <LoaderIcon className="animate-spin" />
             ) : (
-              " Generate Both"
+              " Generate Columns"
             )}
-          </RainbowButton>
+          </Button>
         </div>
       </div>
     </Card>

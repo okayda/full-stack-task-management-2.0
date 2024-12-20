@@ -13,7 +13,6 @@ interface SidebarLayoutProps {
   children: React.ReactNode;
   isDesktop: boolean;
   isHomePage?: boolean;
-  hasBoardsData?: boolean;
   userBoardsData?: Models.DocumentList<Models.Document>;
 }
 
@@ -23,13 +22,10 @@ export default function DashBoardLayout({
   children,
   isDesktop,
   isHomePage,
-  hasBoardsData,
   userBoardsData,
 }: SidebarLayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(isDesktop);
   const [viewportWidth, setViewportWidth] = useState(VIEWPORT_WIDTH);
-
-  const showNavbar = hasBoardsData && !isHomePage;
 
   useEffect(() => {
     const savedViewportWidth = localStorage.getItem("viewportWidth");
@@ -47,7 +43,7 @@ export default function DashBoardLayout({
         )}
       >
         <Sidebar
-          isOpen={isSidebarOpen}
+          isSidebarOpen={isSidebarOpen}
           toggle={() => setIsSidebarOpen(!isSidebarOpen)}
           viewportWidth={viewportWidth}
           setViewportWidth={setViewportWidth}
@@ -62,13 +58,11 @@ export default function DashBoardLayout({
           isSidebarOpen ? "lg:pl-[17.5rem]" : "pl-0",
         )}
       >
-        {showNavbar && (
-          <div className="border-b bg-white px-4 py-3 lg:px-6">
-            <div className="mx-auto" style={{ maxWidth: `${viewportWidth}px` }}>
-              <Navbar userBoardsData={userBoardsData} />
-            </div>
+        <div className="border-b bg-white px-4 py-3 lg:px-6">
+          <div className="mx-auto" style={{ maxWidth: `${viewportWidth}px` }}>
+            <Navbar isHomePage={isHomePage} userBoardsData={userBoardsData} />
           </div>
-        )}
+        </div>
 
         <div className="pb-0 pl-2 pt-8 lg:pl-6 lg:pt-9 2xl:px-6">
           <div className="mx-auto" style={{ maxWidth: `${viewportWidth}px` }}>

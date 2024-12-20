@@ -118,7 +118,7 @@ export default function TaskContent({
             className={cn(
               "mb-5 font-geist text-[0.9375rem] text-muted-foreground",
               {
-                "rounded-md bg-secondary p-3 text-[0.8125rem] text-foreground shadow-inner":
+                "rounded-md bg-[#FAFAFA] p-3 text-[0.8125rem] text-foreground shadow-inner":
                   !task.description,
               },
             )}
@@ -140,7 +140,7 @@ export default function TaskContent({
                   >
                     <label
                       htmlFor={`task-${index}`}
-                      className="flex cursor-pointer items-center gap-x-2 rounded-md bg-secondary px-3 py-3.5 shadow-inner"
+                      className="flex cursor-pointer items-center gap-x-2 rounded-md bg-[#FAFAFA] px-3 py-3.5 shadow-inner"
                     >
                       <input
                         id={`task-${index}`}
@@ -157,7 +157,7 @@ export default function TaskContent({
                   </li>
                 ))
               ) : (
-                <li className="rounded-md bg-secondary p-3 font-geist text-[0.8125rem] shadow-inner">
+                <li className="rounded-md bg-[#FAFAFA] p-3 font-geist text-[0.8125rem] shadow-inner">
                   No Subtask
                 </li>
               )}
