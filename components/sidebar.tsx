@@ -18,11 +18,11 @@ import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 
 import { MdOutlineDashboard } from "react-icons/md";
-import { LogOut, Columns2Icon, LoaderIcon } from "lucide-react";
+import { LogOut, XIcon, Columns2Icon, LoaderIcon } from "lucide-react";
 
 interface SidebarProps {
   isSidebarOpen: boolean;
-  toggle: () => void;
+  toggleSidebar: () => void;
   viewportWidth: number;
   setViewportWidth: (width: number) => void;
   isHomePage?: boolean;
@@ -40,7 +40,7 @@ const getTargetIndex = function (width: number) {
 
 export default function Sidebar({
   isSidebarOpen,
-  toggle,
+  toggleSidebar,
   viewportWidth,
   setViewportWidth,
   isHomePage,
@@ -75,12 +75,13 @@ export default function Sidebar({
 
   return (
     <React.Fragment>
-      {isSidebarOpen && (
-        <div
-          className="fixed inset-0 size-full bg-[#FAFAFA]/80 lg:hidden"
-          onClick={toggle}
-        />
-      )}
+      <div
+        className={cn(
+          "fixed inset-0 size-full bg-[#FAFAFA]/90 transition-opacity duration-300 lg:hidden",
+          isSidebarOpen ? "opacity-100" : "pointer-events-none opacity-0",
+        )}
+        onClick={toggleSidebar}
+      />
 
       <div
         className={cn(
@@ -89,15 +90,17 @@ export default function Sidebar({
         )}
       >
         <Button
-          onClick={toggle}
+          onClick={toggleSidebar}
           variant="ghost"
           className={cn(
-            "absolute -right-[7.125rem] top-[4.25rem] h-auto border border-neutral-300/80 bg-[#FAFAFA] p-1 text-xs lg:right-[-1.9375rem] lg:top-16 lg:border-none lg:border-transparent lg:bg-transparent",
-            isSidebarOpen && "right-[-1.9375rem]",
+            "absolute -right-[7.25rem] top-[4rem] hidden h-auto border border-neutral-300/80 bg-[#FAFAFA] p-1 text-xs lg:right-[-1.9375rem] lg:top-16 lg:block lg:border-none lg:border-transparent lg:bg-transparent",
+            isSidebarOpen && "right-[-1.9375rem] block",
           )}
         >
           <div className="flex items-center gap-x-1 lg:block">
-            <Columns2Icon className="cursor-pointer" />
+            <Columns2Icon className="hidden cursor-pointer lg:block" />
+
+            <XIcon className="cursor-pointer lg:hidden" />
 
             <span className={cn("lg:hidden", { hidden: isSidebarOpen })}>
               Open Sidebar

@@ -32,9 +32,9 @@ export default async function Home() {
       {/* For tablet */}
       <div className="lg:hidden">
         <DashBoardLayout isDesktop={false} isHomePage={true}>
-          <div className="flex flex-col px-2 pb-0 pt-8 lg:px-6 lg:pt-10">
+          <div className="flex flex-col">
             <div className="flex h-full flex-col justify-center">
-              <div className="flex flex-col gap-y-8 pr-2">
+              <div className="flex flex-col gap-y-8 md:mx-auto md:max-w-[43.75rem] md:flex-row md:gap-x-12 md:gap-y-0">
                 <GenerateExampleBox />
                 <GenerateExampleColumnBox />
               </div>
@@ -46,9 +46,9 @@ export default async function Home() {
       {/* For desktop */}
       <div className="hidden lg:block">
         <DashBoardLayout isDesktop={true} isHomePage={true}>
-          <div className="flex flex-col px-2 pb-0 pt-8 lg:px-6 lg:pt-10">
+          <div className="flex flex-col">
             <div className="flex h-[60vh] flex-col justify-center">
-              <div className="mx-auto flex max-w-[700px] gap-x-8">
+              <div className="mx-auto flex max-w-[43.75rem] gap-x-8">
                 <GenerateExampleBox />
                 <GenerateExampleColumnBox />
               </div>

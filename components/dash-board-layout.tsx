@@ -44,7 +44,7 @@ export default function DashBoardLayout({
       >
         <Sidebar
           isSidebarOpen={isSidebarOpen}
-          toggle={() => setIsSidebarOpen(!isSidebarOpen)}
+          toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
           viewportWidth={viewportWidth}
           setViewportWidth={setViewportWidth}
           isHomePage={isHomePage}
@@ -60,11 +60,20 @@ export default function DashBoardLayout({
       >
         <div className="border-b bg-white px-4 py-3 lg:px-6">
           <div className="mx-auto" style={{ maxWidth: `${viewportWidth}px` }}>
-            <Navbar isHomePage={isHomePage} userBoardsData={userBoardsData} />
+            <Navbar
+              isHomePage={isHomePage}
+              toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+              userBoardsData={userBoardsData}
+            />
           </div>
         </div>
 
-        <div className="pb-0 pl-2 pt-8 lg:pl-6 lg:pt-9 2xl:px-6">
+        <div
+          className={cn(
+            "pb-0 pl-2 pt-8 lg:pl-6 lg:pt-9 2xl:px-6",
+            isHomePage && "px-4 py-16 md:py-24 lg:pr-6",
+          )}
+        >
           <div className="mx-auto" style={{ maxWidth: `${viewportWidth}px` }}>
             {children}
           </div>
