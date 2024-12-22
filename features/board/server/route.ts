@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 
-import { ID, Query } from "node-appwrite";
+import { Databases, ID, Query } from "node-appwrite";
 
 import {
   BOARDS_ID,
@@ -22,6 +22,7 @@ import {
   taskSchema,
   updateTaskSchema,
   updateSubtasksSchema,
+  settingColumnSchema,
 } from "../schemas";
 
 import { VALID_STATUS_ID, MAX_COLUMNS, MAX_SUB_TASKS } from "../constants";
@@ -173,6 +174,126 @@ const app = new Hono()
       ]);
 
       return c.json({ task, subtasks: subtasksDocument });
+    },
+  )
+  .post(
+    "/update-setting-column",
+    sessionMiddleware,
+    zValidator("json", settingColumnSchema),
+    async (c) => {
+      const databases = c.get("databases") as Databases;
+      const { boardId, boardName, statusColumn } = c.req.valid("json");
+
+      const statusDocumentList = await databases.listDocuments(
+        DATABASE_ID,
+        STATUS_COLUMN_ID,
+        [Query.equal("boardId", boardId), Query.limit(1)],
+      );
+
+      const statusDocument = statusDocumentList.documents[0];
+
+      const oldColumnsAvailable = [
+        {
+          statusId: statusDocument.column_0_id,
+          statusName: statusDocument.column_0,
+        },
+        {
+          statusId: statusDocument.column_1_id,
+          statusName: statusDocument.column_1,
+        },
+        {
+          statusId: statusDocument.column_2_id,
+          statusName: statusDocument.column_2,
+        },
+        {
+          statusId: statusDocument.column_3_id,
+          statusName: statusDocument.column_3,
+        },
+        {
+          statusId: statusDocument.column_4_id,
+          statusName: statusDocument.column_4,
+        },
+      ].filter((column) => column.statusId && column.statusName);
+
+      const currentColumnsAvailable = statusColumn
+        .filter((col) => col.statusId)
+        .map((col) => col.statusId);
+
+      const removedColumns = oldColumnsAvailable.filter(
+        (oldColumn) => !currentColumnsAvailable.includes(oldColumn.statusId),
+      );
+
+      try {
+        for (const column of removedColumns) {
+          if (!column.statusId) continue;
+
+          const tasks = await databases.listDocuments(DATABASE_ID, TASKS_ID, [
+            Query.equal("boardId", boardId),
+            Query.equal("statusId", column.statusId),
+          ]);
+
+          for (const task of tasks.documents) {
+            await databases.deleteDocument(DATABASE_ID, TASKS_ID, task.$id);
+          }
+        }
+      } catch (error) {
+        console.error("Error removing tasks for deleted columns:", error);
+        return c.json(
+          { error: "Failed to remove tasks for deleted columns" },
+          500,
+        );
+      }
+
+      const usedIds = statusColumn
+        .filter((col) => !!col.statusId)
+        .map((col) => col.statusId);
+
+      const availableIds = VALID_STATUS_ID.filter(
+        (id) => !usedIds.includes(id),
+      );
+
+      statusColumn.forEach((column) => {
+        if (!column.statusId) {
+          column.statusId = availableIds.shift() ?? "";
+        }
+      });
+
+      try {
+        await databases.updateDocument(DATABASE_ID, BOARDS_ID, boardId, {
+          boardName,
+        });
+      } catch (error) {
+        console.error("Error updating board name:", error);
+        return c.json({ error: "Failed to update board name" }, 500);
+      }
+
+      const updatedStatusColumn: Record<string, string | null> = {
+        boardId,
+      };
+
+      statusColumn.forEach((col, i) => {
+        updatedStatusColumn[`column_${i}`] = col.statusName.trim();
+        updatedStatusColumn[`column_${i}_id`] = col.statusId.trim();
+      });
+
+      for (let i = statusColumn.length; i < MAX_COLUMNS; i++) {
+        updatedStatusColumn[`column_${i}`] = null;
+        updatedStatusColumn[`column_${i}_id`] = null;
+      }
+
+      try {
+        await databases.updateDocument(
+          DATABASE_ID,
+          STATUS_COLUMN_ID,
+          statusDocument.$id,
+          updatedStatusColumn,
+        );
+      } catch (error) {
+        console.error("Error updating statusColumn document:", error);
+        return c.json({ error: "Failed to update columns" }, 500);
+      }
+
+      return c.json({ success: true });
     },
   )
   .post("/create-example-board-data", sessionMiddleware, async (c) => {

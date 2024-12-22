@@ -192,7 +192,7 @@ export default function Board({
               return (
                 <div
                   key={statusId}
-                  className="flex-1 cursor-ew-resize rounded-md pb-1.5"
+                  className="cursor-ew-resize rounded-md pb-1.5"
                 >
                   <BoardHeader
                     statusId={statusId}

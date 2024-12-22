@@ -19,7 +19,7 @@ export const settingColumnSchema = z.object({
   statusColumn: z
     .array(
       z.object({
-        statusId: z.string().trim().min(1),
+        statusId: z.string().trim(),
         statusName: z.string().trim().min(1),
       }),
     )

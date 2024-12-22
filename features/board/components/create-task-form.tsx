@@ -283,8 +283,9 @@ export const CreateTaskForm = function ({
 
                             <Button
                               type="button"
+                              variant="secondary"
                               disabled={fields.length === 1 || isCreating}
-                              className="h-[2.5rem] px-3"
+                              className="h-[2.5rem] border border-neutral-300/80 px-3 text-neutral-700"
                               onClick={() => removeSubtask(index)}
                             >
                               <CircleXIcon className="!size-5" />

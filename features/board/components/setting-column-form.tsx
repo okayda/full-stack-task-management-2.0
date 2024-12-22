@@ -7,6 +7,8 @@ import { z } from "zod";
 
 import { useGetBoardId } from "../hooks/use-get-board-id";
 
+import { useUpdateSettingColumn } from "../api/use-update-setting-column";
+
 import { Models } from "node-appwrite";
 
 import { SettingColumnActions } from "./setting-column-actions";
@@ -46,6 +48,9 @@ export const SettingColumnForm = function ({
   const boardId = useGetBoardId();
   const board = userBoardsData.documents.find((board) => board.$id === boardId);
 
+  const { mutate: updateSettingColumn, isPending: isUpdatingSettingColumn } =
+    useUpdateSettingColumn();
+
   if (!board) {
     console.error("board not found at setting column form");
     return null;
@@ -70,7 +75,7 @@ export const SettingColumnForm = function ({
 
   const addColumn = function () {
     if (fields.length < MAX_COLUMNS) {
-      append({ statusName: "", statusId: "status100" });
+      append({ statusName: "", statusId: "" });
     }
   };
 
@@ -79,8 +84,8 @@ export const SettingColumnForm = function ({
   };
 
   const onSubmit: SubmitHandler<SettingColumnFormValues> = (formValues) => {
-    console.log(formValues);
-    closeSettingColumnForm();
+    updateSettingColumn({ json: formValues });
+    // closeSettingColumnForm();
   };
 
   return (
@@ -139,13 +144,17 @@ export const SettingColumnForm = function ({
                           autoComplete="off"
                           placeholder="Column Name"
                           className="h-[2.8125rem] border-neutral-400/60 md:h-[2.625rem]"
+                          disabled={isUpdatingSettingColumn}
                         />
 
                         <Button
                           type="button"
-                          className="h-[2.8125rem] px-3 md:h-[2.625rem]"
+                          variant="secondary"
+                          className="h-[2.8125rem] border border-neutral-300/80 px-3 text-neutral-700 md:h-[2.625rem]"
                           onClick={() => removeColumn(index)}
-                          disabled={fields.length === 2}
+                          disabled={
+                            fields.length === 2 || isUpdatingSettingColumn
+                          }
                         >
                           <CircleXIcon className="!size-5" />
                         </Button>
@@ -159,8 +168,9 @@ export const SettingColumnForm = function ({
                     <Button
                       type="button"
                       variant="outline"
-                      className="h-[2.8125rem] justify-center rounded-full border-neutral-400/60 px-10 hover:bg-[#FAFAFA]/80 md:h-[2.625rem]"
+                      className="h-[2.8125rem] justify-center rounded-full border-neutral-400/60 px-10 md:h-[2.625rem]"
                       onClick={addColumn}
+                      disabled={isUpdatingSettingColumn}
                     >
                       New Column
                     </Button>
@@ -175,13 +185,12 @@ export const SettingColumnForm = function ({
               </div>
             </div>
 
-            {/* --- Submit & Cancel Buttons --- */}
             <div className="border-t bg-[#FAFAFA] px-4 py-4 sm:px-6">
               <div className="flex gap-x-2">
                 <Button
                   type="submit"
                   className="h-[2.625rem] w-full tracking-wide"
-                  disabled={false}
+                  disabled={isUpdatingSettingColumn}
                 >
                   Save
                 </Button>
@@ -190,7 +199,7 @@ export const SettingColumnForm = function ({
                   variant="outline"
                   onClick={closeSettingColumnForm}
                   className="h-[2.625rem] w-full border"
-                  disabled={false}
+                  disabled={isUpdatingSettingColumn}
                 >
                   Cancel
                 </Button>
