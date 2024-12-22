@@ -13,6 +13,25 @@ export const createColumnSchema = z.object({
   statusName: z.string().trim().min(1),
 });
 
+export const settingColumnSchema = z.object({
+  boardId: z.string().trim(),
+  boardName: z.string().trim().min(1),
+  statusColumn: z
+    .array(
+      z.object({
+        statusId: z.string().trim().min(1),
+        statusName: z.string().trim().min(1),
+      }),
+    )
+    .refine(
+      (columns) =>
+        columns.filter((col) => col.statusName.trim() !== "").length >= 2,
+      {
+        message: "At least 2 columns must have non empty names.",
+      },
+    ),
+});
+
 export const taskSchema = z.object({
   boardId: z.string().trim(),
   taskName: z.string().trim().min(1),

@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 
-import { Models } from "node-appwrite";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 import { useGetBoardId } from "../hooks/use-get-board-id";
+
+import { Models } from "node-appwrite";
 
 import { SettingColumnActions } from "./setting-column-actions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,6 +26,8 @@ import { MAX_COLUMNS } from "../constants";
 
 import { StatusColumnItem } from "../types";
 
+import { settingColumnSchema } from "../schemas";
+
 import { CircleXIcon, MoreVertical } from "lucide-react";
 
 interface SettingColumnFormProps {
@@ -32,44 +36,59 @@ interface SettingColumnFormProps {
   closeSettingColumnForm: () => void;
 }
 
+type SettingColumnFormValues = z.infer<typeof settingColumnSchema>;
+
 export const SettingColumnForm = function ({
   userBoardsData,
   statusColumn,
   closeSettingColumnForm,
 }: SettingColumnFormProps) {
-  const form = useForm({});
-  const [columns, setColumns] = useState<string[]>(["", ""]);
-
   const boardId = useGetBoardId();
   const board = userBoardsData.documents.find((board) => board.$id === boardId);
 
+  if (!board) {
+    console.error("board not found at setting column form");
+    return null;
+  }
+
+  const form = useForm<SettingColumnFormValues>({
+    resolver: zodResolver(settingColumnSchema),
+    defaultValues: {
+      boardId: boardId,
+      boardName: board.boardName,
+      statusColumn: statusColumn.map((statusColumnItem: StatusColumnItem) => ({
+        statusId: statusColumnItem.statusId,
+        statusName: statusColumnItem.statusName,
+      })),
+    },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "statusColumn",
+  });
+
   const addColumn = function () {
-    if (columns.length < MAX_COLUMNS) {
-      setColumns([...columns, ""]);
+    if (fields.length < MAX_COLUMNS) {
+      append({ statusName: "", statusId: "status100" });
     }
   };
 
   const removeColumn = function (index: number) {
-    const updatedColumns = columns.filter((_, i) => i !== index);
-    setColumns(updatedColumns);
+    remove(index);
   };
 
-  const updateColumn = function (index: number, value: string) {
-    const updatedColumns = columns.map((column, i) =>
-      i === index ? value : column,
-    );
-    setColumns(updatedColumns);
+  const onSubmit: SubmitHandler<SettingColumnFormValues> = (formValues) => {
+    console.log(formValues);
+    closeSettingColumnForm();
   };
-
-  const onSubmit = function () {};
 
   return (
     <Card className="h-full w-full border-none shadow-none">
       <CardHeader className="flex flex-row items-center justify-between gap-x-3 space-y-0 pb-5 sm:pt-10">
-        <CardTitle className="text-2xl font-medium">Setting Board</CardTitle>
-
+        <CardTitle className="text-2xl font-medium">Board Setting</CardTitle>
         <SettingColumnActions>
-          <MoreVertical className="!size-5" />
+          <MoreVertical className="!size-6" />
         </SettingColumnActions>
       </CardHeader>
 
@@ -80,7 +99,7 @@ export const SettingColumnForm = function ({
               <div className="mb-[1.125rem]">
                 <FormField
                   control={form.control}
-                  name="name"
+                  name="boardName"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="tracking-wide">
@@ -94,7 +113,6 @@ export const SettingColumnForm = function ({
                           className="!mt-1 h-[2.8125rem] border-neutral-400/60 text-[0.9375rem] md:h-[2.625rem]"
                         />
                       </FormControl>
-
                       <FormMessage />
                     </FormItem>
                   )}
@@ -106,35 +124,42 @@ export const SettingColumnForm = function ({
                   Columns available
                 </FormLabel>
 
-                <div className="mb-4 space-y-2">
-                  {columns.map((column, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                      <Input
-                        value={column}
-                        onChange={(e) => updateColumn(index, e.target.value)}
-                        placeholder="Your column name?"
-                        className="h-[2.8125rem] border-neutral-400/60 md:h-[2.625rem]"
-                      />
+                {form.formState.errors.statusColumn && (
+                  <p className="mb-2 text-sm text-rose-600">
+                    {form.formState.errors.statusColumn.message}
+                  </p>
+                )}
 
-                      <Button
-                        type="button"
-                        className="h-[2.8125rem] px-3 md:h-[2.625rem]"
-                        onClick={() => removeColumn(index)}
-                        disabled={columns.length === 2}
-                      >
-                        <CircleXIcon className="!size-5" />
-                      </Button>
-                    </div>
-                  ))}
+                <div className="mb-4 space-y-2">
+                  {fields.map((field, index) => {
+                    return (
+                      <div key={field.id} className="flex items-center gap-2">
+                        <Input
+                          {...form.register(`statusColumn.${index}.statusName`)}
+                          autoComplete="off"
+                          placeholder="Column Name"
+                          className="h-[2.8125rem] border-neutral-400/60 md:h-[2.625rem]"
+                        />
+
+                        <Button
+                          type="button"
+                          className="h-[2.8125rem] px-3 md:h-[2.625rem]"
+                          onClick={() => removeColumn(index)}
+                          disabled={fields.length === 2}
+                        >
+                          <CircleXIcon className="!size-5" />
+                        </Button>
+                      </div>
+                    );
+                  })}
                 </div>
 
-                {columns.length < MAX_COLUMNS && (
+                {fields.length < MAX_COLUMNS && (
                   <div className="flex justify-center">
                     <Button
                       type="button"
                       variant="outline"
-                      disabled={false}
-                      className="h-[2.8125rem] justify-center rounded-full border-neutral-400/60 px-10 md:h-[2.625rem]"
+                      className="h-[2.8125rem] justify-center rounded-full border-neutral-400/60 px-10 hover:bg-[#FAFAFA]/80 md:h-[2.625rem]"
                       onClick={addColumn}
                     >
                       New Column
@@ -142,14 +167,15 @@ export const SettingColumnForm = function ({
                   </div>
                 )}
 
-                {columns.length === 5 && (
+                {fields.length === MAX_COLUMNS && (
                   <p className="text-center text-sm text-gray-500">
-                    Only 5 columns allowed
+                    Only {MAX_COLUMNS} columns allowed
                   </p>
                 )}
               </div>
             </div>
 
+            {/* --- Submit & Cancel Buttons --- */}
             <div className="border-t bg-[#FAFAFA] px-4 py-4 sm:px-6">
               <div className="flex gap-x-2">
                 <Button
@@ -159,13 +185,12 @@ export const SettingColumnForm = function ({
                 >
                   Save
                 </Button>
-
                 <Button
                   type="button"
                   variant="outline"
-                  disabled={false}
                   onClick={closeSettingColumnForm}
                   className="h-[2.625rem] w-full border"
+                  disabled={false}
                 >
                   Cancel
                 </Button>
