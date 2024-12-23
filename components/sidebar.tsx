@@ -26,7 +26,7 @@ interface SidebarProps {
   viewportWidth: number;
   setViewportWidth: (width: number) => void;
   isHomePage?: boolean;
-  userBoardsData?: Models.DocumentList<Models.Document>;
+  userBoardsData?: Models.Document[];
 }
 
 const VIEW_PORT_STEPS = [1080, 1280, 1580, 1680];
@@ -128,8 +128,8 @@ export default function Sidebar({
 
           <div className="px-4">
             <ul>
-              {userBoardsData && userBoardsData.total > 0 ? (
-                userBoardsData.documents.map((board) => {
+              {userBoardsData && userBoardsData.length > 0 ? (
+                userBoardsData.map((board) => {
                   const isActive = pathname === `/boards/${board.$id}`;
 
                   return (

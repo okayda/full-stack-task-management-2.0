@@ -11,7 +11,7 @@ import { SettingColumnForm } from "./setting-column-form";
 import { StatusColumnItem } from "../types";
 
 interface SettingColumnModalProps {
-  userBoardsData: Models.DocumentList<Models.Document>;
+  userBoardsData: Models.Document[];
   statusColumn: StatusColumnItem[];
 }
 

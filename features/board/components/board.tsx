@@ -279,10 +279,10 @@ export default function Board({
             })}
 
             {statusColumn.columns.length !== MAX_COLUMNS && (
-              <div className="on cursor-move rounded-md pb-1.5 pr-[0.375rem] lg:pr-[0.875rem] 2xl:pr-0">
+              <div className="cursor-move rounded-md pb-1.5 pr-[0.375rem] lg:pr-[0.875rem] 2xl:pr-0">
                 <div
                   onClick={openColumnFormModal}
-                  className="flex h-full w-[18.75rem] cursor-pointer flex-col justify-center rounded-lg border border-dashed border-neutral-300 bg-[#FAFAFA] text-muted-foreground transition 2xl:w-[19.375rem]"
+                  className="flex h-full w-[18.75rem] cursor-pointer flex-col justify-center rounded-lg border border-dashed border-neutral-300 bg-[#FAFAFA] text-muted-foreground transition 2xl:w-[19.5rem]"
                 >
                   <h3 className="text-center text-2xl font-medium">
                     New Column

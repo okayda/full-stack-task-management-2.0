@@ -304,6 +304,16 @@ const app = new Hono()
 
     return c.json({ data });
   })
+  .get("/get-boards", sessionMiddleware, async (c) => {
+    const databases = c.get("databases");
+    const user = c.get("user");
+
+    const boards = await databases.listDocuments(DATABASE_ID, BOARDS_ID, [
+      Query.equal("userId", user.$id),
+    ]);
+
+    return c.json({ boards: boards.documents });
+  })
   .get("/get-tasks", sessionMiddleware, async (c) => {
     const databases = c.get("databases");
     const boardId = c.req.query("boardId");

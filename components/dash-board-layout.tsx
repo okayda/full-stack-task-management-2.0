@@ -13,7 +13,7 @@ interface SidebarLayoutProps {
   children: React.ReactNode;
   isDesktop: boolean;
   isHomePage?: boolean;
-  userBoardsData?: Models.DocumentList<Models.Document>;
+  userBoardsData?: Models.Document[];
 }
 
 const VIEWPORT_WIDTH = 1680;

@@ -2,14 +2,14 @@
 
 import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 
+import { Models } from "node-appwrite";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
 import { useGetBoardId } from "../hooks/use-get-board-id";
 
 import { useUpdateSettingColumn } from "../api/use-update-setting-column";
-
-import { Models } from "node-appwrite";
 
 import { SettingColumnActions } from "./setting-column-actions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,7 +33,7 @@ import { settingColumnSchema } from "../schemas";
 import { CircleXIcon, MoreVertical } from "lucide-react";
 
 interface SettingColumnFormProps {
-  userBoardsData: Models.DocumentList<Models.Document>;
+  userBoardsData: Models.Document[];
   statusColumn: StatusColumnItem[];
   closeSettingColumnForm: () => void;
 }
@@ -46,7 +46,9 @@ export const SettingColumnForm = function ({
   closeSettingColumnForm,
 }: SettingColumnFormProps) {
   const boardId = useGetBoardId();
-  const board = userBoardsData.documents.find((board) => board.$id === boardId);
+  const board = userBoardsData.find(
+    (board: Models.Document) => board.$id === boardId,
+  );
 
   const { mutate: updateSettingColumn, isPending: isUpdatingSettingColumn } =
     useUpdateSettingColumn();

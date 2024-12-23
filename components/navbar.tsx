@@ -10,7 +10,7 @@ import { Settings2Icon, PanelRightCloseIcon } from "lucide-react";
 interface NavbarProps {
   isHomePage?: boolean;
   toggleSidebar: () => void;
-  userBoardsData?: Models.DocumentList<Models.Document>;
+  userBoardsData?: Models.Document[];
 }
 
 export default function Navbar({
@@ -21,9 +21,7 @@ export default function Navbar({
   const boardId = useGetBoardId();
   const { open: openSettingModal } = useSettingColumnModal();
 
-  const board = userBoardsData?.documents.find(
-    (board) => board.$id === boardId,
-  );
+  const board = userBoardsData?.find((board) => board.$id === boardId);
 
   return (
     <nav className="flex items-center justify-between">

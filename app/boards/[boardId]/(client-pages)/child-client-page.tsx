@@ -6,11 +6,11 @@ import { useGetTasks } from "@/features/board/api/use-get-tasks";
 import { useGetBoardId } from "@/features/board/hooks/use-get-board-id";
 import Board from "@/features/board/components/board";
 
-interface BoardClientProps {
+interface ChildClientProps {
   isDesktop: boolean;
 }
 
-export default function BoardClientPage({ isDesktop }: BoardClientProps) {
+export default function ChildClientPage({ isDesktop }: ChildClientProps) {
   const boardId = useGetBoardId();
   const { data, isPending } = useGetTasks({ boardId });
 
@@ -24,12 +24,10 @@ export default function BoardClientPage({ isDesktop }: BoardClientProps) {
   }
 
   return (
-    <div>
-      <Board
-        dataTasks={data.tasks}
-        statusColumn={data.statusColumn}
-        isDesktop={isDesktop}
-      />
-    </div>
+    <Board
+      dataTasks={data.tasks}
+      statusColumn={data.statusColumn}
+      isDesktop={isDesktop}
+    />
   );
 }
