@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 
 import { Models } from "node-appwrite";
 
-import { useCreateBoardModal } from "@/features/board/hooks/use-create-board-modal";
+import { CreateBoardModal } from "@/features/board/components/create-board-modal";
 
 import SparklesText from "./ui/sparkles-text";
 import CustomSlider from "./ui/custom-slider";
@@ -23,10 +23,12 @@ import { LogOut, XIcon, Columns2Icon, LoaderIcon } from "lucide-react";
 interface SidebarProps {
   isSidebarOpen: boolean;
   toggleSidebar: () => void;
+
   viewportWidth: number;
   setViewportWidth: (width: number) => void;
-  isHomePage?: boolean;
-  userBoardsData?: Models.Document[];
+
+  isHomePage: boolean;
+  userBoardsData: Models.Document[];
 }
 
 const VIEW_PORT_STEPS = [1080, 1280, 1580, 1680];
@@ -47,8 +49,11 @@ export default function Sidebar({
   userBoardsData,
 }: SidebarProps) {
   const pathname = usePathname();
+  const hasUserBoardsData = userBoardsData && userBoardsData.length > 0;
 
-  const { open: openBoardFormModal } = useCreateBoardModal();
+  const [isCreateBoardModalOpen, setIsCreateBoardModalOpen] = useState(false);
+  const openCreateBoardModal = () => setIsCreateBoardModalOpen(true);
+  const closeCreateBoardModal = () => setIsCreateBoardModalOpen(false);
 
   const [index, setIndex] = useState(getTargetIndex(viewportWidth));
   const [label, setLabel] = useState(VIEW_PORT_LABELS[index]);
@@ -75,6 +80,11 @@ export default function Sidebar({
 
   return (
     <React.Fragment>
+      <CreateBoardModal
+        isCreateBoardModalOpen={isCreateBoardModalOpen}
+        closeCreateBoardModal={closeCreateBoardModal}
+      />
+
       <div
         className={cn(
           "fixed inset-0 size-full bg-[#FAFAFA]/90 transition-opacity duration-300 lg:hidden",
@@ -121,19 +131,20 @@ export default function Sidebar({
               src="/panda.webp"
               width={60}
               height={60}
+              unoptimized
               alt="Panda GIF"
               className="absolute -right-4 top-1/2 -translate-x-1/2 -translate-y-1/2 transform"
             />
           </div>
 
           <div className="px-4">
-            <ul>
-              {userBoardsData && userBoardsData.length > 0 ? (
+            <ul className="flex flex-col gap-y-5">
+              {hasUserBoardsData ? (
                 userBoardsData.map((board) => {
                   const isActive = pathname === `/boards/${board.$id}`;
 
                   return (
-                    <li key={board.$id} className="mb-3">
+                    <li key={board.$id}>
                       <Link
                         href={`/boards/${board.$id}`}
                         className={cn(
@@ -153,10 +164,10 @@ export default function Sidebar({
                 </li>
               )}
 
-              <li className="mt-5 border-t-2 border-dashed border-neutral-400/60 pt-4">
+              <li className="border-t-2 border-dashed border-neutral-400/60 pt-4">
                 <Button
                   className="h-[2.625rem] w-full lg:h-auto"
-                  onClick={openBoardFormModal}
+                  onClick={openCreateBoardModal}
                 >
                   Create Board
                 </Button>

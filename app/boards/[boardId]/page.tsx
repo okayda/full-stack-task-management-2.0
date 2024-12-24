@@ -1,13 +1,12 @@
-import { redirect } from "next/navigation";
-import { getCurrentUser } from "@/features/auth/queries";
-import ParentClientPage from "./(client-pages)/parent-client-page";
+import { Suspense } from "react";
 
-export default async function BoardIdPage() {
-  const currentUser = await getCurrentUser();
-  if (!currentUser) {
-    redirect("/sign-in");
-    return null;
-  }
+import AsyncPage from "./async-page";
+import AsyncLoader from "./async-loader";
 
-  return <ParentClientPage />;
+export default function BoardIdPage() {
+  return (
+    <Suspense fallback={<AsyncLoader />}>
+      <AsyncPage />
+    </Suspense>
+  );
 }

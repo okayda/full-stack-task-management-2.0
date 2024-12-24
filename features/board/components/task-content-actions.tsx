@@ -8,44 +8,40 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 
-import { StatusColumnItem, Task } from "../types";
+import { StatusColumn, Task } from "../types";
 
 import { FilePenLineIcon, CalendarOffIcon } from "lucide-react";
 import { EditTaskModal } from "./edit-task-modal";
 
 interface TaskContentActionsProps {
   task: Task;
-  statusColumn: {
-    columns: StatusColumnItem[];
-    boardId: string;
-  };
-
+  statusColumn: StatusColumn;
   children: React.ReactNode;
 
-  closeTaskModal: () => void;
-  deleteTaskHander: () => void;
+  closeTaskContentModal: () => void;
+  deleteTaskHandler: () => void;
 }
 
 export const TaskContentActions = function ({
   task,
   statusColumn,
   children,
-  closeTaskModal,
-  deleteTaskHander,
+  closeTaskContentModal,
+  deleteTaskHandler,
 }: TaskContentActionsProps) {
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isEditTaskModalOpen, setIsEditTaskModalOpen] = useState(false);
 
-  const openEditModal = () => setIsEditModalOpen(true);
-  const closeEditModal = () => setIsEditModalOpen(false);
+  const openEditTaskModal = () => setIsEditTaskModalOpen(true);
+  const closeEditTaskModal = () => setIsEditTaskModalOpen(false);
 
   return (
     <React.Fragment>
       <EditTaskModal
         task={task}
         statusColumn={statusColumn}
-        isEditModalOpen={isEditModalOpen}
-        closeEditModal={closeEditModal}
-        closeTaskModal={closeTaskModal}
+        closeTaskContentModal={closeTaskContentModal}
+        isEditTaskModalOpen={isEditTaskModalOpen}
+        closeEditTaskModal={closeEditTaskModal}
       />
 
       <div className="flex cursor-pointer justify-end">
@@ -56,7 +52,7 @@ export const TaskContentActions = function ({
             <DropdownMenuItem
               className="cursor-pointer p-[0.625rem] font-medium"
               onClick={() => {
-                openEditModal();
+                openEditTaskModal();
               }}
             >
               <FilePenLineIcon />
@@ -72,7 +68,7 @@ export const TaskContentActions = function ({
 
             <DropdownMenuItem
               className="cursor-pointer p-[0.625rem] font-medium text-rose-700 focus:text-rose-700"
-              onClick={deleteTaskHander}
+              onClick={deleteTaskHandler}
             >
               <CalendarOffIcon />
 

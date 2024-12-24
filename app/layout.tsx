@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
-import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { QueryProvider } from "@/components/query-provider";
 
 import { Toaster } from "@/components/ui/sonner";
@@ -40,7 +39,7 @@ export default function RootLayout({
           <QueryProvider>
             <Toaster richColors />
 
-            <NuqsAdapter>{children}</NuqsAdapter>
+            {children}
           </QueryProvider>
         </main>
       </body>

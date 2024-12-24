@@ -20,23 +20,21 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { Task, StatusColumnItem, SubTask } from "../types";
+import { StatusColumn, Task, SubTask } from "../types";
 
 import { MoreVertical } from "lucide-react";
 
 interface TaskContentProps {
   task: Task;
-  statusColumn: {
-    columns: StatusColumnItem[];
-    boardId: string;
-  };
-  closeTaskModal: () => void;
+  statusColumn: StatusColumn;
+
+  closeTaskContentModal: () => void;
 }
 
 export default function TaskContent({
   task,
   statusColumn,
-  closeTaskModal,
+  closeTaskContentModal,
 }: TaskContentProps) {
   const [subTasks, setSubTasks] = useState(task.subtasks);
   const [status, setStatus] = useState(task.statusId);
@@ -74,10 +72,10 @@ export default function TaskContent({
       },
     });
 
-    closeTaskModal();
+    closeTaskContentModal();
   };
 
-  const deleteTaskHander = function () {
+  const deleteTaskHandler = function () {
     deleteTask({
       json: {
         boardId,
@@ -85,7 +83,7 @@ export default function TaskContent({
       },
     });
 
-    closeTaskModal();
+    closeTaskContentModal();
   };
 
   // Validating if there is any changes to the previous task data otherwise it will determine if the button is clickable
@@ -105,8 +103,8 @@ export default function TaskContent({
         <TaskContentActions
           task={task}
           statusColumn={statusColumn}
-          closeTaskModal={closeTaskModal}
-          deleteTaskHander={deleteTaskHander}
+          closeTaskContentModal={closeTaskContentModal}
+          deleteTaskHandler={deleteTaskHandler}
         >
           <MoreVertical className="!size-6" />
         </TaskContentActions>
@@ -206,7 +204,7 @@ export default function TaskContent({
             </Button>
 
             <Button
-              onClick={closeTaskModal}
+              onClick={closeTaskContentModal}
               disabled={isUpdatingTaskContent || isDeletingTask}
               variant="outline"
               className="h-[2.625rem] w-full border-neutral-300/80 tracking-wide"

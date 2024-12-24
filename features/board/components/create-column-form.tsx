@@ -23,13 +23,13 @@ import { Button } from "@/components/ui/button";
 import { createColumnSchema } from "../schemas";
 
 interface CreateColumnFormProps {
-  closeCreateColumnForm: () => void;
+  closeCreateColumnModal: () => void;
 }
 
 type CreateColumnFormValue = z.infer<typeof createColumnSchema>;
 
 export const CreateColumnForm = function ({
-  closeCreateColumnForm,
+  closeCreateColumnModal,
 }: CreateColumnFormProps) {
   const { mutate: createColumn, isPending: isCreatingColumn } =
     useCreateColumn();
@@ -52,7 +52,7 @@ export const CreateColumnForm = function ({
           form.reset({
             statusName: "",
           });
-          closeCreateColumnForm();
+          closeCreateColumnModal();
         },
       },
     );
@@ -103,7 +103,7 @@ export const CreateColumnForm = function ({
                   type="button"
                   variant="outline"
                   disabled={isCreatingColumn}
-                  onClick={closeCreateColumnForm}
+                  onClick={closeCreateColumnModal}
                   className="h-[2.625rem] w-full border tracking-wide"
                 >
                   Cancel

@@ -37,7 +37,7 @@ import {
 
 import { customizeUpperCase } from "@/lib/utils";
 
-import { TaskPriority, StatusColumnItem } from "../types";
+import { TaskPriority, StatusColumn } from "../types";
 import { taskSchema } from "../schemas";
 
 import { MAX_SUB_TASKS } from "../constants";
@@ -45,15 +45,15 @@ import { MAX_SUB_TASKS } from "../constants";
 import { CircleXIcon } from "lucide-react";
 
 interface CreateTaskFormProps {
-  closeCreateTaskForm: () => void;
-  statusColumn: StatusColumnItem[];
+  statusColumn: StatusColumn;
+  closeCreateTaskModal: () => void;
 }
 
 type CreateTaskFormValues = z.infer<typeof taskSchema>;
 
 export const CreateTaskForm = function ({
-  closeCreateTaskForm,
   statusColumn,
+  closeCreateTaskModal,
 }: CreateTaskFormProps) {
   const boardId = useGetBoardId();
 
@@ -92,7 +92,7 @@ export const CreateTaskForm = function ({
       {
         onSuccess: function () {
           form.reset();
-          closeCreateTaskForm();
+          closeCreateTaskModal();
         },
       },
     );
@@ -151,7 +151,7 @@ export const CreateTaskForm = function ({
                           </FormControl>
 
                           <SelectContent>
-                            {statusColumn.map((statusColumn) => {
+                            {statusColumn.columns.map((statusColumn) => {
                               const columnName = customizeUpperCase(
                                 statusColumn.statusName,
                               );
@@ -325,7 +325,7 @@ export const CreateTaskForm = function ({
                   type="button"
                   disabled={isCreating}
                   variant="outline"
-                  onClick={closeCreateTaskForm}
+                  onClick={closeCreateTaskModal}
                   className="h-[2.625rem] w-full border tracking-wide"
                 >
                   Cancel

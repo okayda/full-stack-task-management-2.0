@@ -1,23 +1,30 @@
 "use client";
 
-import { useCreateTaskModal } from "../hooks/use-create-task-modal";
-
 import { ResponsiveModal } from "@/components/responsive-modal";
-
 import { CreateTaskForm } from "./create-task-form";
-
-import { StatusColumnItem } from "../types";
+import { StatusColumn } from "../types";
 
 interface CreateTaskModalProps {
-  statusColumn: StatusColumnItem[];
+  statusColumn: StatusColumn;
+
+  isCreateTaskModalOpen: boolean;
+  closeCreateTaskModal: () => void;
 }
 
-export function CreateTaskModal({ statusColumn }: CreateTaskModalProps) {
-  const { isOpen, setIsOpen, close } = useCreateTaskModal();
-
+export function CreateTaskModal({
+  statusColumn,
+  isCreateTaskModalOpen,
+  closeCreateTaskModal,
+}: CreateTaskModalProps) {
   return (
-    <ResponsiveModal open={isOpen} onOpenChange={setIsOpen}>
-      <CreateTaskForm statusColumn={statusColumn} closeCreateTaskForm={close} />
+    <ResponsiveModal
+      open={isCreateTaskModalOpen}
+      onOpenChange={closeCreateTaskModal}
+    >
+      <CreateTaskForm
+        statusColumn={statusColumn}
+        closeCreateTaskModal={closeCreateTaskModal}
+      />
     </ResponsiveModal>
   );
 }

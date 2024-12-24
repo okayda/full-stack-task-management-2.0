@@ -13,6 +13,11 @@ export type StatusColumnItem = {
   statusId: string;
 };
 
+export type StatusColumn = {
+  boardId: string;
+  columns: StatusColumnItem[];
+};
+
 export type Task = Models.Document & {
   boardId: string; // appwrite referential id
   statusId: string;

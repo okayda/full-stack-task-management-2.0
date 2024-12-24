@@ -26,7 +26,7 @@ import { Button } from "@/components/ui/button";
 
 import { MAX_COLUMNS } from "../constants";
 
-import { StatusColumnItem } from "../types";
+import { StatusColumn, StatusColumnItem } from "../types";
 
 import { settingColumnSchema } from "../schemas";
 
@@ -34,8 +34,9 @@ import { CircleXIcon, MoreVertical } from "lucide-react";
 
 interface SettingColumnFormProps {
   userBoardsData: Models.Document[];
-  statusColumn: StatusColumnItem[];
-  closeSettingColumnForm: () => void;
+  statusColumn?: StatusColumn;
+
+  closeSettingColumnModal: () => void;
 }
 
 type SettingColumnFormValues = z.infer<typeof settingColumnSchema>;
@@ -43,7 +44,7 @@ type SettingColumnFormValues = z.infer<typeof settingColumnSchema>;
 export const SettingColumnForm = function ({
   userBoardsData,
   statusColumn,
-  closeSettingColumnForm,
+  closeSettingColumnModal,
 }: SettingColumnFormProps) {
   const boardId = useGetBoardId();
   const board = userBoardsData.find(
@@ -53,20 +54,17 @@ export const SettingColumnForm = function ({
   const { mutate: updateSettingColumn, isPending: isUpdatingSettingColumn } =
     useUpdateSettingColumn();
 
-  if (!board) {
-    console.error("board not found at setting column form");
-    return null;
-  }
-
   const form = useForm<SettingColumnFormValues>({
     resolver: zodResolver(settingColumnSchema),
     defaultValues: {
       boardId: boardId,
-      boardName: board.boardName,
-      statusColumn: statusColumn.map((statusColumnItem: StatusColumnItem) => ({
-        statusId: statusColumnItem.statusId,
-        statusName: statusColumnItem.statusName,
-      })),
+      boardName: board?.boardName,
+      statusColumn: statusColumn?.columns.map(
+        (statusColumnItem: StatusColumnItem) => ({
+          statusId: statusColumnItem.statusId,
+          statusName: statusColumnItem.statusName,
+        }),
+      ),
     },
   });
 
@@ -87,7 +85,7 @@ export const SettingColumnForm = function ({
 
   const onSubmit: SubmitHandler<SettingColumnFormValues> = (formValues) => {
     updateSettingColumn({ json: formValues });
-    // closeSettingColumnForm();
+    closeSettingColumnModal();
   };
 
   return (
@@ -199,7 +197,7 @@ export const SettingColumnForm = function ({
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={closeSettingColumnForm}
+                  onClick={closeSettingColumnModal}
                   className="h-[2.625rem] w-full border"
                   disabled={isUpdatingSettingColumn}
                 >

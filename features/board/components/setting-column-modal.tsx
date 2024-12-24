@@ -2,31 +2,35 @@
 
 import { Models } from "node-appwrite";
 
-import { useSettingColumnModal } from "../hooks/use-setting-column-modal";
-
 import { ResponsiveModal } from "@/components/responsive-modal";
 
 import { SettingColumnForm } from "./setting-column-form";
 
-import { StatusColumnItem } from "../types";
+import { StatusColumn } from "../types";
 
 interface SettingColumnModalProps {
   userBoardsData: Models.Document[];
-  statusColumn: StatusColumnItem[];
+  statusColumn?: StatusColumn;
+
+  isSettingColumnModalOpen: boolean;
+  closeSettingColumnModal: () => void;
 }
 
 export function SettingColumnModal({
-  userBoardsData,
   statusColumn,
+  userBoardsData,
+  isSettingColumnModalOpen,
+  closeSettingColumnModal,
 }: SettingColumnModalProps) {
-  const { isOpen, setIsOpen, close } = useSettingColumnModal();
-
   return (
-    <ResponsiveModal open={isOpen} onOpenChange={setIsOpen}>
+    <ResponsiveModal
+      open={isSettingColumnModalOpen}
+      onOpenChange={closeSettingColumnModal}
+    >
       <SettingColumnForm
-        closeSettingColumnForm={close}
         userBoardsData={userBoardsData}
         statusColumn={statusColumn}
+        closeSettingColumnModal={closeSettingColumnModal}
       />
     </ResponsiveModal>
   );

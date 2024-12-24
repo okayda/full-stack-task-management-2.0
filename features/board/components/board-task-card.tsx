@@ -11,14 +11,11 @@ import {
 
 import { LiaGripHorizontalSolid } from "react-icons/lia";
 
-import { Task, StatusColumnItem, SubTask } from "../types";
+import { StatusColumn, Task, SubTask } from "../types";
 
 interface BoardTaskCardProps {
   task: Task;
-  statusColumn: {
-    columns: StatusColumnItem[];
-    boardId: string;
-  };
+  statusColumn: StatusColumn;
 }
 
 const priorityIcons: Record<string, { icon: JSX.Element; tooltip: string }> = {
@@ -95,15 +92,14 @@ export default function BoardTaskCard({
   task,
   statusColumn,
 }: BoardTaskCardProps) {
-  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
+  const [isTaskContentModalOpen, setIsTaskContentModalOpen] = useState(false);
+  const openTaskContentModal = () => setIsTaskContentModalOpen(true);
+  const closeTaskContentModal = () => setIsTaskContentModalOpen(false);
 
   const defaultClass =
     "relative cursor-pointer rounded-lg border border-l-4 border-y-transparent border-r-transparent bg-white px-4 2xl:pr-6 py-6 shadow-task transition";
 
   const borderColor = priorityBorderColors[task.priority];
-
-  const openTaskModal = () => setIsTaskModalOpen(true);
-  const closeTaskModal = () => setIsTaskModalOpen(false);
 
   const completedSubtasks = task.subtasks.filter(
     (subtask: SubTask) => subtask.isCompleted,
@@ -119,11 +115,14 @@ export default function BoardTaskCard({
       <TaskContentModal
         task={task}
         statusColumn={statusColumn}
-        isTaskModalOpen={isTaskModalOpen}
-        closeTaskModal={closeTaskModal}
+        isTaskContentModalOpen={isTaskContentModalOpen}
+        closeTaskContentModal={closeTaskContentModal}
       />
 
-      <div className={`${defaultClass} ${borderColor}`} onClick={openTaskModal}>
+      <div
+        className={`${defaultClass} ${borderColor}`}
+        onClick={openTaskContentModal}
+      >
         <div className="absolute right-2 top-2">
           {getPriorityType(task.priority)}
         </div>

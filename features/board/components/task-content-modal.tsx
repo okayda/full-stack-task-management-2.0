@@ -4,31 +4,31 @@ import { ResponsiveModal } from "@/components/responsive-modal";
 
 import TaskContent from "./task-content";
 
-import { Task, StatusColumnItem } from "../types";
+import { StatusColumn, Task } from "../types";
 
 interface TaskContentModalProps {
   task: Task;
-  statusColumn: {
-    columns: StatusColumnItem[];
-    boardId: string;
-  };
+  statusColumn: StatusColumn;
 
-  isTaskModalOpen: boolean;
-  closeTaskModal: () => void;
+  isTaskContentModalOpen: boolean;
+  closeTaskContentModal: () => void;
 }
 
 export function TaskContentModal({
   task,
   statusColumn,
-  isTaskModalOpen,
-  closeTaskModal,
+  isTaskContentModalOpen,
+  closeTaskContentModal,
 }: TaskContentModalProps) {
   return (
-    <ResponsiveModal open={isTaskModalOpen} onOpenChange={closeTaskModal}>
+    <ResponsiveModal
+      open={isTaskContentModalOpen}
+      onOpenChange={closeTaskContentModal}
+    >
       <TaskContent
         task={task}
         statusColumn={statusColumn}
-        closeTaskModal={closeTaskModal}
+        closeTaskContentModal={closeTaskContentModal}
       />
     </ResponsiveModal>
   );

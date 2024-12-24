@@ -5,15 +5,16 @@ import { useState, useEffect } from "react";
 import { Models } from "node-appwrite";
 
 import Sidebar from "@/components/sidebar";
-import Navbar from "@/components/navbar";
+import NavbarHome from "@/components/navbar-home";
+import NavbarBoard from "./navbar-board";
 
 import { cn } from "@/lib/utils";
 
 interface SidebarLayoutProps {
   children: React.ReactNode;
   isDesktop: boolean;
-  isHomePage?: boolean;
-  userBoardsData?: Models.Document[];
+  isHomePage: boolean;
+  userBoardsData: Models.Document[];
 }
 
 const VIEWPORT_WIDTH = 1680;
@@ -60,11 +61,16 @@ export default function DashBoardLayout({
       >
         <div className="border-b bg-white px-4 py-3 lg:px-6">
           <div className="mx-auto" style={{ maxWidth: `${viewportWidth}px` }}>
-            <Navbar
-              isHomePage={isHomePage}
-              toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-              userBoardsData={userBoardsData}
-            />
+            {isHomePage ? (
+              <NavbarHome
+                toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+              />
+            ) : (
+              <NavbarBoard
+                toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+                userBoardsData={userBoardsData}
+              />
+            )}
           </div>
         </div>
 

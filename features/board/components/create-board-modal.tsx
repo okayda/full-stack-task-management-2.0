@@ -1,15 +1,23 @@
 "use client";
 
-import { useCreateBoardModal } from "../hooks/use-create-board-modal";
 import { ResponsiveModal } from "@/components/responsive-modal";
 import { CreateBoardForm } from "./create-board-form";
 
-export const CreateBoardModal = function () {
-  const { isOpen, setIsOpen, close } = useCreateBoardModal();
+interface CreateBoardModalProps {
+  isCreateBoardModalOpen: boolean;
+  closeCreateBoardModal: () => void;
+}
 
+export const CreateBoardModal = function ({
+  isCreateBoardModalOpen,
+  closeCreateBoardModal,
+}: CreateBoardModalProps) {
   return (
-    <ResponsiveModal open={isOpen} onOpenChange={setIsOpen}>
-      <CreateBoardForm closeBoardForm={close} />
+    <ResponsiveModal
+      open={isCreateBoardModalOpen}
+      onOpenChange={closeCreateBoardModal}
+    >
+      <CreateBoardForm closeCreateBoardModal={closeCreateBoardModal} />
     </ResponsiveModal>
   );
 };

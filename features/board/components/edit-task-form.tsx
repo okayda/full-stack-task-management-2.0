@@ -41,18 +41,16 @@ import { MAX_SUB_TASKS } from "../constants";
 
 import { taskSchema } from "../schemas";
 
-import { Task, StatusColumnItem, SubTask, TaskPriority } from "../types";
+import { StatusColumn, Task, SubTask, TaskPriority } from "../types";
 
 import { CircleXIcon } from "lucide-react";
 
 interface EditTaskFormProps {
   task: Task;
-  statusColumn: {
-    columns: StatusColumnItem[];
-    boardId: string;
-  };
-  closeEditModal: () => void;
-  closeTaskModal: () => void | undefined;
+  statusColumn: StatusColumn;
+
+  closeEditTaskModal: () => void;
+  closeTaskContentModal: () => void;
 }
 
 type EditTaskFormValues = z.infer<typeof taskSchema>;
@@ -60,8 +58,8 @@ type EditTaskFormValues = z.infer<typeof taskSchema>;
 export const EditTaskForm = function ({
   task,
   statusColumn,
-  closeEditModal,
-  closeTaskModal,
+  closeEditTaskModal,
+  closeTaskContentModal,
 }: EditTaskFormProps) {
   const boardId = useGetBoardId();
   const { mutate: updateTask, isPending: isUpdatingTask } = useUpdateTask();
@@ -118,8 +116,8 @@ export const EditTaskForm = function ({
     };
 
     updateTask({ json: editedTask });
-    closeEditModal();
-    closeTaskModal();
+    closeEditTaskModal();
+    closeTaskContentModal();
   };
 
   return (
@@ -343,7 +341,7 @@ export const EditTaskForm = function ({
                   type="button"
                   disabled={isUpdatingTask}
                   variant="outline"
-                  onClick={closeEditModal}
+                  onClick={closeEditTaskModal}
                   className="h-[2.625rem] w-full border tracking-wide"
                 >
                   Cancel

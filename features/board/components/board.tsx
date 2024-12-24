@@ -4,8 +4,6 @@ import React, { useState, useEffect, useCallback } from "react";
 
 import ScrollContainer from "react-indiana-drag-scroll";
 
-import { useCreateColumnModal } from "../hooks/use-create-column-modal";
-
 import BoardHeader from "./board-header";
 import BoardTaskCard from "./board-task-card";
 import {
@@ -17,16 +15,12 @@ import {
 
 import { MAX_COLUMNS } from "../constants";
 
-import { Task, StatusColumnItem } from "../types";
-
-interface StatusColumnData {
-  columns: StatusColumnItem[];
-  boardId: string;
-}
+import { StatusColumn, Task } from "../types";
+import { CreateColumnModal } from "./create-column-modal";
 
 interface DataBoardProps {
+  statusColumn: StatusColumn;
   dataTasks: Task[];
-  statusColumn: StatusColumnData;
   isDesktop: boolean;
 }
 
@@ -42,8 +36,8 @@ type Payloads = {
 };
 
 const buildTasksState = function (
+  statusColumn: StatusColumn,
   data: Task[],
-  statusColumn: StatusColumnData,
 ): TasksState {
   const tasksState: TasksState = {};
 
@@ -65,17 +59,20 @@ const buildTasksState = function (
 };
 
 export default function Board({
-  dataTasks,
   statusColumn,
+  dataTasks,
   isDesktop,
 }: DataBoardProps) {
-  const { open: openColumnFormModal } = useCreateColumnModal();
   const [tasks, setTasks] = useState<TasksState>(() =>
-    buildTasksState(dataTasks, statusColumn),
+    buildTasksState(statusColumn, dataTasks),
   );
 
+  const [isCreateColumnModalOpen, setIsCreateColumnModalOpen] = useState(false);
+  const openCreateColumnModal = () => setIsCreateColumnModalOpen(true);
+  const closeCreateColumnModal = () => setIsCreateColumnModalOpen(false);
+
   useEffect(() => {
-    setTasks(buildTasksState(dataTasks, statusColumn));
+    setTasks(buildTasksState(statusColumn, dataTasks));
   }, [dataTasks, statusColumn]);
 
   const onDragEnd = useCallback(
@@ -180,119 +177,130 @@ export default function Board({
   );
 
   return (
-    <ScrollContainer
-      vertical={false}
-      hideScrollbars={false}
-      ignoreElements={".board-task"}
-    >
-      <DragDropContext onDragEnd={onDragEnd}>
-        <div className="h-[calc(100vh-6.625rem)] lg:h-[calc(100vh-7rem)]">
-          <div className="flex h-full cursor-ew-resize gap-x-6 pb-2 2xl:gap-x-8">
-            {statusColumn.columns.map(({ statusId, statusName }) => {
-              return (
-                <div
-                  key={statusId}
-                  className="cursor-ew-resize rounded-md pb-1.5"
-                >
-                  <BoardHeader
-                    statusId={statusId}
-                    statusName={statusName}
-                    taskCount={tasks[statusId].length || 0}
-                  />
-                  <Droppable
-                    droppableId={statusId}
-                    renderClone={
-                      isDesktop
-                        ? (provided, _, rubric) => {
-                            const sourceStatusId = rubric.source.droppableId;
-                            const task =
-                              tasks[sourceStatusId]?.[rubric.source.index];
+    <React.Fragment>
+      <CreateColumnModal
+        isCreateColumnModalOpen={isCreateColumnModalOpen}
+        closeCreateColumnModal={closeCreateColumnModal}
+      />
 
-                            return (
-                              <div
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                style={provided.draggableProps.style}
-                                className="board-task"
-                              >
-                                {task && (
-                                  <BoardTaskCard
-                                    task={task}
-                                    statusColumn={statusColumn}
-                                  />
-                                )}
-                              </div>
-                            );
-                          }
-                        : undefined
-                    }
+      <ScrollContainer
+        vertical={false}
+        hideScrollbars={false}
+        ignoreElements={".board-task"}
+      >
+        <DragDropContext onDragEnd={onDragEnd}>
+          <div className="h-[calc(100vh-6.625rem)] lg:h-[calc(100vh-7rem)]">
+            <div className="flex h-full cursor-ew-resize gap-x-6 pb-2 2xl:gap-x-8">
+              {statusColumn.columns.map(({ statusId, statusName }) => {
+                return (
+                  <div
+                    key={statusId}
+                    className="cursor-ew-resize rounded-md pb-1.5"
                   >
-                    {(provided, snapshot) => (
-                      <div
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                        className="h-full min-h-fit w-[18.75rem] pb-6 2xl:max-h-[calc(100vh-11.875rem)] 2xl:min-h-0 2xl:w-[19.375rem] 2xl:overflow-y-auto 2xl:overflow-x-hidden 2xl:pb-0 2xl:pr-2 2xl:pt-1"
-                      >
-                        {tasks[statusId]?.map((task, index) => {
-                          const shouldRenderClone =
-                            task.$id === snapshot.draggingFromThisWith;
+                    <BoardHeader
+                      statusColumn={statusColumn}
+                      statusId={statusId}
+                      statusName={statusName}
+                      taskCount={tasks[statusId]?.length || 0}
+                    />
+                    <Droppable
+                      droppableId={statusId}
+                      renderClone={
+                        isDesktop
+                          ? (provided, _, rubric) => {
+                              const sourceStatusId = rubric.source.droppableId;
+                              const task =
+                                tasks[sourceStatusId]?.[rubric.source.index];
 
-                          return (
-                            <React.Fragment key={task.$id}>
-                              {shouldRenderClone && isDesktop ? (
-                                <div className="relative">
-                                  <div className="board-task absolute left-0 top-0 -z-[5] mb-6 w-full opacity-0">
+                              return (
+                                <div
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  style={provided.draggableProps.style}
+                                  className="board-task"
+                                >
+                                  {task && (
                                     <BoardTaskCard
                                       task={task}
                                       statusColumn={statusColumn}
                                     />
-                                  </div>
+                                  )}
                                 </div>
-                              ) : (
-                                <Draggable draggableId={task.$id} index={index}>
-                                  {(provided) => (
-                                    <div
-                                      ref={provided.innerRef}
-                                      {...provided.draggableProps}
-                                      {...provided.dragHandleProps}
-                                      style={provided.draggableProps.style}
-                                      className="board-task mb-6"
-                                    >
+                              );
+                            }
+                          : undefined
+                      }
+                    >
+                      {(provided, snapshot) => (
+                        <div
+                          {...provided.droppableProps}
+                          ref={provided.innerRef}
+                          className="h-full min-h-fit w-[18.75rem] pb-6 2xl:max-h-[calc(100vh-11.875rem)] 2xl:min-h-0 2xl:w-[19.375rem] 2xl:overflow-y-auto 2xl:overflow-x-hidden 2xl:pb-0 2xl:pr-2 2xl:pt-1"
+                        >
+                          {tasks[statusId]?.map((task, index) => {
+                            const shouldRenderClone =
+                              task.$id === snapshot.draggingFromThisWith;
+
+                            return (
+                              <React.Fragment key={task.$id}>
+                                {shouldRenderClone && isDesktop ? (
+                                  <div className="relative">
+                                    <div className="board-task absolute left-0 top-0 -z-[5] mb-6 w-full opacity-0">
                                       <BoardTaskCard
                                         task={task}
                                         statusColumn={statusColumn}
                                       />
                                     </div>
-                                  )}
-                                </Draggable>
-                              )}
-                            </React.Fragment>
-                          );
-                        })}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-                </div>
-              );
-            })}
+                                  </div>
+                                ) : (
+                                  <Draggable
+                                    draggableId={task.$id}
+                                    index={index}
+                                  >
+                                    {(provided) => (
+                                      <div
+                                        ref={provided.innerRef}
+                                        {...provided.draggableProps}
+                                        {...provided.dragHandleProps}
+                                        style={provided.draggableProps.style}
+                                        className="board-task mb-6"
+                                      >
+                                        <BoardTaskCard
+                                          task={task}
+                                          statusColumn={statusColumn}
+                                        />
+                                      </div>
+                                    )}
+                                  </Draggable>
+                                )}
+                              </React.Fragment>
+                            );
+                          })}
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                  </div>
+                );
+              })}
 
-            {statusColumn.columns.length !== MAX_COLUMNS && (
-              <div className="cursor-move rounded-md pb-1.5 pr-[0.375rem] lg:pr-[0.875rem] 2xl:pr-0">
-                <div
-                  onClick={openColumnFormModal}
-                  className="flex h-full w-[18.75rem] cursor-pointer flex-col justify-center rounded-lg border border-dashed border-neutral-300 bg-[#FAFAFA] text-muted-foreground transition 2xl:w-[19.5rem]"
-                >
-                  <h3 className="text-center text-2xl font-medium">
-                    New Column
-                  </h3>
+              {statusColumn.columns.length !== MAX_COLUMNS && (
+                <div className="cursor-move rounded-md pb-1.5 pr-[0.375rem] lg:pr-[0.875rem] 2xl:pr-0">
+                  <div
+                    onClick={openCreateColumnModal}
+                    className="flex h-full w-[18.75rem] cursor-pointer flex-col justify-center rounded-lg border border-dashed border-neutral-300 bg-[#FAFAFA] text-muted-foreground transition 2xl:w-[19.5rem]"
+                  >
+                    <h3 className="text-center text-2xl font-medium">
+                      New Column
+                    </h3>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        </div>
-      </DragDropContext>
-    </ScrollContainer>
+        </DragDropContext>
+      </ScrollContainer>
+    </React.Fragment>
   );
 }

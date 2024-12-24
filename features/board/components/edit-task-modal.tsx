@@ -4,34 +4,35 @@ import { ResponsiveModal } from "@/components/responsive-modal";
 
 import { EditTaskForm } from "./edit-task-form";
 
-import { Task, StatusColumnItem } from "../types";
+import { StatusColumn, Task } from "../types";
 
 interface EditTaskModalProps {
   task: Task;
-  statusColumn: {
-    columns: StatusColumnItem[];
-    boardId: string;
-  };
+  statusColumn: StatusColumn;
 
-  isEditModalOpen: boolean;
-  closeEditModal: () => void;
-  closeTaskModal: () => void;
+  closeTaskContentModal: () => void;
+
+  isEditTaskModalOpen: boolean;
+  closeEditTaskModal: () => void;
 }
 
 export function EditTaskModal({
   task,
   statusColumn,
-  isEditModalOpen,
-  closeEditModal,
-  closeTaskModal,
+  closeTaskContentModal,
+  isEditTaskModalOpen,
+  closeEditTaskModal,
 }: EditTaskModalProps) {
   return (
-    <ResponsiveModal open={isEditModalOpen} onOpenChange={closeEditModal}>
+    <ResponsiveModal
+      open={isEditTaskModalOpen}
+      onOpenChange={closeEditTaskModal}
+    >
       <EditTaskForm
         task={task}
         statusColumn={statusColumn}
-        closeEditModal={closeEditModal}
-        closeTaskModal={closeTaskModal}
+        closeEditTaskModal={closeEditTaskModal}
+        closeTaskContentModal={closeTaskContentModal}
       />
     </ResponsiveModal>
   );

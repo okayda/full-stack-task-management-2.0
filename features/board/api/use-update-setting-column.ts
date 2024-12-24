@@ -25,7 +25,7 @@ export const useUpdateSettingColumn = function () {
       );
 
       if (!response.ok) {
-        throw new Error("Failed to update your setting columns.");
+        throw new Error("Failed to update your board.");
       }
 
       return await response.json();
@@ -33,7 +33,7 @@ export const useUpdateSettingColumn = function () {
 
     onSuccess: (data, variables) => {
       const { boardId } = variables.json;
-      toast.success("Successfully updated the columns.", {
+      toast.success("Successfully updated your board.", {
         description: currentDate(),
       });
 
@@ -42,7 +42,7 @@ export const useUpdateSettingColumn = function () {
     },
 
     onError: () => {
-      toast.error("Failed to update your setting columns.", {
+      toast.error("Failed to update your board.", {
         description: currentDate(),
       });
     },
