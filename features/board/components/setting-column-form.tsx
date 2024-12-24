@@ -96,7 +96,7 @@ export const SettingColumnForm = function ({
     closeSettingColumnModal();
   };
 
-  // Validating whether there are any changes to the previous task data this determines if the save button should be clickable
+  // Validating whether there are any changes to the previous settings data this determines if the save button should be clickable
   const currentFormValues = useWatch({ control: form.control });
   const hasFormChanged =
     JSON.stringify(originalFormValues) !== JSON.stringify(currentFormValues);

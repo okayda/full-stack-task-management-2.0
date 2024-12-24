@@ -40,24 +40,38 @@ const app = new Hono()
     sessionMiddleware,
     zValidator("json", createBoardSchema),
     async (c) => {
-      const databases = c.get("databases");
       const user = c.get("user");
+      const databases = c.get("databases") as Databases;
 
       const { boardName } = c.req.valid("json");
 
       const boardId = ID.unique();
 
-      const board = await databases.createDocument(
-        DATABASE_ID,
-        BOARDS_ID,
+      const defaultStatusColumn = {
         boardId,
-        {
+        column_0: "todo",
+        column_0_id: "status100",
+        column_1: "done",
+        column_1_id: "status200",
+      };
+
+      const [board, statusColumn] = await Promise.all([
+        databases.createDocument(DATABASE_ID, BOARDS_ID, boardId, {
           boardName,
           userId: user.$id,
-        },
-      );
+        }),
+        databases.createDocument(
+          DATABASE_ID,
+          STATUS_COLUMN_ID,
+          ID.unique(),
+          defaultStatusColumn,
+        ),
+      ]);
 
-      return c.json({ board });
+      return c.json({
+        board,
+        statusColumn,
+      });
     },
   )
   .post(
@@ -65,7 +79,7 @@ const app = new Hono()
     sessionMiddleware,
     zValidator("json", createColumnSchema),
     async (c) => {
-      const databases = c.get("databases");
+      const databases = c.get("databases") as Databases;
       const { boardId, statusName } = c.req.valid("json");
 
       const columnDocument = await databases.listDocuments(
@@ -117,7 +131,7 @@ const app = new Hono()
     sessionMiddleware,
     zValidator("json", taskSchema),
     async (c) => {
-      const databases = c.get("databases");
+      const databases = c.get("databases") as Databases;
 
       const { boardId, taskName, statusId, priority, description, subtasks } =
         c.req.valid("json");
@@ -298,15 +312,15 @@ const app = new Hono()
   )
   .post("/create-example-board-data", sessionMiddleware, async (c) => {
     const user = c.get("user");
-    const databases = c.get("databases");
+    const databases = c.get("databases") as Databases;
 
     const data = await initializeBoardDataExample(databases, user.$id);
 
     return c.json({ data });
   })
   .get("/get-board-names", sessionMiddleware, async (c) => {
-    const databases = c.get("databases");
     const user = c.get("user");
+    const databases = c.get("databases") as Databases;
 
     const boards = await databases.listDocuments(DATABASE_ID, BOARDS_ID, [
       Query.equal("userId", user.$id),
@@ -315,7 +329,7 @@ const app = new Hono()
     return c.json({ boards: boards.documents });
   })
   .get("/get-board-data", sessionMiddleware, async (c) => {
-    const databases = c.get("databases");
+    const databases = c.get("databases") as Databases;
     const boardId = c.req.query("boardId");
 
     if (!boardId) {
@@ -427,7 +441,7 @@ const app = new Hono()
     sessionMiddleware,
     zValidator("json", updateSubtasksSchema),
     async (c) => {
-      const databases = c.get("databases");
+      const databases = c.get("databases") as Databases;
 
       const { boardId, taskId, statusId, subtasksId, subtasks } =
         c.req.valid("json");
@@ -473,7 +487,7 @@ const app = new Hono()
     sessionMiddleware,
     zValidator("json", updateTaskSchema),
     async (c) => {
-      const databases = c.get("databases");
+      const databases = c.get("databases") as Databases;
       const {
         taskId,
         subtasksId,
@@ -532,7 +546,7 @@ const app = new Hono()
     sessionMiddleware,
     zValidator("json", deleteTaskSchema),
     async (c) => {
-      const databases = c.get("databases");
+      const databases = c.get("databases") as Databases;
       const { taskId, boardId } = c.req.valid("json");
 
       const taskDocuments = await databases.listDocuments(
