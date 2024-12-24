@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { client } from "@/lib/rpc";
 
-export const useGetBoards = function () {
+export const useGetBoardNames = function () {
   const query = useQuery({
-    queryKey: ["boards"],
+    queryKey: ["board-names"],
 
     queryFn: async () => {
-      const response = await client.api.board["get-boards"]["$get"]();
+      const response = await client.api.board["get-board-names"]["$get"]();
 
       if (!response.ok) {
         throw new Error("Failed to get boards to this specific board");

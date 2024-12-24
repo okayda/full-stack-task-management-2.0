@@ -20,7 +20,7 @@ import { CreateColumnModal } from "./create-column-modal";
 
 interface DataBoardProps {
   statusColumn: StatusColumn;
-  dataTasks: Task[];
+  tasks: Task[];
   isDesktop: boolean;
 }
 
@@ -37,7 +37,7 @@ type Payloads = {
 
 const buildTasksState = function (
   statusColumn: StatusColumn,
-  data: Task[],
+  tasks: Task[],
 ): TasksState {
   const tasksState: TasksState = {};
 
@@ -45,7 +45,7 @@ const buildTasksState = function (
     tasksState[column.statusId] = [];
   });
 
-  data.forEach((task) => {
+  tasks.forEach((task) => {
     const statusId = task.statusId;
 
     tasksState[statusId].push(task);
@@ -60,11 +60,11 @@ const buildTasksState = function (
 
 export default function Board({
   statusColumn,
-  dataTasks,
+  tasks,
   isDesktop,
 }: DataBoardProps) {
-  const [tasks, setTasks] = useState<TasksState>(() =>
-    buildTasksState(statusColumn, dataTasks),
+  const [tasksData, setTasksData] = useState<TasksState>(() =>
+    buildTasksState(statusColumn, tasks),
   );
 
   const [isCreateColumnModalOpen, setIsCreateColumnModalOpen] = useState(false);
@@ -72,8 +72,8 @@ export default function Board({
   const closeCreateColumnModal = () => setIsCreateColumnModalOpen(false);
 
   useEffect(() => {
-    setTasks(buildTasksState(statusColumn, dataTasks));
-  }, [dataTasks, statusColumn]);
+    setTasksData(buildTasksState(statusColumn, tasks));
+  }, [tasks, statusColumn]);
 
   const onDragEnd = useCallback(
     (result: DropResult) => {
@@ -91,7 +91,7 @@ export default function Board({
 
       let updatesPayload: Payloads[] = [];
 
-      setTasks((prevTasks) => {
+      setTasksData((prevTasks) => {
         const newTasks = { ...prevTasks };
 
         const sourceColumn = [...newTasks[sourceStatusId]];
@@ -201,7 +201,7 @@ export default function Board({
                       statusColumn={statusColumn}
                       statusId={statusId}
                       statusName={statusName}
-                      taskCount={tasks[statusId]?.length || 0}
+                      taskCount={tasksData[statusId]?.length || 0}
                     />
                     <Droppable
                       droppableId={statusId}
@@ -210,7 +210,9 @@ export default function Board({
                           ? (provided, _, rubric) => {
                               const sourceStatusId = rubric.source.droppableId;
                               const task =
-                                tasks[sourceStatusId]?.[rubric.source.index];
+                                tasksData[sourceStatusId]?.[
+                                  rubric.source.index
+                                ];
 
                               return (
                                 <div
@@ -238,7 +240,7 @@ export default function Board({
                           ref={provided.innerRef}
                           className="h-full min-h-fit w-[18.75rem] pb-6 2xl:max-h-[calc(100vh-11.875rem)] 2xl:min-h-0 2xl:w-[19.375rem] 2xl:overflow-y-auto 2xl:overflow-x-hidden 2xl:pb-0 2xl:pr-2 2xl:pt-1"
                         >
-                          {tasks[statusId]?.map((task, index) => {
+                          {tasksData[statusId]?.map((task, index) => {
                             const shouldRenderClone =
                               task.$id === snapshot.draggingFromThisWith;
 

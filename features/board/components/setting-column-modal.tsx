@@ -9,7 +9,7 @@ import { SettingColumnForm } from "./setting-column-form";
 import { StatusColumn } from "../types";
 
 interface SettingColumnModalProps {
-  userBoardsData: Models.Document[];
+  userBoardNames: Models.Document[];
   statusColumn?: StatusColumn;
 
   isSettingColumnModalOpen: boolean;
@@ -18,7 +18,7 @@ interface SettingColumnModalProps {
 
 export function SettingColumnModal({
   statusColumn,
-  userBoardsData,
+  userBoardNames,
   isSettingColumnModalOpen,
   closeSettingColumnModal,
 }: SettingColumnModalProps) {
@@ -28,7 +28,7 @@ export function SettingColumnModal({
       onOpenChange={closeSettingColumnModal}
     >
       <SettingColumnForm
-        userBoardsData={userBoardsData}
+        userBoardNames={userBoardNames}
         statusColumn={statusColumn}
         closeSettingColumnModal={closeSettingColumnModal}
       />

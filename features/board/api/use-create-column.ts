@@ -35,7 +35,7 @@ export const useCreateColumn = function () {
         description: currentDate(),
       });
 
-      queryClient.invalidateQueries({ queryKey: ["tasks", boardId] });
+      queryClient.invalidateQueries({ queryKey: ["board-data", boardId] });
     },
 
     onError: () => {

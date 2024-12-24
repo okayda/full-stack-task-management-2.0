@@ -1,16 +1,36 @@
 "use client";
 
-import { useCreateExampleBoardData } from "../api/use-create-example-board-data";
+import { UseMutateFunction } from "@tanstack/react-query";
+import { InferRequestType } from "hono";
+import { client } from "@/lib/rpc";
+
+import { Models } from "node-appwrite";
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 import { LoaderIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export default function GenerateExampleColumnBox() {
-  const { mutate: createBoardExample, isPending: isCreatingBoardExample } =
-    useCreateExampleBoardData();
+type RequestType = InferRequestType<
+  (typeof client.api.board)["create-example-board-data"]["$post"]
+>;
 
+interface GenerateExampleColumnBoxProps {
+  createBoardExample: UseMutateFunction<
+    ResponseType,
+    Error,
+    RequestType,
+    unknown
+  >;
+  isCreatingBoardExample: boolean;
+  userBoardNames: Models.Document[];
+}
+
+export default function GenerateExampleColumnBox({
+  createBoardExample,
+  isCreatingBoardExample,
+  userBoardNames,
+}: GenerateExampleColumnBoxProps) {
   return (
     <Card className="mx-auto w-full max-w-xs">
       <div className="flex h-full flex-col justify-between">
@@ -34,11 +54,11 @@ export default function GenerateExampleColumnBox() {
           <Button
             variant="outline"
             className="h-[2.625rem] w-full rounded-md border-neutral-300/80 bg-[#FAFAFA] font-geist text-[0.9375rem] text-primary"
-            disabled={isCreatingBoardExample}
+            disabled={isCreatingBoardExample || userBoardNames.length > 0}
             onClick={createBoardExample}
           >
             {isCreatingBoardExample ? (
-              <LoaderIcon className="animate-spin" />
+              <LoaderIcon className="!size-6 animate-spin" />
             ) : (
               " Generate Columns"
             )}

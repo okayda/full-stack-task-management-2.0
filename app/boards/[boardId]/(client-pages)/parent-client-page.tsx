@@ -3,7 +3,7 @@
 import React from "react";
 import { redirect } from "next/navigation";
 
-import { useGetBoards } from "@/features/board/api/use-get-boards";
+import { useGetBoardNames } from "@/features/board/api/use-get-board-names";
 
 import DashBoardLayout from "@/components/dash-board-layout";
 import GridPattern from "@/components/ui/grid-pattern";
@@ -12,19 +12,21 @@ import { PageLoader } from "@/components/page-loader";
 import ChildClientPage from "./child-client-page";
 
 export default function ParentClientPage() {
-  const { data, isPending } = useGetBoards();
-  const userBoardsData = data?.boards || [];
+  const { data: fetchedBoardNames, isPending: isFetchingBoardNames } =
+    useGetBoardNames();
 
-  if (isPending) {
+  const userBoardNames = fetchedBoardNames?.boards || [];
+
+  if (isFetchingBoardNames) {
     return <PageLoader />;
   }
 
-  if (!data) {
-    console.error("Failed to get boards at parent-client-page");
+  if (!fetchedBoardNames) {
+    console.error("Failed to fetch board names on the parent-client-page");
     return null;
   }
 
-  if (userBoardsData.length === 0) {
+  if (userBoardNames.length === 0) {
     redirect("/");
     return null;
   }
@@ -43,7 +45,7 @@ export default function ParentClientPage() {
         <DashBoardLayout
           isDesktop={false}
           isHomePage={false}
-          userBoardsData={userBoardsData}
+          userBoardNames={userBoardNames}
         >
           <ChildClientPage isDesktop={false} />
         </DashBoardLayout>
@@ -54,7 +56,7 @@ export default function ParentClientPage() {
         <DashBoardLayout
           isDesktop={true}
           isHomePage={false}
-          userBoardsData={userBoardsData}
+          userBoardNames={userBoardNames}
         >
           <ChildClientPage isDesktop={true} />
         </DashBoardLayout>

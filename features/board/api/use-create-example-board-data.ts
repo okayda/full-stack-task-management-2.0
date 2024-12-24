@@ -34,8 +34,8 @@ export const useCreateExampleBoardData = function () {
         description: currentDate(),
       });
 
-      queryClient.invalidateQueries({ queryKey: ["boards"] });
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["board-names"] });
+      queryClient.invalidateQueries({ queryKey: ["board-data"] });
     },
 
     onError: () => {

@@ -34,7 +34,7 @@ export const useCreateBoard = function () {
         description: currentDate(),
       });
 
-      queryClient.invalidateQueries({ queryKey: ["boards"] });
+      queryClient.invalidateQueries({ queryKey: ["board-names"] });
     },
 
     onError: () => {

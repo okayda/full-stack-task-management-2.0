@@ -7,7 +7,7 @@ import { z } from "zod";
 
 import { useGetBoardId } from "../hooks/use-get-board-id";
 
-import { useUpdateTask } from "../api/use-update-task";
+import { useUpdateEditTask } from "../api/use-update-edit-task";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -62,7 +62,7 @@ export const EditTaskForm = function ({
   closeTaskContentModal,
 }: EditTaskFormProps) {
   const boardId = useGetBoardId();
-  const { mutate: updateTask, isPending: isUpdatingTask } = useUpdateTask();
+  const { mutate: updateTask, isPending: isUpdatingTask } = useUpdateEditTask();
 
   const form = useForm<EditTaskFormValues>({
     resolver: zodResolver(taskSchema),

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Models } from "node-appwrite";
 
 import { useGetBoardId } from "@/features/board/hooks/use-get-board-id";
-import { useGetTasks } from "@/features/board/api/use-get-tasks";
+import { useGetBoardData } from "@/features/board/api/use-get-board-data";
 import { SettingColumnModal } from "@/features/board/components/setting-column-modal";
 
 import { Button } from "./ui/button";
@@ -11,16 +11,16 @@ import { Button } from "./ui/button";
 import { Settings2Icon, PanelRightCloseIcon, Loader } from "lucide-react";
 
 interface NavbarBoardProps {
-  userBoardsData: Models.Document[];
+  userBoardNames: Models.Document[];
   toggleSidebar: () => void;
 }
 
 export default function NavbarBoard({
-  userBoardsData,
+  userBoardNames,
   toggleSidebar,
 }: NavbarBoardProps) {
   const boardId = useGetBoardId();
-  const { data, isPending } = useGetTasks({ boardId });
+  const { data, isPending } = useGetBoardData({ boardId });
 
   const [isSettingColumnModalOpen, setIsSettingColumnModalOpen] =
     useState(false);
@@ -28,12 +28,12 @@ export default function NavbarBoard({
   const openSettingColumnModal = () => setIsSettingColumnModalOpen(true);
   const closeSettingColumnModal = () => setIsSettingColumnModalOpen(false);
 
-  const board = userBoardsData?.find((board) => board.$id === boardId);
+  const board = userBoardNames?.find((board) => board.$id === boardId);
 
   return (
     <React.Fragment>
       <SettingColumnModal
-        userBoardsData={userBoardsData}
+        userBoardNames={userBoardNames}
         statusColumn={data?.statusColumn}
         isSettingColumnModalOpen={isSettingColumnModalOpen}
         closeSettingColumnModal={closeSettingColumnModal}

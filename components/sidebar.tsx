@@ -28,7 +28,7 @@ interface SidebarProps {
   setViewportWidth: (width: number) => void;
 
   isHomePage: boolean;
-  userBoardsData: Models.Document[];
+  userBoardNames: Models.Document[];
 }
 
 const VIEW_PORT_STEPS = [1080, 1280, 1580, 1680];
@@ -46,10 +46,10 @@ export default function Sidebar({
   viewportWidth,
   setViewportWidth,
   isHomePage,
-  userBoardsData,
+  userBoardNames,
 }: SidebarProps) {
   const pathname = usePathname();
-  const hasUserBoardsData = userBoardsData && userBoardsData.length > 0;
+  const hasUserBoardNames = userBoardNames && userBoardNames.length > 0;
 
   const [isCreateBoardModalOpen, setIsCreateBoardModalOpen] = useState(false);
   const openCreateBoardModal = () => setIsCreateBoardModalOpen(true);
@@ -139,8 +139,8 @@ export default function Sidebar({
 
           <div className="px-4">
             <ul className="flex flex-col gap-y-5">
-              {hasUserBoardsData ? (
-                userBoardsData.map((board) => {
+              {hasUserBoardNames ? (
+                userBoardNames.map((board) => {
                   const isActive = pathname === `/boards/${board.$id}`;
 
                   return (

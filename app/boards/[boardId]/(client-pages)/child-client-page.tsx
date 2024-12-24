@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetTasks } from "@/features/board/api/use-get-tasks";
+import { useGetBoardData } from "@/features/board/api/use-get-board-data";
 import { useGetBoardId } from "@/features/board/hooks/use-get-board-id";
 import Board from "@/features/board/components/board";
 
@@ -12,21 +12,22 @@ interface ChildClientProps {
 
 export default function ChildClientPage({ isDesktop }: ChildClientProps) {
   const boardId = useGetBoardId();
-  const { data, isPending } = useGetTasks({ boardId });
+  const { data: fetchedBoardData, isPending: isFetchingBoardData } =
+    useGetBoardData({ boardId });
 
-  if (isPending) {
+  if (isFetchingBoardData) {
     return <PageLoader />;
   }
 
-  if (!data) {
-    console.error("Failed to get tasks at child-client-page");
+  if (!fetchedBoardData) {
+    console.error("Failed to fetch board data on the child-client-page");
     return null;
   }
 
   return (
     <Board
-      statusColumn={data.statusColumn}
-      dataTasks={data.tasks}
+      statusColumn={fetchedBoardData.statusColumn}
+      tasks={fetchedBoardData.tasks}
       isDesktop={isDesktop}
     />
   );

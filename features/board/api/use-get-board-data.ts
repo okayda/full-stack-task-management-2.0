@@ -1,21 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
 import { client } from "@/lib/rpc";
 
-interface UseGetTasksProps {
+interface UseGetBoardDataProps {
   boardId: string;
 }
 
-export const useGetTasks = function ({ boardId }: UseGetTasksProps) {
+export const useGetBoardData = function ({ boardId }: UseGetBoardDataProps) {
   const query = useQuery({
-    queryKey: ["tasks", boardId],
+    queryKey: ["board-data", boardId],
 
     queryFn: async () => {
-      const response = await client.api.board["get-tasks"].$get({
+      const response = await client.api.board["get-board-data"].$get({
         query: { boardId },
       });
 
       if (!response.ok) {
-        throw new Error("Failed to get tasks to this specific board");
+        throw new Error("Failed to get board data to this specific board");
       }
 
       const data = await response.json();

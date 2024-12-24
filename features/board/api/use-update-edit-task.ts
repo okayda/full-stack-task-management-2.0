@@ -9,14 +9,14 @@ import { toast } from "sonner";
 import { BoardData, Task } from "../types";
 
 type ResponseType = InferResponseType<
-  (typeof client.api.board)["update-task"]["$patch"],
+  (typeof client.api.board)["update-edit-task"]["$patch"],
   200
 >;
 type RequestType = InferRequestType<
-  (typeof client.api.board)["update-task"]["$patch"]
+  (typeof client.api.board)["update-edit-task"]["$patch"]
 >;
 
-export const useUpdateTask = function () {
+export const useUpdateEditTask = function () {
   const queryClient = useQueryClient();
 
   const mutation = useMutation<
@@ -26,7 +26,7 @@ export const useUpdateTask = function () {
     { previousData?: BoardData }
   >({
     mutationFn: async ({ json }) => {
-      const response = await client.api.board["update-task"]["$patch"]({
+      const response = await client.api.board["update-edit-task"]["$patch"]({
         json,
       });
 
@@ -46,14 +46,14 @@ export const useUpdateTask = function () {
         statusId,
       } = variables.json;
 
-      await queryClient.cancelQueries({ queryKey: ["tasks", boardId] });
+      await queryClient.cancelQueries({ queryKey: ["board-data", boardId] });
 
       const previousData = queryClient.getQueryData<BoardData>([
         "tasks",
         boardId,
       ]);
 
-      queryClient.setQueryData(["tasks", boardId], (oldBoardData) => {
+      queryClient.setQueryData(["board-data", boardId], (oldBoardData) => {
         if (!oldBoardData) return null;
 
         const { statusColumn, tasks } = oldBoardData as BoardData;
@@ -93,13 +93,13 @@ export const useUpdateTask = function () {
       });
 
       if (contextData) {
-        queryClient.setQueryData(["tasks", boardId], contextData);
+        queryClient.setQueryData(["board-data", boardId], contextData);
       }
     },
 
     onSettled: (_data, _error, variables) => {
       const { boardId } = variables.json;
-      queryClient.invalidateQueries({ queryKey: ["tasks", boardId] });
+      queryClient.invalidateQueries({ queryKey: ["board-data", boardId] });
     },
   });
 

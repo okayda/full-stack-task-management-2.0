@@ -304,7 +304,7 @@ const app = new Hono()
 
     return c.json({ data });
   })
-  .get("/get-boards", sessionMiddleware, async (c) => {
+  .get("/get-board-names", sessionMiddleware, async (c) => {
     const databases = c.get("databases");
     const user = c.get("user");
 
@@ -314,15 +314,14 @@ const app = new Hono()
 
     return c.json({ boards: boards.documents });
   })
-  .get("/get-tasks", sessionMiddleware, async (c) => {
+  .get("/get-board-data", sessionMiddleware, async (c) => {
     const databases = c.get("databases");
     const boardId = c.req.query("boardId");
 
     if (!boardId) {
       return c.json(
         {
-          error:
-            "Failed to get the board tasks since the boardId is not provided",
+          error: "Failed to get board data since the boardId is not provided",
         },
         404,
       );
@@ -424,7 +423,53 @@ const app = new Hono()
     });
   })
   .patch(
-    "/update-task",
+    "/update-task-content",
+    sessionMiddleware,
+    zValidator("json", updateSubtasksSchema),
+    async (c) => {
+      const databases = c.get("databases");
+
+      const { boardId, taskId, statusId, subtasksId, subtasks } =
+        c.req.valid("json");
+
+      const subtaskData: Record<string, unknown> = { boardId };
+
+      subtasks.forEach((subtask, i) => {
+        subtaskData[`subtask_${i}`] = subtask.subtaskName;
+        subtaskData[`subtask_check_${i}`] = subtask.isCompleted;
+      });
+
+      for (let i = subtasks.length; i < MAX_SUB_TASKS; i++) {
+        subtaskData[`subtask_${i}`] = null;
+        subtaskData[`subtask_check_${i}`] = null;
+      }
+
+      const taskPromise = databases.updateDocument(
+        DATABASE_ID,
+        TASKS_ID,
+        taskId,
+        {
+          statusId,
+        },
+      );
+
+      const subtasksPromise = databases.updateDocument(
+        DATABASE_ID,
+        SUB_TASKS_ID,
+        subtasksId,
+        subtaskData,
+      );
+
+      const [updatedTask, updatedSubtasks] = await Promise.all([
+        taskPromise,
+        subtasksPromise,
+      ]);
+
+      return c.json({ task: updatedTask, subtasks: updatedSubtasks });
+    },
+  )
+  .patch(
+    "/update-edit-task",
     sessionMiddleware,
     zValidator("json", updateTaskSchema),
     async (c) => {
@@ -480,52 +525,6 @@ const app = new Hono()
       ]);
 
       return c.json({ task: updatedTask, subtasks: subtasksDocument });
-    },
-  )
-  .patch(
-    "/update-task-content",
-    sessionMiddleware,
-    zValidator("json", updateSubtasksSchema),
-    async (c) => {
-      const databases = c.get("databases");
-
-      const { boardId, taskId, statusId, subtasksId, subtasks } =
-        c.req.valid("json");
-
-      const subtaskData: Record<string, unknown> = { boardId };
-
-      subtasks.forEach((subtask, i) => {
-        subtaskData[`subtask_${i}`] = subtask.subtaskName;
-        subtaskData[`subtask_check_${i}`] = subtask.isCompleted;
-      });
-
-      for (let i = subtasks.length; i < MAX_SUB_TASKS; i++) {
-        subtaskData[`subtask_${i}`] = null;
-        subtaskData[`subtask_check_${i}`] = null;
-      }
-
-      const taskPromise = databases.updateDocument(
-        DATABASE_ID,
-        TASKS_ID,
-        taskId,
-        {
-          statusId,
-        },
-      );
-
-      const subtasksPromise = databases.updateDocument(
-        DATABASE_ID,
-        SUB_TASKS_ID,
-        subtasksId,
-        subtaskData,
-      );
-
-      const [updatedTask, updatedSubtasks] = await Promise.all([
-        taskPromise,
-        subtasksPromise,
-      ]);
-
-      return c.json({ task: updatedTask, subtasks: updatedSubtasks });
     },
   )
   .delete(

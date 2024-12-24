@@ -46,14 +46,14 @@ export const useUpdateTaskContent = function () {
         subtasks,
       } = variables.json;
 
-      await queryClient.cancelQueries({ queryKey: ["tasks", boardId] });
+      await queryClient.cancelQueries({ queryKey: ["board-data", boardId] });
 
       const previousData = queryClient.getQueryData<BoardData>([
         "tasks",
         boardId,
       ]);
 
-      queryClient.setQueryData(["tasks", boardId], (oldBoardData) => {
+      queryClient.setQueryData(["board-data", boardId], (oldBoardData) => {
         if (!oldBoardData) return null;
 
         const { statusColumn, tasks } = oldBoardData as BoardData;
@@ -85,13 +85,13 @@ export const useUpdateTaskContent = function () {
       });
 
       if (contextData) {
-        queryClient.setQueryData(["tasks", boardId], contextData);
+        queryClient.setQueryData(["board-data", boardId], contextData);
       }
     },
 
     onSettled: (_data, _error, variables) => {
       const { boardId } = variables.json;
-      queryClient.invalidateQueries({ queryKey: ["tasks", boardId] });
+      queryClient.invalidateQueries({ queryKey: ["board-data", boardId] });
     },
   });
 

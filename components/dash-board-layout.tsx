@@ -14,7 +14,7 @@ interface SidebarLayoutProps {
   children: React.ReactNode;
   isDesktop: boolean;
   isHomePage: boolean;
-  userBoardsData: Models.Document[];
+  userBoardNames: Models.Document[];
 }
 
 const VIEWPORT_WIDTH = 1680;
@@ -23,7 +23,7 @@ export default function DashBoardLayout({
   children,
   isDesktop,
   isHomePage,
-  userBoardsData,
+  userBoardNames,
 }: SidebarLayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(isDesktop);
   const [viewportWidth, setViewportWidth] = useState(VIEWPORT_WIDTH);
@@ -49,7 +49,7 @@ export default function DashBoardLayout({
           viewportWidth={viewportWidth}
           setViewportWidth={setViewportWidth}
           isHomePage={isHomePage}
-          userBoardsData={userBoardsData}
+          userBoardNames={userBoardNames}
         />
       </div>
 
@@ -68,7 +68,7 @@ export default function DashBoardLayout({
             ) : (
               <NavbarBoard
                 toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-                userBoardsData={userBoardsData}
+                userBoardNames={userBoardNames}
               />
             )}
           </div>

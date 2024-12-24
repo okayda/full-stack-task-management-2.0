@@ -37,8 +37,8 @@ export const useUpdateSettingColumn = function () {
         description: currentDate(),
       });
 
-      queryClient.invalidateQueries({ queryKey: ["boards"] });
-      queryClient.invalidateQueries({ queryKey: ["tasks", boardId] });
+      queryClient.invalidateQueries({ queryKey: ["board-names"] });
+      queryClient.invalidateQueries({ queryKey: ["board-data", boardId] });
     },
 
     onError: () => {

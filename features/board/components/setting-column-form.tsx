@@ -33,7 +33,7 @@ import { settingColumnSchema } from "../schemas";
 import { CircleXIcon, MoreVertical } from "lucide-react";
 
 interface SettingColumnFormProps {
-  userBoardsData: Models.Document[];
+  userBoardNames: Models.Document[];
   statusColumn?: StatusColumn;
 
   closeSettingColumnModal: () => void;
@@ -42,12 +42,12 @@ interface SettingColumnFormProps {
 type SettingColumnFormValues = z.infer<typeof settingColumnSchema>;
 
 export const SettingColumnForm = function ({
-  userBoardsData,
+  userBoardNames,
   statusColumn,
   closeSettingColumnModal,
 }: SettingColumnFormProps) {
   const boardId = useGetBoardId();
-  const board = userBoardsData.find(
+  const board = userBoardNames.find(
     (board: Models.Document) => board.$id === boardId,
   );
 

@@ -3,28 +3,34 @@
 import React from "react";
 import { redirect } from "next/navigation";
 
+import { useCreateExampleBoardData } from "@/features/board/api/use-create-example-board-data";
 import GenerateExampleBox from "@/features/board/components/generate-example-box";
 import GenerateExampleColumnBox from "@/features/board/components/generate-example-column-box";
-import { useGetBoards } from "@/features/board/api/use-get-boards";
+import { useGetBoardNames } from "@/features/board/api/use-get-board-names";
 
 import DashBoardLayout from "@/components/dash-board-layout";
 import { PageLoader } from "@/components/page-loader";
 
 export default function HomeClientPage() {
-  const { data, isPending } = useGetBoards();
-  const userBoardsData = data?.boards || [];
+  const { data: fetchedBoardNames, isPending: isFetchingBoardNames } =
+    useGetBoardNames();
 
-  if (isPending) {
-    return <PageLoader />;
-  }
+  const userBoardNames = fetchedBoardNames?.boards || [];
 
-  if (!data) {
-    console.error("Failed to get boards at home-client-page");
+  const { mutate: createExampleBoard, isPending: isCreatingExampleBoard } =
+    useCreateExampleBoardData();
+
+  if (userBoardNames.length) {
+    redirect(`/boards/${userBoardNames[0].$id}`);
     return null;
   }
 
-  if (userBoardsData.length > 0) {
-    redirect(`/boards/${userBoardsData[0].$id}`);
+  if (isFetchingBoardNames) {
+    return <PageLoader />;
+  }
+
+  if (!fetchedBoardNames) {
+    console.error("Failed to fetch board names on the home-client-page");
     return null;
   }
 
@@ -37,13 +43,20 @@ export default function HomeClientPage() {
         <DashBoardLayout
           isDesktop={false}
           isHomePage={true}
-          userBoardsData={userBoardsData}
+          userBoardNames={userBoardNames}
         >
           <div className="flex flex-col">
             <div className="flex h-full flex-col justify-center">
               <div className="flex flex-col gap-y-8 md:mx-auto md:max-w-[43.75rem] md:flex-row md:gap-x-12 md:gap-y-0">
-                <GenerateExampleBox />
-                <GenerateExampleColumnBox />
+                <GenerateExampleBox
+                  createExampleBoard={createExampleBoard}
+                  isCreatingExampleBoard={isCreatingExampleBoard}
+                />
+                <GenerateExampleColumnBox
+                  createBoardExample={createExampleBoard}
+                  isCreatingBoardExample={isCreatingExampleBoard}
+                  userBoardNames={userBoardNames}
+                />
               </div>
             </div>
           </div>
@@ -55,13 +68,20 @@ export default function HomeClientPage() {
         <DashBoardLayout
           isDesktop={true}
           isHomePage={true}
-          userBoardsData={userBoardsData}
+          userBoardNames={userBoardNames}
         >
           <div className="flex flex-col">
             <div className="flex h-[60vh] flex-col justify-center">
               <div className="mx-auto flex max-w-[43.75rem] gap-x-8">
-                <GenerateExampleBox />
-                <GenerateExampleColumnBox />
+                <GenerateExampleBox
+                  createExampleBoard={createExampleBoard}
+                  isCreatingExampleBoard={isCreatingExampleBoard}
+                />
+                <GenerateExampleColumnBox
+                  createBoardExample={createExampleBoard}
+                  isCreatingBoardExample={isCreatingExampleBoard}
+                  userBoardNames={userBoardNames}
+                />
               </div>
             </div>
           </div>

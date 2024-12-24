@@ -27,8 +27,8 @@ type AdditionalContext = {
   };
 };
 
-// authenticating if the user is actually authorized
-// allow you to do some CRUD operations
+// Authenticating whether the user is authorized.
+// Allows performing CRUD operations.
 export const sessionMiddleware = createMiddleware<AdditionalContext>(
   async (c, next) => {
     const client = new Client()
