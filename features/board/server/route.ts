@@ -198,12 +198,13 @@ const app = new Hono()
       const databases = c.get("databases") as Databases;
       const { boardId, boardName, statusColumn } = c.req.valid("json");
 
-      const statusDocumentList = await databases.listDocuments(
+      const statusDocumentPromise = databases.listDocuments(
         DATABASE_ID,
         STATUS_COLUMN_ID,
         [Query.equal("boardId", boardId), Query.limit(1)],
       );
 
+      const [statusDocumentList] = await Promise.all([statusDocumentPromise]);
       const statusDocument = statusDocumentList.documents[0];
 
       const oldColumnsAvailable = [
@@ -237,26 +238,29 @@ const app = new Hono()
         (oldColumn) => !currentColumnsAvailable.includes(oldColumn.statusId),
       );
 
-      try {
-        for (const column of removedColumns) {
-          if (!column.statusId) continue;
+      const deletePromises = removedColumns.map(async (column) => {
+        if (!column.statusId) return;
 
-          const tasks = await databases.listDocuments(DATABASE_ID, TASKS_ID, [
-            Query.equal("boardId", boardId),
-            Query.equal("statusId", column.statusId),
-          ]);
+        const tasks = await databases.listDocuments(DATABASE_ID, TASKS_ID, [
+          Query.equal("boardId", boardId),
+          Query.equal("statusId", column.statusId),
+        ]);
 
-          for (const task of tasks.documents) {
-            await databases.deleteDocument(DATABASE_ID, TASKS_ID, task.$id);
-          }
-        }
-      } catch (error) {
-        console.error("Error removing tasks for deleted columns:", error);
-        return c.json(
-          { error: "Failed to remove tasks for deleted columns" },
-          500,
+        const taskDeletionPromises = tasks.documents.map((task) =>
+          Promise.all([
+            databases.deleteDocument(DATABASE_ID, TASKS_ID, task.$id),
+            databases.deleteDocument(
+              DATABASE_ID,
+              SUB_TASKS_ID,
+              task.subtasksId,
+            ),
+          ]),
         );
-      }
+
+        return Promise.all(taskDeletionPromises);
+      });
+
+      await Promise.all(deletePromises);
 
       const usedIds = statusColumn
         .filter((col) => !!col.statusId)
@@ -272,40 +276,37 @@ const app = new Hono()
         }
       });
 
-      try {
-        await databases.updateDocument(DATABASE_ID, BOARDS_ID, boardId, {
+      await Promise.all([
+        databases.updateDocument(DATABASE_ID, BOARDS_ID, boardId, {
           boardName,
-        });
-      } catch (error) {
-        console.error("Error updating board name:", error);
-        return c.json({ error: "Failed to update board name" }, 500);
-      }
-
-      const updatedStatusColumn: Record<string, string | null> = {
-        boardId,
-      };
-
-      statusColumn.forEach((col, i) => {
-        updatedStatusColumn[`column_${i}`] = col.statusName.trim();
-        updatedStatusColumn[`column_${i}_id`] = col.statusId.trim();
-      });
-
-      for (let i = statusColumn.length; i < MAX_COLUMNS; i++) {
-        updatedStatusColumn[`column_${i}`] = null;
-        updatedStatusColumn[`column_${i}_id`] = null;
-      }
-
-      try {
-        await databases.updateDocument(
+        }),
+        databases.updateDocument(
           DATABASE_ID,
           STATUS_COLUMN_ID,
           statusDocument.$id,
-          updatedStatusColumn,
-        );
-      } catch (error) {
-        console.error("Error updating statusColumn document:", error);
-        return c.json({ error: "Failed to update columns" }, 500);
-      }
+          {
+            boardId,
+            ...statusColumn.reduce(
+              (accumalator, column, i) => ({
+                ...accumalator,
+                [`column_${i}`]: column.statusName.trim(),
+                [`column_${i}_id`]: column.statusId.trim(),
+              }),
+              {},
+            ),
+            ...Array.from(
+              { length: MAX_COLUMNS - statusColumn.length },
+              (_, i) => ({
+                [`column_${statusColumn.length + i}`]: null,
+                [`column_${statusColumn.length + i}_id`]: null,
+              }),
+            ).reduce(
+              (accumalator, column) => ({ ...accumalator, ...column }),
+              {},
+            ),
+          },
+        ),
+      ]);
 
       return c.json({ success: true });
     },
