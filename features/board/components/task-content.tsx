@@ -86,7 +86,7 @@ export default function TaskContent({
     closeTaskContentModal();
   };
 
-  // Validating if there is any changes to the previous task data otherwise it will determine if the button is clickable
+  // Validating whether there are any changes to the previous task data this determines if the save button should be clickable
   const subTasksChanged =
     JSON.stringify(originalSubTasks) !== JSON.stringify(subTasks);
   const statusChanged =

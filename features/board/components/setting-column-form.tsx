@@ -1,9 +1,13 @@
 "use client";
 
-import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
-
 import { Models } from "node-appwrite";
 
+import {
+  useForm,
+  SubmitHandler,
+  useFieldArray,
+  useWatch,
+} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
@@ -54,17 +58,21 @@ export const SettingColumnForm = function ({
   const { mutate: updateSettingColumn, isPending: isUpdatingSettingColumn } =
     useUpdateSettingColumn();
 
+  const originalFormValues = {
+    boardId,
+    boardName: board?.boardName,
+    statusColumn: statusColumn?.columns.map(
+      (statusColumnItem: StatusColumnItem) => ({
+        statusId: statusColumnItem.statusId,
+        statusName: statusColumnItem.statusName,
+      }),
+    ),
+  };
+
   const form = useForm<SettingColumnFormValues>({
     resolver: zodResolver(settingColumnSchema),
     defaultValues: {
-      boardId: boardId,
-      boardName: board?.boardName,
-      statusColumn: statusColumn?.columns.map(
-        (statusColumnItem: StatusColumnItem) => ({
-          statusId: statusColumnItem.statusId,
-          statusName: statusColumnItem.statusName,
-        }),
-      ),
+      ...originalFormValues,
     },
   });
 
@@ -88,10 +96,16 @@ export const SettingColumnForm = function ({
     closeSettingColumnModal();
   };
 
+  // Validating whether there are any changes to the previous task data this determines if the save button should be clickable
+  const currentFormValues = useWatch({ control: form.control });
+  const hasFormChanged =
+    JSON.stringify(originalFormValues) !== JSON.stringify(currentFormValues);
+
   return (
     <Card className="h-full w-full border-none shadow-none">
       <CardHeader className="flex flex-row items-center justify-between gap-x-3 space-y-0 pb-5 sm:pt-10">
         <CardTitle className="text-2xl font-medium">Board Setting</CardTitle>
+
         <SettingColumnActions>
           <MoreVertical className="!size-6" />
         </SettingColumnActions>
@@ -110,6 +124,7 @@ export const SettingColumnForm = function ({
                       <FormLabel className="tracking-wide">
                         Board Name
                       </FormLabel>
+
                       <FormControl>
                         <Input
                           {...field}
@@ -118,6 +133,7 @@ export const SettingColumnForm = function ({
                           className="!mt-1 h-[2.8125rem] border-neutral-400/60 text-[0.9375rem] md:h-[2.625rem]"
                         />
                       </FormControl>
+
                       <FormMessage />
                     </FormItem>
                   )}
@@ -190,10 +206,11 @@ export const SettingColumnForm = function ({
                 <Button
                   type="submit"
                   className="h-[2.625rem] w-full tracking-wide"
-                  disabled={isUpdatingSettingColumn}
+                  disabled={isUpdatingSettingColumn || !hasFormChanged}
                 >
                   Save
                 </Button>
+
                 <Button
                   type="button"
                   variant="outline"
