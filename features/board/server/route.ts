@@ -356,12 +356,24 @@ const app = new Hono()
     const tasks = tasksData.documents;
 
     if (tasks.length === 0) {
-      const fallbackBoardId = statusColumn.boardId;
+      const columns: StatusColumnItem[] = [];
+
+      for (let i = 0; i < MAX_COLUMNS; i++) {
+        const getStatusName = statusColumn[`column_${i}`];
+        const getStatusId = statusColumn[`column_${i}_id`];
+
+        if (getStatusName && getStatusId) {
+          columns.push({
+            statusName: getStatusName,
+            statusId: getStatusId,
+          });
+        }
+      }
 
       return c.json({
         statusColumn: {
-          boardId: fallbackBoardId,
-          columns: [],
+          boardId,
+          columns,
         },
         tasks: [],
       });
