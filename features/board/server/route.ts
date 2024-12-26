@@ -493,8 +493,28 @@ const app = new Hono()
     async (c) => {
       const databases = c.get("databases") as Databases;
 
-      const { boardId, taskId, statusId, subtasksId, subtasks } =
+      const { boardId, taskId, statusId, subtasksId, position, subtasks } =
         c.req.valid("json");
+
+      let newPosition = position;
+
+      // Calculate a new position only if the position is null which typically happens when the status has changed
+      if (newPosition === null) {
+        const highestPositionTask = await databases.listDocuments(
+          DATABASE_ID,
+          TASKS_ID,
+          [
+            Query.equal("boardId", boardId),
+            Query.orderDesc("position"),
+            Query.limit(1),
+          ],
+        );
+
+        newPosition =
+          highestPositionTask.documents.length > 0
+            ? highestPositionTask.documents[0].position + 1000
+            : 1000;
+      }
 
       const subtaskData: Record<string, unknown> = { boardId };
 
@@ -514,6 +534,7 @@ const app = new Hono()
         taskId,
         {
           statusId,
+          position: newPosition,
         },
       );
 

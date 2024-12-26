@@ -54,20 +54,24 @@ export default function TaskContent({
       prev.map((subTask: SubTask, stateIndex: number) => {
         if (stateIndex === subTaskIndex) {
           return { ...subTask, isCompleted: !subTask.isCompleted };
-        } else {
-          return subTask;
-        }
+        } else return subTask;
       }),
     );
   };
 
   const onSubmit = function () {
+    // Determine the position based on whether the status has changed
+    // If the status has changed (originalStatus !== status) set position to null to signal the API & back-end to recalculate the task position
+    // Otherwise retain the existing position from the task object
+    const changePosition = originalStatus !== status ? null : task.position;
+
     updateTaskContent({
       json: {
         boardId,
         taskId: task.$id,
         statusId: status,
         subtasksId: task.subtasksId,
+        position: changePosition,
         subtasks: subTasks,
       },
     });

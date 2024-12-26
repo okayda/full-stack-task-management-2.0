@@ -60,6 +60,7 @@ export const updateSubtasksSchema = z.object({
   subtasksId: z.string().trim(),
   taskId: z.string().trim(),
   statusId: z.string().trim(),
+  position: z.number().nullable().optional(),
   subtasks: z
     .array(
       z.object({

@@ -7,7 +7,7 @@ import { currentDate } from "@/lib/utils";
 
 import { toast } from "sonner";
 
-import { BoardData, Task } from "../types";
+import { BoardData } from "../types";
 
 type ResponseType = InferResponseType<
   (typeof client.api.board)["update-task-content"]["$patch"],
@@ -43,6 +43,7 @@ export const useUpdateTaskContent = function () {
         boardId,
         taskId: targetTaskId,
         statusId,
+        position, // Position indicates the task location within its column
         subtasks,
       } = variables.json;
 
@@ -56,12 +57,29 @@ export const useUpdateTaskContent = function () {
       queryClient.setQueryData(["board-data", boardId], (oldBoardData) => {
         if (!oldBoardData) return null;
 
-        const { statusColumn, tasks } = oldBoardData as BoardData;
+        const { statusColumn, tasks: oldTasks } = oldBoardData as BoardData;
 
-        const updatedTasks = tasks.map((task: Task) => {
-          if (task.$id === targetTaskId) {
-            return { ...task, statusId, subtasks };
-          } else return task;
+        let newPosition = position;
+
+        // Calculate a new position if the current position is null typically when the task status changes
+        if (newPosition === null) {
+          const highestPosition = Math.max(
+            ...oldTasks.map((oldTask) => oldTask.position),
+            0,
+          );
+
+          newPosition = highestPosition + 1000;
+        }
+
+        const updatedTasks = oldTasks.map((oldTask) => {
+          if (oldTask.$id === targetTaskId) {
+            return {
+              ...oldTask,
+              statusId,
+              subtasks,
+              position: newPosition,
+            };
+          } else return oldTask;
         });
 
         return { statusColumn, tasks: updatedTasks };
