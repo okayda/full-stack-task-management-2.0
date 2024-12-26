@@ -26,7 +26,12 @@ import {
   settingColumnSchema,
 } from "../schemas";
 
-import { VALID_STATUS_ID, MAX_COLUMNS, MAX_SUB_TASKS } from "../constants";
+import {
+  VALID_STATUS_ID,
+  MAX_COLUMNS,
+  MAX_SUB_TASKS,
+  MAX_DRAG_AND_DROP_POSITION,
+} from "../constants";
 
 import {
   Task,
@@ -198,7 +203,7 @@ const app = new Hono()
     async (c) => {
       const databases = c.get("databases") as Databases;
       const { boardId, boardName, statusColumn } = c.req.valid("json");
-
+      console.log(statusColumn);
       const statusDocumentPromise = databases.listDocuments(
         DATABASE_ID,
         STATUS_COLUMN_ID,
@@ -309,7 +314,46 @@ const app = new Hono()
         ),
       ]);
 
-      return c.json({ success: true });
+      return c.json({ message: "Successfully updated your board setting" });
+    },
+  )
+  .post(
+    "/drag-and-drop-update-tasks",
+    sessionMiddleware,
+    zValidator(
+      "json",
+      z.object({
+        boardId: z.string(),
+        tasks: z.array(
+          z.object({
+            $id: z.string(),
+            statusId: z.string(),
+            position: z
+              .number()
+              .int()
+              .positive()
+              .min(1000)
+              .max(MAX_DRAG_AND_DROP_POSITION),
+          }),
+        ),
+      }),
+    ),
+    async (c) => {
+      const databases = c.get("databases") as Databases;
+      const { tasks } = c.req.valid("json");
+
+      const updatedTasks = await Promise.all(
+        tasks.map(async (task) => {
+          const { $id, statusId, position } = task;
+
+          return databases.updateDocument<Task>(DATABASE_ID, TASKS_ID, $id, {
+            statusId,
+            position,
+          });
+        }),
+      );
+
+      return c.json({ updatedTasks });
     },
   )
   .post("/create-example-board-data", sessionMiddleware, async (c) => {
@@ -374,7 +418,6 @@ const app = new Hono()
 
       return c.json({
         statusColumn: {
-          boardId,
           columns,
         },
         tasks: [],
@@ -399,21 +442,15 @@ const app = new Hono()
 
     const columns: StatusColumnItem[] = [];
 
-    let finalBoardId = boardId;
+    for (let i = 0; i < MAX_COLUMNS; i++) {
+      const getStatusName = statusColumn[`column_${i}`];
+      const getStatusId = statusColumn[`column_${i}_id`];
 
-    if (statusColumn) {
-      finalBoardId = statusColumn.boardId;
-
-      for (let i = 0; i < MAX_COLUMNS; i++) {
-        const getStatusName = statusColumn[`column_${i}`];
-        const getStatusId = statusColumn[`column_${i}_id`];
-
-        if (getStatusName && getStatusId) {
-          columns.push({
-            statusName: getStatusName,
-            statusId: getStatusId,
-          });
-        }
+      if (getStatusName && getStatusId) {
+        columns.push({
+          statusName: getStatusName,
+          statusId: getStatusId,
+        });
       }
     }
 
@@ -444,7 +481,6 @@ const app = new Hono()
 
     return c.json({
       statusColumn: {
-        boardId: finalBoardId,
         columns,
       },
       tasks: updatedTasks,

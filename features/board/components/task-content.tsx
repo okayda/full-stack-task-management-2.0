@@ -197,7 +197,7 @@ export default function TaskContent({
               className="h-[2.625rem] w-full tracking-wide"
             >
               {isUpdatingTaskContent
-                ? "Loading..."
+                ? "Updating..."
                 : isDeletingTask
                   ? "Deleting..."
                   : "Save"}

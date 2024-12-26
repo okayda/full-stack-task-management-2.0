@@ -4,6 +4,10 @@ import React, { useState, useEffect, useCallback } from "react";
 
 import ScrollContainer from "react-indiana-drag-scroll";
 
+import { useDragAndDropUpdateTasks } from "../api/use-drag-and-drop-update-tasks";
+
+import { useGetBoardId } from "../hooks/use-get-board-id";
+
 import BoardHeader from "./board-header";
 import BoardTaskCard from "./board-task-card";
 import {
@@ -13,7 +17,7 @@ import {
   DropResult,
 } from "@hello-pangea/dnd";
 
-import { MAX_COLUMNS } from "../constants";
+import { MAX_COLUMNS, MAX_DRAG_AND_DROP_POSITION } from "../constants";
 
 import { StatusColumn, Task } from "../types";
 import { CreateColumnModal } from "./create-column-modal";
@@ -31,7 +35,6 @@ type TasksState = {
 type Payloads = {
   $id: string;
   statusId: string;
-  statusName: string;
   position: number;
 };
 
@@ -63,9 +66,12 @@ export default function Board({
   tasks,
   isDesktop,
 }: DataBoardProps) {
+  const boardId = useGetBoardId();
   const [tasksData, setTasksData] = useState<TasksState>(() =>
     buildTasksState(statusColumn, tasks),
   );
+
+  const { mutate: updateTasks } = useDragAndDropUpdateTasks();
 
   const [isCreateColumnModalOpen, setIsCreateColumnModalOpen] = useState(false);
   const openCreateColumnModal = () => setIsCreateColumnModalOpen(true);
@@ -74,6 +80,15 @@ export default function Board({
   useEffect(() => {
     setTasksData(buildTasksState(statusColumn, tasks));
   }, [tasks, statusColumn]);
+
+  const onDragAndDropUpdateTasks = useCallback(
+    (boardId: string, tasks: Payloads[]) => {
+      updateTasks({
+        json: { boardId, tasks },
+      });
+    },
+    [updateTasks],
+  );
 
   const onDragEnd = useCallback(
     (result: DropResult) => {
@@ -132,19 +147,23 @@ export default function Board({
         updatesPayload.push({
           $id: updatedMovedTask.$id,
           statusId: destStatusId,
-          statusName: destStatus.statusName,
-          position: Math.min((destination.index + 1) * 1000, 50_000),
+          position: Math.min(
+            (destination.index + 1) * 1000,
+            MAX_DRAG_AND_DROP_POSITION,
+          ),
         });
 
         // update positions for tasks in the destination column
         newTasks[destStatusId].forEach((task, index) => {
           if (task && task.$id !== updatedMovedTask.$id) {
-            const newPosition = Math.min((index + 1) * 1000, 50_000);
+            const newPosition = Math.min(
+              (index + 1) * 1000,
+              MAX_DRAG_AND_DROP_POSITION,
+            );
             if (task.position !== newPosition) {
               updatesPayload.push({
                 $id: task.$id,
                 statusId: destStatusId,
-                statusName: destStatus.statusName,
                 position: newPosition,
               });
             }
@@ -155,12 +174,14 @@ export default function Board({
         if (sourceStatusId !== destStatusId) {
           newTasks[sourceStatusId].forEach((task, index) => {
             if (task) {
-              const newPosition = Math.min((index + 1) * 1000, 100_000);
+              const newPosition = Math.min(
+                (index + 1) * 1000,
+                MAX_DRAG_AND_DROP_POSITION,
+              );
               if (task.position !== newPosition) {
                 updatesPayload.push({
                   $id: task.$id,
                   statusId: sourceStatusId,
-                  statusName: movedTask.statusName,
                   position: newPosition,
                 });
               }
@@ -171,9 +192,9 @@ export default function Board({
         return newTasks;
       });
 
-      // onChange(updatesPayload);
+      onDragAndDropUpdateTasks(boardId, updatesPayload);
     },
-    [statusColumn],
+    [boardId, statusColumn, onDragAndDropUpdateTasks],
   );
 
   return (

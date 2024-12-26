@@ -318,7 +318,7 @@ export const CreateTaskForm = function ({
                   disabled={isCreating}
                   className="h-[2.625rem] w-full tracking-wide"
                 >
-                  {isCreating ? "Loading..." : "Create"}
+                  {isCreating ? "Creating..." : "Create"}
                 </Button>
 
                 <Button

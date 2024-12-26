@@ -6,6 +6,8 @@ export const VALID_STATUS_ID = [
   "status500",
 ];
 
+export const MAX_DRAG_AND_DROP_POSITION = 50_000;
+
 export const MAX_COLUMNS = 5;
 
 export const MAX_SUB_TASKS = 5;

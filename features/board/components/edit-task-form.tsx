@@ -334,7 +334,7 @@ export const EditTaskForm = function ({
                   disabled={isUpdatingTask}
                   className="h-[2.625rem] w-full tracking-wide"
                 >
-                  {isUpdatingTask ? "Loading..." : "Update"}
+                  {isUpdatingTask ? "Updating..." : "Update"}
                 </Button>
 
                 <Button
