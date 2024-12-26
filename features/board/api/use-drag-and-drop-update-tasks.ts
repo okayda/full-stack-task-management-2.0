@@ -6,6 +6,8 @@ import { currentDate } from "@/lib/utils";
 
 import { toast } from "sonner";
 
+import { BoardData } from "../types";
+
 type ResponseType = InferResponseType<
   (typeof client.api.board)["drag-and-drop-update-tasks"]["$post"],
   200
@@ -30,6 +32,43 @@ export const useDragAndDropUpdateTasks = function () {
       }
 
       return await response.json();
+    },
+
+    onMutate: async (variables) => {
+      const { boardId, tasks: updateddTasks } = variables.json;
+      if (updateddTasks.length === 0) return;
+
+      await queryClient.cancelQueries({ queryKey: ["board-data", boardId] });
+
+      const previousData = queryClient.getQueryData<BoardData>([
+        "board-data",
+        boardId,
+      ]);
+
+      queryClient.setQueryData<BoardData>(
+        ["board-data", boardId],
+        (oldBoarData) => {
+          if (!oldBoarData) return oldBoarData;
+
+          const newBoardData = { ...oldBoarData };
+
+          newBoardData.tasks = oldBoarData.tasks.map((task) => {
+            const updated = updateddTasks.find(
+              (updatedTask) => updatedTask.$id === task.$id,
+            );
+
+            if (updated) {
+              return { ...task, ...updated };
+            }
+
+            return task;
+          });
+
+          return newBoardData;
+        },
+      );
+
+      return { previousData };
     },
 
     onSuccess: () => {
