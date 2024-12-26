@@ -31,20 +31,23 @@ export const useUpdateSettingColumn = function () {
       return await response.json();
     },
 
-    onSuccess: (data, variables) => {
-      const { boardId } = variables.json;
+    onSuccess: () => {
       toast.success("Successfully updated your board.", {
         description: currentDate(),
       });
+    },
+
+    onError: (error) => {
+      toast.error(error.message, {
+        description: currentDate(),
+      });
+    },
+
+    onSettled: (_data, _error, variables) => {
+      const { boardId } = variables.json;
 
       queryClient.invalidateQueries({ queryKey: ["board-names"] });
       queryClient.invalidateQueries({ queryKey: ["board-data", boardId] });
-    },
-
-    onError: () => {
-      toast.error("Failed to update your board.", {
-        description: currentDate(),
-      });
     },
   });
 

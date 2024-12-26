@@ -27,20 +27,22 @@ export const useCreateTask = function () {
       return await response.json();
     },
 
-    onSuccess: (_, variables) => {
-      const { boardId } = variables.json;
-
+    onSuccess: () => {
       toast.success("Successfully created your task.", {
         description: currentDate(),
       });
-
-      queryClient.invalidateQueries({ queryKey: ["board-data", boardId] });
     },
 
-    onError: () => {
-      toast.error("Failed to create your task.", {
+    onError: (error) => {
+      toast.error(error.message, {
         description: currentDate(),
       });
+    },
+
+    onSettled: (_data, _error, variables) => {
+      const { boardId } = variables.json;
+
+      queryClient.invalidateQueries({ queryKey: ["board-data", boardId] });
     },
   });
 

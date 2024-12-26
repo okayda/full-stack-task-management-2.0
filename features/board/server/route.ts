@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 
 import { Databases, ID, Query } from "node-appwrite";
@@ -590,6 +591,66 @@ const app = new Hono()
 
       return c.json({
         message: "Task & Subtasks deleted successfully",
+      });
+    },
+  )
+  .delete(
+    "/delete-board",
+    sessionMiddleware,
+    zValidator(
+      "json",
+      z.object({
+        boardId: z.string().trim(),
+      }),
+    ),
+    async (c) => {
+      const databases = c.get("databases") as Databases;
+      const { boardId } = c.req.valid("json");
+
+      const deleteBoardPromise = databases.deleteDocument(
+        DATABASE_ID,
+        BOARDS_ID,
+        boardId,
+      );
+
+      const tasksData = await databases.listDocuments(DATABASE_ID, TASKS_ID, [
+        Query.equal("boardId", boardId),
+      ]);
+
+      const subtasksIds = tasksData.documents.map((task) => task.subtasksId);
+
+      const deleteSubtasksPromises = subtasksIds.map((subtaskId) =>
+        databases.deleteDocument(DATABASE_ID, SUB_TASKS_ID, subtaskId),
+      );
+
+      const deleteTasksPromises = tasksData.documents.map((task) =>
+        databases.deleteDocument(DATABASE_ID, TASKS_ID, task.$id),
+      );
+
+      const statusColumnData = await databases.listDocuments(
+        DATABASE_ID,
+        STATUS_COLUMN_ID,
+        [Query.equal("boardId", boardId)],
+      );
+
+      const deleteStatusColumnPromises = statusColumnData.documents.map(
+        (statusColumn) =>
+          databases.deleteDocument(
+            DATABASE_ID,
+            STATUS_COLUMN_ID,
+            statusColumn.$id,
+          ),
+      );
+
+      await Promise.all([
+        deleteBoardPromise,
+        ...deleteSubtasksPromises,
+        ...deleteTasksPromises,
+        ...deleteStatusColumnPromises,
+      ]);
+
+      return c.json({
+        message: "Successfully deleted the board",
       });
     },
   );

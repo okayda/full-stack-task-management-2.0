@@ -9,7 +9,7 @@ export const useGetBoardNames = function () {
       const response = await client.api.board["get-board-names"]["$get"]();
 
       if (!response.ok) {
-        throw new Error("Failed to get boards to this specific board");
+        throw new Error("Failed to retrieve board names.");
       }
 
       const data = await response.json();

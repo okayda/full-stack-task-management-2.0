@@ -15,7 +15,9 @@ export const useGetBoardData = function ({ boardId }: UseGetBoardDataProps) {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to get board data to this specific board");
+        throw new Error(
+          "Failed to retrieve board data for this specific board.",
+        );
       }
 
       const data = await response.json();

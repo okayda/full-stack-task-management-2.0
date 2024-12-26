@@ -33,15 +33,17 @@ export const useCreateExampleBoardData = function () {
       toast.success("Successfully initialized board data example.", {
         description: currentDate(),
       });
-
-      queryClient.invalidateQueries({ queryKey: ["board-names"] });
-      queryClient.invalidateQueries({ queryKey: ["board-data"] });
     },
 
-    onError: () => {
-      toast.error("Failed to initialize board data example.", {
+    onError: (error) => {
+      toast.error(error.message, {
         description: currentDate(),
       });
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["board-names"] });
+      queryClient.invalidateQueries({ queryKey: ["board-data"] });
     },
   });
 

@@ -10,10 +10,13 @@ import GridPattern from "@/components/ui/grid-pattern";
 import { PageLoader } from "@/components/page-loader";
 
 import ChildClientPage from "./child-client-page";
+import { useGetBoardId } from "@/features/board/hooks/use-get-board-id";
 
 export default function ParentClientPage() {
   const { data: fetchedBoardNames, isPending: isFetchingBoardNames } =
     useGetBoardNames();
+
+  const currentBoardId = useGetBoardId();
 
   const userBoardNames = fetchedBoardNames?.boards || [];
 
@@ -28,6 +31,16 @@ export default function ParentClientPage() {
 
   if (userBoardNames.length === 0) {
     redirect("/");
+    return null;
+  }
+
+  // Redirect to the first available board if the current board is deleted
+  if (!userBoardNames.some((board) => board.$id === currentBoardId)) {
+    const targetBoard = userBoardNames[0];
+    if (targetBoard) {
+      redirect(`/boards/${targetBoard.$id}`);
+    } else redirect("/");
+
     return null;
   }
 

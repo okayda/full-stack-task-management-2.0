@@ -99,6 +99,7 @@ export const useUpdateEditTask = function () {
 
     onSettled: (_data, _error, variables) => {
       const { boardId } = variables.json;
+
       queryClient.invalidateQueries({ queryKey: ["board-data", boardId] });
     },
   });

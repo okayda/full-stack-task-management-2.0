@@ -14,6 +14,7 @@ import { z } from "zod";
 import { useGetBoardId } from "../hooks/use-get-board-id";
 
 import { useUpdateSettingColumn } from "../api/use-update-setting-column";
+import { useDeleteBoard } from "../api/use-delete-board";
 
 import { SettingColumnActions } from "./setting-column-actions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -57,6 +58,7 @@ export const SettingColumnForm = function ({
 
   const { mutate: updateSettingColumn, isPending: isUpdatingSettingColumn } =
     useUpdateSettingColumn();
+  const { mutate: deleteBoard, isPending: isDeletingBoard } = useDeleteBoard();
 
   const originalFormValues = {
     boardId,
@@ -92,8 +94,25 @@ export const SettingColumnForm = function ({
   };
 
   const onSubmit: SubmitHandler<SettingColumnFormValues> = (formValues) => {
-    updateSettingColumn({ json: formValues });
-    closeSettingColumnModal();
+    updateSettingColumn(
+      { json: formValues },
+      {
+        onSuccess: function () {
+          closeSettingColumnModal();
+        },
+      },
+    );
+  };
+
+  const deleteBoardHandler = function () {
+    deleteBoard(
+      { json: { boardId } },
+      {
+        onSuccess: function () {
+          closeSettingColumnModal();
+        },
+      },
+    );
   };
 
   // Validating whether there are any changes to the previous settings data this determines if the save button should be clickable
@@ -106,7 +125,7 @@ export const SettingColumnForm = function ({
       <CardHeader className="flex flex-row items-center justify-between gap-x-3 space-y-0 pb-5 sm:pt-10">
         <CardTitle className="text-2xl font-medium">Board Setting</CardTitle>
 
-        <SettingColumnActions>
+        <SettingColumnActions deleteBoardHandler={deleteBoardHandler}>
           <MoreVertical className="!size-6" />
         </SettingColumnActions>
       </CardHeader>
@@ -128,6 +147,7 @@ export const SettingColumnForm = function ({
                       <FormControl>
                         <Input
                           {...field}
+                          disabled={isUpdatingSettingColumn || isDeletingBoard}
                           autoComplete="off"
                           placeholder="Your board name?"
                           className="!mt-1 h-[2.8125rem] border-neutral-400/60 text-[0.9375rem] md:h-[2.625rem]"
@@ -160,7 +180,7 @@ export const SettingColumnForm = function ({
                           autoComplete="off"
                           placeholder="Column Name"
                           className="h-[2.8125rem] border-neutral-400/60 md:h-[2.625rem]"
-                          disabled={isUpdatingSettingColumn}
+                          disabled={isUpdatingSettingColumn || isDeletingBoard}
                         />
 
                         <Button
@@ -169,7 +189,9 @@ export const SettingColumnForm = function ({
                           className="h-[2.8125rem] border border-neutral-300/80 px-3 text-neutral-700 md:h-[2.625rem]"
                           onClick={() => removeColumn(index)}
                           disabled={
-                            fields.length === 2 || isUpdatingSettingColumn
+                            fields.length === 2 ||
+                            isUpdatingSettingColumn ||
+                            isDeletingBoard
                           }
                         >
                           <CircleXIcon className="!size-5" />
@@ -186,7 +208,7 @@ export const SettingColumnForm = function ({
                       variant="outline"
                       className="h-[2.8125rem] justify-center rounded-full border-neutral-400/60 px-10 md:h-[2.625rem]"
                       onClick={addColumn}
-                      disabled={isUpdatingSettingColumn}
+                      disabled={isUpdatingSettingColumn || isDeletingBoard}
                     >
                       New Column
                     </Button>
@@ -206,9 +228,17 @@ export const SettingColumnForm = function ({
                 <Button
                   type="submit"
                   className="h-[2.625rem] w-full tracking-wide"
-                  disabled={isUpdatingSettingColumn || !hasFormChanged}
+                  disabled={
+                    isUpdatingSettingColumn ||
+                    !hasFormChanged ||
+                    isDeletingBoard
+                  }
                 >
-                  Save
+                  {isUpdatingSettingColumn
+                    ? "Updating..."
+                    : isDeletingBoard
+                      ? "Deleting..."
+                      : "Save"}
                 </Button>
 
                 <Button
@@ -216,7 +246,7 @@ export const SettingColumnForm = function ({
                   variant="outline"
                   onClick={closeSettingColumnModal}
                   className="h-[2.625rem] w-full border"
-                  disabled={isUpdatingSettingColumn}
+                  disabled={isUpdatingSettingColumn || isDeletingBoard}
                 >
                   Cancel
                 </Button>
