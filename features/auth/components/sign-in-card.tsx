@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 
 import Link from "next/link";
 
+import { signUpWithGoogle, signUpWithGithub } from "@/lib/oauth";
+
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -68,7 +70,7 @@ export default function SignInCard() {
 
             <CardContent className="justify-cente flex gap-x-4 px-0 pb-6 sm:px-6">
               <Button
-                onClick={() => {}}
+                onClick={() => signUpWithGithub()}
                 disabled={isVerifyingAccount}
                 variant="outline"
                 className="h-[2.6875rem] w-full border-neutral-700/20 p-3"
@@ -82,7 +84,7 @@ export default function SignInCard() {
               </Button>
 
               <Button
-                onClick={() => {}}
+                onClick={() => signUpWithGoogle()}
                 disabled={isVerifyingAccount}
                 variant="outline"
                 className="h-[2.6875rem] w-full border-neutral-700/20 p-3"

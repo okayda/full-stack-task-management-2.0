@@ -35,7 +35,7 @@ export const useLogin = function () {
         description: currentDate(),
       });
       router.refresh();
-      queryClient.invalidateQueries({ queryKey: ["user-existent"] });
+      queryClient.invalidateQueries({ queryKey: ["user-account"] });
     },
 
     onError: (error) => {
