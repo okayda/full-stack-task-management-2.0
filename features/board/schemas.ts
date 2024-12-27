@@ -55,7 +55,7 @@ export const updateTaskSchema = taskSchema.extend({
 });
 
 // should be use in the back-end only
-export const updateSubtasksSchema = z.object({
+export const updateTaskContentSchema = z.object({
   boardId: z.string().trim(),
   subtasksId: z.string().trim(),
   taskId: z.string().trim(),

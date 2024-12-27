@@ -1,6 +1,8 @@
 import { TaskPriority } from "@/features/board/types";
 
-export const boardNameExample = "Board Example";
+export const boardNameExampleData = "Data Example";
+
+export const boardNameExampleColumns = "Columns Example";
 
 export const tasksExample = [
   {
@@ -145,4 +147,9 @@ export const statusColumnExample = [
   { statusId: "status200", statusName: "In Progress" },
   { statusId: "status300", statusName: "In Review" },
   { statusId: "status400", statusName: "Done" },
+];
+
+export const defaultStatusColumn = [
+  { statusId: "status100", statusName: "Todo" },
+  { statusId: "status200", statusName: "Done" },
 ];

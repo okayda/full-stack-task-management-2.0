@@ -2,9 +2,9 @@ import { Databases } from "node-appwrite";
 import { ID } from "node-appwrite";
 
 import {
-  boardNameExample,
-  tasksExample,
+  boardNameExampleData,
   statusColumnExample,
+  tasksExample,
 } from "@/lib/exampleBoardData";
 
 import {
@@ -27,7 +27,7 @@ export async function initializeBoardDataExample(
       BOARDS_ID,
       boardId,
       {
-        boardName: boardNameExample,
+        boardName: boardNameExampleData,
         userId,
       },
     );
@@ -63,13 +63,6 @@ export async function initializeBoardDataExample(
 
       const subtasksId = ID.unique();
 
-      const subtasksPromise = databases.createDocument(
-        DATABASE_ID,
-        SUB_TASKS_ID,
-        subtasksId,
-        subtaskObj,
-      );
-
       const taskPromise = databases.createDocument(
         DATABASE_ID,
         TASKS_ID,
@@ -85,7 +78,14 @@ export async function initializeBoardDataExample(
         },
       );
 
-      await Promise.all([subtasksPromise, taskPromise]);
+      const subtasksPromise = databases.createDocument(
+        DATABASE_ID,
+        SUB_TASKS_ID,
+        subtasksId,
+        subtaskObj,
+      );
+
+      await Promise.all([taskPromise, subtasksPromise]);
     }
   } catch (error) {
     console.error("Error initializing example board data:", error);

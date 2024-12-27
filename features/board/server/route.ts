@@ -15,6 +15,8 @@ import {
 import { sessionMiddleware } from "@/lib/session-middleware";
 
 import { initializeBoardDataExample } from "@/lib/initializeExampleBoardData";
+import { initializeExampleBoardColumns } from "@/lib/initializeExampleBoardColumns";
+import { defaultStatusColumn } from "@/lib/exampleBoardData";
 
 import {
   createBoardSchema,
@@ -22,7 +24,7 @@ import {
   deleteTaskSchema,
   taskSchema,
   updateTaskSchema,
-  updateSubtasksSchema,
+  updateTaskContentSchema,
   settingColumnSchema,
 } from "../schemas";
 
@@ -53,25 +55,33 @@ const app = new Hono()
 
       const boardId = ID.unique();
 
-      const defaultStatusColumn = {
-        boardId,
-        column_0: "todo",
-        column_0_id: "status100",
-        column_1: "done",
-        column_1_id: "status200",
-      };
+      const statusColumnObj: Record<string, string> = { boardId };
 
-      const [board, statusColumn] = await Promise.all([
-        databases.createDocument(DATABASE_ID, BOARDS_ID, boardId, {
+      defaultStatusColumn.forEach((column, i) => {
+        statusColumnObj[`column_${i}_id`] = column.statusId;
+        statusColumnObj[`column_${i}`] = column.statusName;
+      });
+
+      const boardPromise = databases.createDocument(
+        DATABASE_ID,
+        BOARDS_ID,
+        boardId,
+        {
           boardName,
           userId: user.$id,
-        }),
-        databases.createDocument(
-          DATABASE_ID,
-          STATUS_COLUMN_ID,
-          ID.unique(),
-          defaultStatusColumn,
-        ),
+        },
+      );
+
+      const columnsPromise = databases.createDocument(
+        DATABASE_ID,
+        STATUS_COLUMN_ID,
+        ID.unique(),
+        statusColumnObj,
+      );
+
+      const [board, statusColumn] = await Promise.all([
+        boardPromise,
+        columnsPromise,
       ]);
 
       return c.json({
@@ -360,9 +370,25 @@ const app = new Hono()
     const user = c.get("user");
     const databases = c.get("databases") as Databases;
 
-    const data = await initializeBoardDataExample(databases, user.$id);
+    try {
+      await initializeBoardDataExample(databases, user.$id);
 
-    return c.json({ data });
+      return c.json({ ok: true });
+    } catch (error) {
+      return c.json({ ok: false, error }, 500);
+    }
+  })
+  .post("/create-example-board-columns", sessionMiddleware, async (c) => {
+    const user = c.get("user");
+    const databases = c.get("databases") as Databases;
+
+    try {
+      await initializeExampleBoardColumns(databases, user.$id);
+
+      return c.json({ ok: true });
+    } catch (error) {
+      return c.json({ ok: false, error }, 500);
+    }
   })
   .get("/get-board-names", sessionMiddleware, async (c) => {
     const user = c.get("user");
@@ -489,7 +515,7 @@ const app = new Hono()
   .patch(
     "/update-task-content",
     sessionMiddleware,
-    zValidator("json", updateSubtasksSchema),
+    zValidator("json", updateTaskContentSchema),
     async (c) => {
       const databases = c.get("databases") as Databases;
 

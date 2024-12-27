@@ -1,51 +1,21 @@
 "use client";
 
-import { useState } from "react";
-
-import { UseMutateFunction } from "@tanstack/react-query";
-import { InferRequestType } from "hono";
-import { client } from "@/lib/rpc";
-
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 import { LoaderIcon } from "lucide-react";
 
-type RequestType = InferRequestType<
-  (typeof client.api.board)["create-example-board-data"]["$post"]
->;
-
 interface GenerateExampleBoxProps {
-  createExampleBoard: UseMutateFunction<
-    ResponseType,
-    Error,
-    RequestType,
-    unknown
-  >;
-  isCreatingExampleBoard: boolean;
+  isCreatingExampleData: boolean;
+  handlerClickOnceExampleData: () => void;
+  isExampleClicked: boolean;
 }
 
 export default function GenerateExampleBox({
-  createExampleBoard,
-  isCreatingExampleBoard,
+  isCreatingExampleData,
+  handlerClickOnceExampleData,
+  isExampleClicked,
 }: GenerateExampleBoxProps) {
-  const [isClicked, setIsClicked] = useState(false);
-
-  const handleClickOnce = function () {
-    if (!isClicked) {
-      setIsClicked(true);
-
-      createExampleBoard(
-        {},
-        {
-          onError: () => {
-            setIsClicked(false);
-          },
-        },
-      );
-    }
-  };
-
   return (
     <Card className="mx-auto w-full max-w-xs">
       <div className="flex h-full flex-col justify-between">
@@ -70,10 +40,10 @@ export default function GenerateExampleBox({
         <div className="px-6 pb-6">
           <RainbowButton
             className="h-[2.625rem] w-full rounded-md font-geist text-[0.9375rem]"
-            disabled={isCreatingExampleBoard || isClicked}
-            onClick={handleClickOnce}
+            disabled={isCreatingExampleData || isExampleClicked}
+            onClick={handlerClickOnceExampleData}
           >
-            {isCreatingExampleBoard ? (
+            {isCreatingExampleData ? (
               <LoaderIcon className="animate-spin" />
             ) : (
               " Generate Both"
