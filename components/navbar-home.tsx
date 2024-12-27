@@ -9,8 +9,8 @@ export default function NavbarHome({ toggleSidebar }: NavbarHomeProps) {
   return (
     <nav className="flex items-center justify-between">
       <div className="flex w-full justify-between">
-        <h1 className="self-center font-roboto text-2xl font-medium text-primary md:text-3xl">
-          Welcome
+        <h1 className="text-2xl font-bold text-[#451A03] md:text-3xl lg:flex-1 lg:text-center">
+          🪴 WELCOME 🪴
         </h1>
 
         <div className="flex items-center gap-x-2">

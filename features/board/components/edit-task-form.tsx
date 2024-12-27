@@ -122,7 +122,7 @@ export const EditTaskForm = function ({
 
   return (
     <Card className="h-full w-full border-none shadow-none">
-      <CardHeader>
+      <CardHeader className="px-4 sm:px-6">
         <CardTitle className="text-2xl font-medium">Edit Task</CardTitle>
       </CardHeader>
 

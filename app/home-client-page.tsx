@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { useGetBoardNames } from "@/features/board/api/use-get-board-names";
 import { useCreateExampleBoardData } from "@/features/board/api/use-create-example-board-data";
 import { useCreateExampleBoardColumns } from "@/features/board/api/use-create-example-board-columns";
-import GenerateExampleBox from "@/features/board/components/generate-example-box";
+import GenerateExampleDataBox from "@/features/board/components/generate-example-data-box";
 import GenerateExampleColumnBox from "@/features/board/components/generate-example-column-box";
 
 import DashBoardLayout from "@/components/dash-board-layout";
@@ -87,7 +87,7 @@ export default function HomeClientPage() {
           <div className="flex flex-col">
             <div className="flex h-full flex-col justify-center">
               <div className="flex flex-col gap-y-8 md:mx-auto md:max-w-[43.75rem] md:flex-row md:gap-x-12 md:gap-y-0">
-                <GenerateExampleBox
+                <GenerateExampleDataBox
                   isCreatingExampleData={isCreatingExampleData}
                   handlerClickOnceExampleData={handlerClickOnceExampleData}
                   isExampleClicked={isExampleClicked}
@@ -116,7 +116,7 @@ export default function HomeClientPage() {
           <div className="flex flex-col">
             <div className="flex h-[60vh] flex-col justify-center">
               <div className="mx-auto flex max-w-[43.75rem] gap-x-8">
-                <GenerateExampleBox
+                <GenerateExampleDataBox
                   isCreatingExampleData={isCreatingExampleData}
                   handlerClickOnceExampleData={handlerClickOnceExampleData}
                   isExampleClicked={isExampleClicked}

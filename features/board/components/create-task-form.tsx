@@ -100,7 +100,7 @@ export const CreateTaskForm = function ({
 
   return (
     <Card className="h-full w-full border-none shadow-none">
-      <CardHeader>
+      <CardHeader className="px-4 sm:px-6">
         <CardTitle className="text-2xl font-medium">New Task</CardTitle>
       </CardHeader>
 

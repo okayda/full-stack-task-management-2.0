@@ -57,7 +57,7 @@ export default function SignInCard() {
             <CardHeader className="px-0 pt-9 sm:px-6">
               <CardTitle className="mb-1 text-[2rem]">Get started</CardTitle>
 
-              <CardDescription className="text-base">
+              <CardDescription className="font-geist text-base">
                 Log in to stay organized and keep your tasks on track.
                 Let&apos;s get things done together.
               </CardDescription>

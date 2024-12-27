@@ -82,12 +82,6 @@ export const useDragAndDropUpdateTasks = function () {
         description: currentDate(),
       });
     },
-
-    onSettled: (_data, _error, variables) => {
-      const { boardId } = variables.json;
-
-      queryClient.invalidateQueries({ queryKey: ["board-data", boardId] });
-    },
   });
 
   return mutation;

@@ -169,9 +169,9 @@ const app = new Hono()
 
       const subtaskData: Record<string, unknown> = { boardId };
 
-      subtasks.forEach((subtask, index) => {
-        subtaskData[`subtask_${index}`] = subtask.subtaskName;
-        subtaskData[`subtask_check_${index}`] = subtask.isCompleted;
+      subtasks.forEach((subtask, i) => {
+        subtaskData[`subtask_${i}`] = subtask.subtaskName;
+        subtaskData[`subtask_check_${i}`] = subtask.isCompleted;
       });
 
       const subtasksId = ID.unique();
@@ -213,7 +213,7 @@ const app = new Hono()
     async (c) => {
       const databases = c.get("databases") as Databases;
       const { boardId, boardName, statusColumn } = c.req.valid("json");
-      console.log(statusColumn);
+
       const statusDocumentPromise = databases.listDocuments(
         DATABASE_ID,
         STATUS_COLUMN_ID,

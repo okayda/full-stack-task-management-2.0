@@ -20,7 +20,13 @@ import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 
 import { MdOutlineDashboard } from "react-icons/md";
-import { LogOut, XIcon, Columns2Icon, LoaderIcon } from "lucide-react";
+import {
+  LogOut,
+  XIcon,
+  Columns2Icon,
+  LoaderIcon,
+  InfoIcon,
+} from "lucide-react";
 
 interface SidebarProps {
   isSidebarOpen: boolean;
@@ -168,7 +174,7 @@ export default function Sidebar({
                 </li>
               )}
 
-              <li className="border-t-2 border-dashed border-neutral-400/60 pt-4">
+              <li className="border-t border-dashed border-neutral-400/80 pt-4 lg:border-t-2">
                 <Button
                   className="h-[2.625rem] w-full lg:h-auto"
                   onClick={openCreateBoardModal}
@@ -178,13 +184,22 @@ export default function Sidebar({
               </li>
             </ul>
 
-            <Separator className="my-4 bg-neutral-400/50" />
+            <Separator className="my-4" />
 
             {!isHomePage && (
-              <div className="hidden lg:block">
-                <span className="block text-sm font-medium">
+              <div className="relative hidden lg:block">
+                <div className="flex items-center gap-x-2 text-sm font-medium">
                   Viewport adjustment
-                </span>
+                  <div className="group">
+                    <InfoIcon className="inline-block size-4 cursor-pointer" />
+
+                    <div className="absolute left-1/2 top-full mt-2 w-full -translate-x-1/2 rounded-md bg-neutral-800 px-3 py-1 font-geist text-sm font-normal text-white opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100">
+                      Adjustment tool for better viewing. Works only on screens
+                      wider than [1080px, 1280px, 1580px, 1680px] otherwise it
+                      will not work.
+                    </div>
+                  </div>
+                </div>
 
                 {showSlider ? (
                   <div>
@@ -199,9 +214,9 @@ export default function Sidebar({
                       }}
                     />
 
-                    <span className="flex h-[2.25rem] items-center justify-center rounded-full border border-[#0F0F0F] px-3 py-1 text-center text-[0.9375rem] font-medium tracking-wide text-neutral-900">
+                    <div className="flex h-[2.25rem] items-center justify-center rounded-full border border-[#0F0F0F] px-3 py-1 text-center text-[0.9375rem] font-medium tracking-wide text-neutral-900">
                       {label}
-                    </span>
+                    </div>
                   </div>
                 ) : (
                   <LoaderIcon className="mx-auto mt-4 animate-spin" />

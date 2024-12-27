@@ -76,7 +76,7 @@ export default function DashBoardLayout({
 
         <div
           className={cn(
-            "pb-0 pl-2 pt-8 lg:pl-6 lg:pt-9 2xl:px-6",
+            "pb-0 pl-2 lg:pl-6 lg:pt-9 2xl:px-6",
             isHomePage && "px-4 py-16 md:py-24 lg:pr-6",
           )}
         >

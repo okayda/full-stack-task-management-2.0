@@ -3,7 +3,7 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
-import { LoaderIcon } from "lucide-react";
+import { LoaderIcon, Columns3Icon } from "lucide-react";
 
 interface GenerateExampleColumnBoxProps {
   isCreatingExampleColumns: boolean;
@@ -19,7 +19,9 @@ export default function GenerateExampleColumnBox({
   return (
     <Card className="mx-auto w-full max-w-xs">
       <div className="flex h-full flex-col justify-between">
-        <div>
+        <div className="relative">
+          <Columns3Icon className="absolute right-3 top-2 size-6 text-xl" />
+
           <CardHeader className="pb-3">
             <CardTitle className="text-lg">Columns</CardTitle>
           </CardHeader>

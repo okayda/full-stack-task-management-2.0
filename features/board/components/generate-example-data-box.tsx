@@ -3,23 +3,26 @@
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
+import { MdOutlineDashboard } from "react-icons/md";
 import { LoaderIcon } from "lucide-react";
 
-interface GenerateExampleBoxProps {
+interface GenerateExampleDataBoxProps {
   isCreatingExampleData: boolean;
   handlerClickOnceExampleData: () => void;
   isExampleClicked: boolean;
 }
 
-export default function GenerateExampleBox({
+export default function GenerateExampleDataBox({
   isCreatingExampleData,
   handlerClickOnceExampleData,
   isExampleClicked,
-}: GenerateExampleBoxProps) {
+}: GenerateExampleDataBoxProps) {
   return (
     <Card className="mx-auto w-full max-w-xs">
       <div className="flex h-full flex-col justify-between">
-        <div>
+        <div className="relative">
+          <MdOutlineDashboard className="absolute right-3 top-2 size-6 text-xl" />
+
           <CardHeader className="pb-3">
             <CardTitle className="text-lg">Columns & Tasks</CardTitle>
           </CardHeader>

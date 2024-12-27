@@ -36,7 +36,7 @@ export const MobileDisclaimer = function () {
           Disclaimer
         </h4>
 
-        <p className="mb-4 text-muted-foreground">
+        <p className="mb-4 font-geist text-muted-foreground">
           For the sake of transparency, I want to clarify that I don&apos;t
           collect or misuse any personal information. You can review the
           authentication functionality{" "}
@@ -50,14 +50,14 @@ export const MobileDisclaimer = function () {
           .
         </p>
 
-        <p className="mb-4 text-muted-foreground">
+        <p className="mb-4 font-geist text-muted-foreground">
           Any design similarities between this project and your project are{" "}
           <span className="text-emerald-500">purely coincidental</span>. I
           created this project solely for my own educational purposes. Thank
           you.
         </p>
 
-        <p className="text-muted-foreground">
+        <p className="font-geist text-muted-foreground">
           Sincerely,{" "}
           <span className="text-emerald-400"> Jhon Que&ntilde;ano</span>
         </p>
@@ -99,7 +99,7 @@ export const DesktopDisclaimer = function ({
             </h2>
 
             <p
-              className="mb-5"
+              className="mb-5 font-geist"
               style={{ textShadow: "1px 1px 3px rgba(0, 0, 0, 0.45)" }}
             >
               For the sake of transparency, I want to clarify that I don&apos;t
@@ -116,7 +116,7 @@ export const DesktopDisclaimer = function ({
             </p>
 
             <p
-              className="mb-5"
+              className="mb-5 font-geist"
               style={{ textShadow: "1px 1px 3px rgba(0, 0, 0, 0.45)" }}
             >
               Any design similarities between this project and your project are{" "}
@@ -125,7 +125,7 @@ export const DesktopDisclaimer = function ({
               you.
             </p>
 
-            <p>
+            <p className="font-geist">
               Sincerely,{" "}
               <span className="text-emerald-400"> Jhon Que&ntilde;ano</span>
             </p>

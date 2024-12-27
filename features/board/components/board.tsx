@@ -21,6 +21,7 @@ import { MAX_COLUMNS, MAX_DRAG_AND_DROP_POSITION } from "../constants";
 
 import { StatusColumn, Task } from "../types";
 import { CreateColumnModal } from "./create-column-modal";
+import { cn } from "@/lib/utils";
 
 interface DataBoardProps {
   statusColumn: StatusColumn;
@@ -210,13 +211,16 @@ export default function Board({
         ignoreElements={".board-task"}
       >
         <DragDropContext onDragEnd={onDragEnd}>
-          <div className="h-[calc(100vh-6.625rem)] lg:h-[calc(100vh-7rem)]">
+          <div className="h-[calc(100vh-4.5rem)] pt-6 lg:h-[calc(100vh-6.6875rem)] lg:pt-0 2xl:lg:h-[calc(100vh-7rem)]">
             <div className="flex h-full cursor-ew-resize gap-x-6 pb-2 2xl:gap-x-8">
-              {statusColumn.columns.map(({ statusId, statusName }) => {
+              {statusColumn.columns.map(({ statusId, statusName }, i) => {
                 return (
                   <div
                     key={statusId}
-                    className="cursor-ew-resize rounded-md pb-1.5"
+                    className={cn(
+                      "cursor-ew-resize rounded-md pb-1.5",
+                      i === 4 && "pr-[0.625rem] lg:pr-[0.875rem] 2xl:pr-0",
+                    )}
                   >
                     <BoardHeader
                       statusColumn={statusColumn}

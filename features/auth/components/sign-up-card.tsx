@@ -68,7 +68,7 @@ export default function SignUpCard() {
             <CardHeader className="px-0 pt-9 sm:px-6">
               <CardTitle className="mb-1 text-[2rem]">Create account</CardTitle>
 
-              <CardDescription className="text-base">
+              <CardDescription className="font-geist text-base">
                 Join us and start organizing your tasks effortlessly. Together,
                 we&apos;ll keep you on track.
               </CardDescription>

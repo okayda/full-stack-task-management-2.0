@@ -1,8 +1,8 @@
 import { TaskPriority } from "@/features/board/types";
 
-export const boardNameExampleData = "Data Example";
+export const boardNameExampleData = "Data Example 👀";
 
-export const boardNameExampleColumns = "Columns Example";
+export const boardNameExampleColumns = "Columns Example 👀";
 
 export const tasksExample = [
   {
@@ -24,7 +24,7 @@ export const tasksExample = [
       "Set up site-wide header, footer, and dynamic navigation menu.",
     priority: TaskPriority.HIGHEST,
     statusId: "status200",
-    position: 2000,
+    position: 1000,
     subtasks: [
       { subtaskName: "Design header layout", isCompleted: false },
       { subtaskName: "Add dynamic menu items", isCompleted: false },
@@ -37,7 +37,7 @@ export const tasksExample = [
       "Create sign-up page with validations and integrate with backend.",
     priority: TaskPriority.HIGH,
     statusId: "status300",
-    position: 3000,
+    position: 1000,
     subtasks: [
       { subtaskName: "Design registration form", isCompleted: false },
       { subtaskName: "Implement client-side validation", isCompleted: false },
@@ -50,7 +50,7 @@ export const tasksExample = [
       "Automate builds, tests, and deployments using a CI/CD service.",
     priority: TaskPriority.HIGHEST,
     statusId: "status400",
-    position: 4000,
+    position: 1000,
     subtasks: [
       { subtaskName: "Configure build pipeline", isCompleted: true },
       { subtaskName: "Automate test runs", isCompleted: true },
@@ -62,7 +62,7 @@ export const tasksExample = [
     description: "Display products with pagination and filtering options.",
     priority: TaskPriority.HIGH,
     statusId: "status100",
-    position: 5000,
+    position: 2000,
     subtasks: [
       { subtaskName: "Design product card layout", isCompleted: false },
       { subtaskName: "Implement pagination logic", isCompleted: false },
@@ -74,7 +74,7 @@ export const tasksExample = [
     description: "Ensure all pages are fully responsive and mobile-friendly.",
     priority: TaskPriority.LOWEST,
     statusId: "status200",
-    position: 6000,
+    position: 2000,
     subtasks: [
       { subtaskName: "Refine breakpoints in CSS", isCompleted: false },
       { subtaskName: "Test on multiple mobile devices", isCompleted: false },
@@ -86,7 +86,7 @@ export const tasksExample = [
     description: "Allow users to log in with Google and Facebook.",
     priority: TaskPriority.HIGH,
     statusId: "status300",
-    position: 7000,
+    position: 2000,
     subtasks: [
       { subtaskName: "Configure Google OAuth", isCompleted: false },
       { subtaskName: "Configure Facebook login", isCompleted: false },
@@ -102,7 +102,7 @@ export const tasksExample = [
       "Integrate Sentry (or similar) to capture and manage application errors.",
     priority: TaskPriority.MEDIUM,
     statusId: "status400",
-    position: 8000,
+    position: 2000,
     subtasks: [
       { subtaskName: "Add Sentry to frontend", isCompleted: true },
       { subtaskName: "Add Sentry to backend", isCompleted: true },
@@ -118,7 +118,7 @@ export const tasksExample = [
       "Allow users to search across blog posts and product descriptions.",
     priority: TaskPriority.HIGH,
     statusId: "status100",
-    position: 9000,
+    position: 3000,
     subtasks: [
       { subtaskName: "Configure search index", isCompleted: false },
       { subtaskName: "Develop search API endpoint", isCompleted: false },
@@ -130,7 +130,7 @@ export const tasksExample = [
     description: "Create Dockerfiles for consistent and portable deployments.",
     priority: TaskPriority.HIGHEST,
     statusId: "status200",
-    position: 10000,
+    position: 3000,
     subtasks: [
       { subtaskName: "Write Dockerfile for frontend", isCompleted: false },
       { subtaskName: "Write Dockerfile for backend", isCompleted: false },

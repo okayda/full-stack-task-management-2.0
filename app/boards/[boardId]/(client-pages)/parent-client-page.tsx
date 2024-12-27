@@ -47,7 +47,7 @@ export default function ParentClientPage() {
   return (
     <React.Fragment>
       <GridPattern
-        className="fixed left-0 top-0 -z-[10] h-full w-screen stroke-neutral-300/25"
+        className="fixed left-0 top-0 -z-[10] hidden h-full w-screen stroke-neutral-300/25 lg:block"
         strokeDasharray="4 2"
       />
 

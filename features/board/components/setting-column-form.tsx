@@ -122,7 +122,7 @@ export const SettingColumnForm = function ({
 
   return (
     <Card className="h-full w-full border-none shadow-none">
-      <CardHeader className="flex flex-row items-center justify-between gap-x-3 space-y-0 pb-5 sm:pt-10">
+      <CardHeader className="flex flex-row items-center justify-between gap-x-3 space-y-0 px-4 pb-5 sm:px-6">
         <CardTitle className="text-2xl font-medium">Board Setting</CardTitle>
 
         <SettingColumnActions deleteBoardHandler={deleteBoardHandler}>
