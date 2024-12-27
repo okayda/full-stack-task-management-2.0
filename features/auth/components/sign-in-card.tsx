@@ -4,8 +4,6 @@ import { useForm } from "react-hook-form";
 
 import Link from "next/link";
 
-import { signUpWithGoogle, signUpWithGithub } from "@/lib/oauth";
-
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -32,10 +30,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import RippleButton from "@/components/ui/ripple-button";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
-import { FaGithub, FaGoogle } from "react-icons/fa";
 
 import { LoaderIcon } from "lucide-react";
 
@@ -57,7 +52,7 @@ export default function SignInCard() {
   return (
     <div className="md:mx-auto md:flex md:max-w-[56.25rem] md:gap-x-6 md-l:gap-x-12 lg-l:block lg-l:max-w-none">
       <div className="md:w-[25rem] md:shrink-0 lg-l:w-auto lg-l:shrink">
-        <Card className="mx-auto max-w-[25rem] rounded-none border-x-0 border-b border-t-0 border-dashed border-muted-foreground shadow-none sm:max-w-[25.625rem] sm:border-none sm:bg-transparent lg-l:mx-0 lg-l:flex lg-l:w-full lg-l:max-w-none lg-l:gap-x-6">
+        <Card className="mx-auto max-w-[25rem] rounded-none border-x-0 border-b border-t-0 border-dashed border-muted-foreground shadow-none sm:max-w-[25.625rem] sm:border-none sm:bg-transparent lg-l:mx-0 lg-l:flex lg-l:w-full lg-l:max-w-none lg-l:items-start lg-l:gap-x-6">
           <div className="sm:rounded-lg sm:border sm:bg-background sm:shadow-sm lg-l:w-full lg-l:max-w-[25.625rem]">
             <CardHeader className="px-0 pt-9 sm:px-6">
               <CardTitle className="mb-1 text-[2rem]">Get started</CardTitle>
@@ -68,36 +63,6 @@ export default function SignInCard() {
               </CardDescription>
             </CardHeader>
 
-            <CardContent className="justify-cente flex gap-x-4 px-0 pb-6 sm:px-6">
-              <Button
-                onClick={() => signUpWithGithub()}
-                disabled={isVerifyingAccount}
-                variant="outline"
-                className="h-[2.6875rem] w-full border-neutral-700/20 p-3"
-                size="lg"
-              >
-                <FaGithub className="" />
-
-                <span className="self-end font-semibold leading-none tracking-wide">
-                  Github
-                </span>
-              </Button>
-
-              <Button
-                onClick={() => signUpWithGoogle()}
-                disabled={isVerifyingAccount}
-                variant="outline"
-                className="h-[2.6875rem] w-full border-neutral-700/20 p-3"
-                size="lg"
-              >
-                <FaGoogle />
-
-                <span className="self-end font-semibold leading-none tracking-wide">
-                  Google
-                </span>
-              </Button>
-            </CardContent>
-
             <CardContent className="grid gap-y-4 px-0 pb-0 sm:px-6">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
@@ -106,7 +71,7 @@ export default function SignInCard() {
 
                 <div className="relative flex justify-center text-xs uppercase">
                   <span className="bg-background px-2 text-muted-foreground/70">
-                    or
+                    begin your path
                   </span>
                 </div>
               </div>
@@ -189,7 +154,7 @@ export default function SignInCard() {
             </CardFooter>
           </div>
 
-          <DesktopDisclaimer />
+          <DesktopDisclaimer removeGithub={true} />
         </Card>
       </div>
 

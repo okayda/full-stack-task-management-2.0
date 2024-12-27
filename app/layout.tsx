@@ -31,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <body
         className={`${GeistSans.variable} ${roboto.variable} ${rubik.variable} font-rubik antialiased`}
       >

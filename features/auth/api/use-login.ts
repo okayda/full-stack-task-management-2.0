@@ -1,6 +1,7 @@
 import { useRouter } from "next/navigation";
 
 import { useQueryClient, useMutation } from "@tanstack/react-query";
+
 import { InferRequestType, InferResponseType } from "hono";
 
 import { client } from "@/lib/rpc";
@@ -12,8 +13,8 @@ type ResponseType = InferResponseType<(typeof client.api.auth.login)["$post"]>;
 type RequestType = InferRequestType<(typeof client.api.auth.login)["$post"]>;
 
 export const useLogin = function () {
-  const queryClient = useQueryClient();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
     mutationFn: async ({ json }) => {
@@ -34,6 +35,7 @@ export const useLogin = function () {
       toast.success("Account verified successfully.", {
         description: currentDate(),
       });
+
       router.refresh();
       queryClient.invalidateQueries({ queryKey: ["user-account"] });
     },

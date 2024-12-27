@@ -50,9 +50,11 @@ export const useUpdateTaskContent = function () {
       await queryClient.cancelQueries({ queryKey: ["board-data", boardId] });
 
       const previousData = queryClient.getQueryData<BoardData>([
-        "tasks",
+        "board-data",
         boardId,
       ]);
+
+      console.log(previousData);
 
       queryClient.setQueryData(["board-data", boardId], (oldBoardData) => {
         if (!oldBoardData) return null;

@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 
 import { InferRequestType, InferResponseType } from "hono";
 
@@ -35,6 +35,7 @@ export const useCreate = function () {
       toast.success("Account created successfully.", {
         description: currentDate(),
       });
+
       router.refresh();
       queryClient.invalidateQueries({ queryKey: ["user-account"] });
     },

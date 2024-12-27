@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 
+import { useLogout } from "@/features/auth/api/use-logout";
+
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -48,6 +50,8 @@ export default function Sidebar({
   isHomePage,
   userBoardNames,
 }: SidebarProps) {
+  const { mutate: userLogout } = useLogout();
+
   const pathname = usePathname();
   const hasUserBoardNames = userBoardNames && userBoardNames.length > 0;
 
@@ -232,7 +236,7 @@ export default function Sidebar({
           <Button
             variant="outline"
             className="flex h-[2.625rem] w-full items-center gap-x-3 lg:h-auto"
-            onClick={() => {}}
+            onClick={() => userLogout()}
           >
             Log out
             <LogOut className="size-5" />

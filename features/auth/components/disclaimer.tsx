@@ -66,7 +66,11 @@ export const MobileDisclaimer = function () {
   );
 };
 
-export const DesktopDisclaimer = function () {
+export const DesktopDisclaimer = function ({
+  removeGithub,
+}: {
+  removeGithub?: boolean;
+}) {
   return (
     <div className="w-full">
       <div className="relative hidden h-[20rem] self-start rounded-lg lg-l:block">
@@ -130,18 +134,22 @@ export const DesktopDisclaimer = function () {
       </div>
 
       <div className="hidden lg-l:block">
-        <Link
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://github.com/okayda/full-stack-task-management-2.0"
-          className="mt-6 flex items-center justify-between rounded-lg border bg-background/40 p-4 backdrop-blur-md transition-colors hover:border-purple-400"
-        >
-          <h4 className="text-xl font-medium">Task Management v2.0</h4>
+        {removeGithub || (
+          <Link
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://github.com/okayda/full-stack-task-management-2.0"
+            className="mt-6 flex items-center justify-between rounded-lg border bg-background/40 p-4 backdrop-blur-md transition-colors hover:border-purple-400"
+          >
+            <h4 className="text-xl font-medium">Task Management v2.0</h4>
 
-          <Github className="size-7" />
-        </Link>
+            <Github className="size-7" />
+          </Link>
+        )}
 
-        <TechStack />
+        <div className={cn({ "mt-3": removeGithub })}>
+          <TechStack />
+        </div>
       </div>
     </div>
   );

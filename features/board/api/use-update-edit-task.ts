@@ -49,7 +49,7 @@ export const useUpdateEditTask = function () {
       await queryClient.cancelQueries({ queryKey: ["board-data", boardId] });
 
       const previousData = queryClient.getQueryData<BoardData>([
-        "tasks",
+        "board-data",
         boardId,
       ]);
 

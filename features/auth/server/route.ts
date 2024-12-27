@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { setCookie } from "hono/cookie";
+import { setCookie, deleteCookie } from "hono/cookie";
 import { zValidator } from "@hono/zod-validator";
 
 import { ID } from "node-appwrite";
@@ -8,6 +8,7 @@ import { createAdminClient } from "@/lib/appwrite";
 
 import { createUserSchema, loginUserSchema } from "../schemas";
 import { AUTH_COOKIE } from "../constants";
+import { sessionMiddleware } from "@/lib/session-middleware";
 
 // Your information here is handled by Appwrite & Hono.js I dont handle it especially your PASSWORD
 const app = new Hono()
@@ -68,6 +69,15 @@ const app = new Hono()
         401,
       );
     }
+  })
+  .post("/logout", sessionMiddleware, async (c) => {
+    const account = c.get("account");
+
+    deleteCookie(c, AUTH_COOKIE);
+
+    await account.deleteSession("current");
+
+    return c.json({ success: true });
   });
 
 export default app;
