@@ -29,13 +29,8 @@ export const useLogout = () => {
         description: currentDate(),
       });
 
-      queryClient.invalidateQueries({ queryKey: ["board-names"] });
-      queryClient.invalidateQueries({ queryKey: ["board-data"] });
-      queryClient.invalidateQueries({ queryKey: ["user-account"] });
-
-      queryClient.removeQueries({ queryKey: ["user-account"] });
-
-      router.push("/sign-in");
+      queryClient.clear();
+      router.refresh();
     },
 
     onError: (error) => {

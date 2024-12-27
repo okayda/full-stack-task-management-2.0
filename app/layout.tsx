@@ -22,7 +22,8 @@ const roboto = localFont({
 
 export const metadata: Metadata = {
   title: "Task Management 2.0",
-  description: "Allow you to manage your tasks effectively",
+  description:
+    "Allows you to manage your tasks effectively, brought to you by Jhon & Min-seo",
 };
 
 export default function RootLayout({
