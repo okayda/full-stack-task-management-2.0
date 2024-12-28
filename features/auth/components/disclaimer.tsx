@@ -40,7 +40,12 @@ export const MobileDisclaimer = function () {
           For the sake of transparency, I want to clarify that I don&apos;t
           collect or misuse any personal information. You can review the
           authentication functionality{" "}
-          <Link href="#" className="text-sky-500">
+          <Link
+            href="https://github.com/okayda/full-stack-task-management-2.0/blob/main/features/auth/server/route.ts"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="border-b-2 border-b-sky-500 text-sky-500"
+          >
             here
           </Link>{" "}
           to see how I handle it. All data stored in the database will be{" "}
@@ -105,7 +110,12 @@ export const DesktopDisclaimer = function ({
               For the sake of transparency, I want to clarify that I don&apos;t
               collect or misuse any personal information. You can review the
               authentication functionality{" "}
-              <Link href="#" className="text-sky-400">
+              <Link
+                href="https://github.com/okayda/full-stack-task-management-2.0/blob/main/features/auth/server/route.ts"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="border-b-2 border-b-sky-400 text-sky-400"
+              >
                 here
               </Link>{" "}
               to see how I handle it. All data stored in the database will be{" "}
@@ -138,7 +148,7 @@ export const DesktopDisclaimer = function ({
           <Link
             target="_blank"
             rel="noopener noreferrer"
-            href="https://github.com/okayda/full-stack-task-management-2.0"
+            href="https://github.com/okayda/full-stack-task-management-2.0.git"
             className="mt-6 flex items-center justify-between rounded-lg border bg-background/40 p-4 backdrop-blur-md transition-colors hover:border-purple-400"
           >
             <h4 className="text-xl font-medium">Task Management v2.0</h4>

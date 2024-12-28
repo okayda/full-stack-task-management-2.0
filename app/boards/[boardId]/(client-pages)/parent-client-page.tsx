@@ -29,10 +29,7 @@ export default function ParentClientPage() {
     return null;
   }
 
-  if (userBoardNames.length === 0) {
-    redirect("/");
-    return null;
-  }
+  if (userBoardNames.length === 0) redirect("/");
 
   // Redirect to the first available board if the current board is deleted
   if (!userBoardNames.some((board) => board.$id === currentBoardId)) {
@@ -40,8 +37,6 @@ export default function ParentClientPage() {
     if (targetBoard) {
       redirect(`/boards/${targetBoard.$id}`);
     } else redirect("/");
-
-    return null;
   }
 
   return (

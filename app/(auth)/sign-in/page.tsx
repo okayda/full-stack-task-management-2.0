@@ -8,10 +8,7 @@ export const dynamic = "force-dynamic";
 export default async function SignInPage() {
   const currentUser = await getCurrentUser();
 
-  if (currentUser) {
-    redirect("/");
-    return null;
-  }
+  if (currentUser) redirect("/");
 
   return <SignInCard />;
 }

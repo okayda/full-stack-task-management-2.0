@@ -8,10 +8,7 @@ export const dynamic = "force-dynamic";
 export default async function AsyncPage() {
   const currentUser = await getCurrentUser();
 
-  if (!currentUser) {
-    redirect("/sign-in");
-    return null;
-  }
+  if (!currentUser) redirect("/sign-in");
 
   return <ParentClientPage />;
 }

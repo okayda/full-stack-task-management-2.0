@@ -31,7 +31,6 @@ export default function HomeClientPage() {
 
   if (userBoardNames.length) {
     redirect(`/boards/${userBoardNames[0].$id}`);
-    return null;
   }
 
   if (isFetchingBoardNames) {
